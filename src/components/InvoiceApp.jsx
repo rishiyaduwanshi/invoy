@@ -37,7 +37,7 @@ export default function InvoiceApp() {
   const [mobileTab, setMobileTab] = useState('form'); // 'form' | 'preview'
 
   const [senderDetails, setSenderDetails] = useState({
-    name: '', email: '', address: '', gstin: '',
+    businessName: '', name: '', email: '', address: '', gstin: '',
     logo: null, udyamNo: '', phone: '', signature: null
   });
 
@@ -99,11 +99,11 @@ export default function InvoiceApp() {
   };
 
   return (
-    <div className="min-h-screen text-white font-['Inter']">
+    <div className="min-h-screen text-white font-['Inter'] overflow-x-hidden">
 
       {/* ── TOP NAV ─────────────────────────────────────── */}
       <nav className="sticky top-0 z-50 border-b border-white/5 bg-black/70 backdrop-blur-xl">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 h-14 sm:h-16 flex items-center justify-between gap-3">
+        <div className="w-full px-3 sm:px-4 h-14 flex items-center justify-between gap-3">
 
           {/* Left */}
           <div className="flex items-center gap-3">
@@ -158,7 +158,7 @@ export default function InvoiceApp() {
       </nav>
 
       {/* ── MAIN CONTENT ─────────────────────────────────── */}
-      <div className="max-w-7xl mx-auto px-3 sm:px-6 py-4 sm:py-6 lg:py-8">
+      <div className="w-full px-3 sm:px-4 py-4 lg:py-6">
 
         {/* Template badge - visible on desktop */}
         <div className="hidden lg:flex mb-5 items-center gap-3">
@@ -227,10 +227,9 @@ export default function InvoiceApp() {
                 <span className="text-xs text-neutral-600">• Tap Edit to change</span>
               </div>
 
-              {/* Scrollable preview container on mobile */}
-              <div className="bg-white/5 rounded-2xl border border-white/10 p-3 overflow-x-auto shadow-xl">
-                {/* Scale down invoice on mobile so it fits */}
-                <div className="min-w-[340px] origin-top-left" style={{ transform: 'scale(0.9)', transformOrigin: 'top left', width: '111.11%' }}>
+              {/* Scrollable preview container on mobile - scale to fit without overflow */}
+              <div className="bg-white/5 rounded-2xl border border-white/10 p-2 shadow-xl overflow-hidden">
+                <div style={{ transform: 'scale(0.85)', transformOrigin: 'top left', width: '117.6%', pointerEvents: 'none' }}>
                   <InvoicePreview {...sharedProps} />
                 </div>
               </div>

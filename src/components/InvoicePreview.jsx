@@ -80,11 +80,12 @@ export default function InvoicePreview({
           <div className="w-1/2 p-6 border-r border-gray-200">
             <h3 className="font-bold text-gray-800 mb-3 text-sm">FROM</h3>
             <div className="text-sm space-y-1.5">
-              <p><span className="text-gray-500">Business Name:</span> <strong className="text-gray-900">{senderDetails.name}</strong></p>
+              {senderDetails.businessName && <p><span className="text-gray-500">Business Name:</span> <strong className="text-gray-900">{senderDetails.businessName}</strong></p>}
               {senderDetails.udyamNo && <p><span className="text-gray-500">Udyam Reg No:</span> <strong className="text-gray-900">{senderDetails.udyamNo}</strong></p>}
-              <p className="mt-3"><span className="font-bold text-gray-800">Name:</span> <strong className="text-gray-900">{senderDetails.name}</strong></p>
-              <p className="flex"><span className="text-gray-500 w-16">Address:</span> <span className="text-gray-900">{senderDetails.address}</span></p>
-              <p><span className="text-gray-500">Email:</span> <span className="text-gray-900">{senderDetails.email}</span></p>
+              {senderDetails.gstin && <p><span className="text-gray-500">GSTIN:</span> <strong className="text-gray-900">{senderDetails.gstin}</strong></p>}
+              {senderDetails.name && <p className="mt-2"><span className="text-gray-500">Name:</span> <strong className="text-gray-900">{senderDetails.name}</strong></p>}
+              <p className="flex"><span className="text-gray-500 w-16 shrink-0">Address:</span> <span className="text-gray-900">{senderDetails.address}</span></p>
+              {senderDetails.email && <p><span className="text-gray-500">Email:</span> <span className="text-gray-900">{senderDetails.email}</span></p>}
               {senderDetails.phone && <p><span className="text-gray-500">Phone:</span> <span className="text-gray-900">{senderDetails.phone}</span></p>}
             </div>
           </div>
@@ -218,9 +219,12 @@ export default function InvoicePreview({
           <p className="text-gray-500 mt-1 font-medium text-sm">#{invoiceMeta.invoiceNumber || 'INV-000'}</p>
         </div>
         <div className="text-right">
-          <h2 className="text-xl font-bold text-gray-800">{senderDetails.name || 'Your Company Name'}</h2>
+          <h2 className="text-xl font-bold text-gray-800">{senderDetails.businessName || senderDetails.name || 'Your Company Name'}</h2>
+          {senderDetails.businessName && senderDetails.name && (
+            <p className="text-sm text-gray-600 mt-0.5">{senderDetails.name}</p>
+          )}
           <p className="text-sm text-gray-600 mt-1 whitespace-pre-wrap max-w-[250px]">{senderDetails.address || 'Company Address'}</p>
-          <p className="text-sm text-gray-600 mt-1">{senderDetails.email}</p>
+          {senderDetails.email && <p className="text-sm text-gray-600 mt-1">{senderDetails.email}</p>}
           {senderDetails.phone && <p className="text-sm text-gray-600 mt-1">{senderDetails.phone}</p>}
           {senderDetails.gstin && <p className="text-sm font-semibold text-gray-700 mt-1">GSTIN: {senderDetails.gstin}</p>}
         </div>

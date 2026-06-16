@@ -62,7 +62,7 @@ export default function InvoiceForm({
   };
 
   return (
-    <div className="space-y-6 pb-20 font-['Inter']">
+    <div className="space-y-6 pb-20 font-['Inter'] w-full overflow-x-hidden">
 
       {/* Template Selection */}
       <section className="bg-white/5 backdrop-blur-md rounded-2xl p-6 border border-white/10 shadow-[0_8px_30px_rgb(0,0,0,0.12)]">
@@ -87,20 +87,24 @@ export default function InvoiceForm({
       <section className="bg-white/5 backdrop-blur-md rounded-2xl p-6 border border-white/10 shadow-[0_8px_30px_rgb(0,0,0,0.12)]">
         <h2 className="text-xl font-bold text-white mb-5 flex items-center gap-2"><span className="w-1.5 h-5 bg-indigo-500 rounded-full"></span>Your Details (Sender)</h2>
         <div className="space-y-4">
-          <div className="grid grid-cols-2 gap-4">
-            <div>
-              <InputLabel>Business Logo</InputLabel>
-              <input type="file" accept="image/*" onChange={handleLogoUpload} className="text-sm text-neutral-400 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-sm file:font-semibold file:bg-white/10 file:text-white hover:file:bg-white/20 transition-all" />
-            </div>
-            <div>
-              <InputLabel>Authorised Signature</InputLabel>
-              <input type="file" accept="image/*" onChange={handleSignatureUpload} className="text-sm text-neutral-400 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-sm file:font-semibold file:bg-white/10 file:text-white hover:file:bg-white/20 transition-all" />
-            </div>
+          <div>
+            <InputLabel>Business Logo</InputLabel>
+            <input type="file" accept="image/*" onChange={handleLogoUpload}
+              className="w-full text-sm text-neutral-400 file:mr-3 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-sm file:font-semibold file:bg-white/10 file:text-white hover:file:bg-white/20 transition-all" />
+          </div>
+          <div>
+            <InputLabel>Authorised Signature</InputLabel>
+            <input type="file" accept="image/*" onChange={handleSignatureUpload}
+              className="w-full text-sm text-neutral-400 file:mr-3 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-sm file:font-semibold file:bg-white/10 file:text-white hover:file:bg-white/20 transition-all" />
+          </div>
+          <div>
+            <InputLabel>Business Name</InputLabel>
+            <Input value={senderDetails.businessName} onChange={(e) => setSenderDetails({...senderDetails, businessName: e.target.value})} placeholder="Your Company / Business Name" />
           </div>
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <InputLabel>Name</InputLabel>
-              <Input value={senderDetails.name} onChange={(e) => setSenderDetails({...senderDetails, name: e.target.value})} placeholder="Your Name or Company" />
+              <InputLabel>Owner / Contact Name</InputLabel>
+              <Input value={senderDetails.name} onChange={(e) => setSenderDetails({...senderDetails, name: e.target.value})} placeholder="Your Full Name" />
             </div>
             <div>
               <InputLabel>Email</InputLabel>
@@ -192,22 +196,24 @@ export default function InvoiceForm({
                 initial={{ opacity: 0, y: -10 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, x: -20 }}
-                className="grid grid-cols-12 gap-3 items-end bg-neutral-900/50 p-3 rounded-lg border border-neutral-700/30"
+                className="bg-neutral-900/50 p-3 rounded-lg border border-neutral-700/30 space-y-2"
               >
-                <div className="col-span-6">
+                {/* Description - full width */}
+                <div>
                   {index === 0 && <InputLabel>Description</InputLabel>}
                   <Input value={item.description} onChange={(e) => handleItemChange(item.id, 'description', e.target.value)} placeholder="Item description" />
                 </div>
-                <div className="col-span-2">
-                  {index === 0 && <InputLabel>Qty</InputLabel>}
-                  <Input type="number" min="1" value={item.quantity} onChange={(e) => handleItemChange(item.id, 'quantity', parseFloat(e.target.value) || 0)} />
-                </div>
-                <div className="col-span-3">
-                  {index === 0 && <InputLabel>Rate (₹)</InputLabel>}
-                  <Input type="number" value={item.rate} onChange={(e) => handleItemChange(item.id, 'rate', parseFloat(e.target.value) || 0)} />
-                </div>
-                <div className="col-span-1 flex justify-center pb-1.5">
-                  <button onClick={() => removeItem(item.id)} className="text-neutral-500 hover:text-red-400 transition-colors">
+                {/* Qty, Rate, Delete - in a row */}
+                <div className="flex items-end gap-2">
+                  <div className="flex-1">
+                    {index === 0 && <InputLabel>Qty</InputLabel>}
+                    <Input type="number" min="1" value={item.quantity} onChange={(e) => handleItemChange(item.id, 'quantity', parseFloat(e.target.value) || 0)} />
+                  </div>
+                  <div className="flex-[2]">
+                    {index === 0 && <InputLabel>Rate (₹)</InputLabel>}
+                    <Input type="number" value={item.rate} onChange={(e) => handleItemChange(item.id, 'rate', parseFloat(e.target.value) || 0)} />
+                  </div>
+                  <button onClick={() => removeItem(item.id)} className="shrink-0 text-neutral-500 hover:text-red-400 transition-colors pb-1.5">
                     <Trash2 className="w-5 h-5" />
                   </button>
                 </div>
@@ -222,28 +228,30 @@ export default function InvoiceForm({
       </section>
 
       {/* Tax Settings */}
-      <section className="bg-gradient-to-r from-indigo-900/40 to-purple-900/40 backdrop-blur-md rounded-2xl p-6 border border-indigo-500/20 shadow-[0_8px_30px_rgb(0,0,0,0.2)] flex items-center justify-between">
-        <div>
-          <h2 className="text-xl font-bold text-white mb-1">Apply GST</h2>
-          <p className="text-sm text-indigo-200/70">Calculates CGST/SGST or IGST based on State.</p>
-        </div>
-        <div className="flex items-center gap-4">
-          <label className="relative inline-flex items-center cursor-pointer">
-            <input type="checkbox" checked={taxSettings.applyGst} onChange={(e) => setTaxSettings({...taxSettings, applyGst: e.target.checked})} className="sr-only peer" />
-            <div className="w-11 h-6 bg-neutral-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-neutral-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
-          </label>
-          {taxSettings.applyGst && (
-            <select 
-              value={taxSettings.gstRate} 
-              onChange={(e) => setTaxSettings({...taxSettings, gstRate: parseFloat(e.target.value)})}
-              className="bg-neutral-900 border border-neutral-700 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2"
-            >
-              <option value="5">5%</option>
-              <option value="12">12%</option>
-              <option value="18">18%</option>
-              <option value="28">28%</option>
-            </select>
-          )}
+      <section className="bg-gradient-to-r from-indigo-900/40 to-purple-900/40 backdrop-blur-md rounded-2xl p-6 border border-indigo-500/20 shadow-[0_8px_30px_rgb(0,0,0,0.2)]">
+        <div className="flex flex-wrap items-center justify-between gap-4">
+          <div>
+            <h2 className="text-xl font-bold text-white mb-1">Apply GST</h2>
+            <p className="text-sm text-indigo-200/70">Calculates CGST/SGST or IGST based on State.</p>
+          </div>
+          <div className="flex items-center gap-4 shrink-0">
+            <label className="relative inline-flex items-center cursor-pointer">
+              <input type="checkbox" checked={taxSettings.applyGst} onChange={(e) => setTaxSettings({...taxSettings, applyGst: e.target.checked})} className="sr-only peer" />
+              <div className="w-11 h-6 bg-neutral-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-neutral-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+            </label>
+            {taxSettings.applyGst && (
+              <select 
+                value={taxSettings.gstRate} 
+                onChange={(e) => setTaxSettings({...taxSettings, gstRate: parseFloat(e.target.value)})}
+                className="bg-neutral-900 border border-neutral-700 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2"
+              >
+                <option value="5">5%</option>
+                <option value="12">12%</option>
+                <option value="18">18%</option>
+                <option value="28">28%</option>
+              </select>
+            )}
+          </div>
         </div>
       </section>
 

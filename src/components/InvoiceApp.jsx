@@ -11,6 +11,7 @@ export default function InvoiceApp() {
   // ── UI States ──────────────────────────────────────────
   const [downloading, setDownloading] = useState(false);
   const [mobileTab, setMobileTab] = useState('form');
+  const [toast, setToast] = useState(null); // { type: 'success'|'error', msg: string }
 
   // ── Sender Details ─────────────────────────────────────
   const [senderDetails, setSenderDetails] = useState({
@@ -74,21 +75,30 @@ export default function InvoiceApp() {
   );
 
   // ── PDF Download ───────────────────────────────────────
+  const showToast = (type, msg) => {
+    setToast({ type, msg });
+    setTimeout(() => setToast(null), 4000);
+  };
+
   const handleDownloadPDF = async () => {
     setDownloading(true);
     try {
       const element = document.getElementById('invoice-preview-container');
+      if (!element) throw new Error('Preview not found');
+      const filename = `Invoy_${invoiceMeta.invoiceNumber}.pdf`;
       const opt = {
         margin: 0,
-        filename: `Invoy_${invoiceMeta.invoiceNumber}.pdf`,
+        filename,
         image: { type: 'jpeg', quality: 0.98 },
         html2canvas: { scale: 2, useCORS: true },
         jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' },
       };
       const html2pdf = (await import('html2pdf.js')).default;
       await html2pdf().from(element).set(opt).save();
+      showToast('success', `${filename} saved to your Downloads folder ✓`);
     } catch (err) {
       console.error('PDF export failed:', err);
+      showToast('error', 'PDF generation failed. Please try again.');
     } finally {
       setDownloading(false);
     }
@@ -214,6 +224,18 @@ export default function InvoiceApp() {
         .scrollbar-thin::-webkit-scrollbar-track { background: transparent; }
         .scrollbar-thin::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.08); border-radius: 99px; }
       `}</style>
+
+      {/* ── Toast Notification ───────────────────────────── */}
+      {toast && (
+        <div className={`fixed bottom-6 left-1/2 -translate-x-1/2 z-[9999] flex items-center gap-3 px-5 py-3.5 rounded-2xl shadow-2xl border text-sm font-semibold transition-all animate-fade-in ${
+          toast.type === 'success'
+            ? 'bg-emerald-950/90 border-emerald-500/40 text-emerald-300 shadow-emerald-900/40'
+            : 'bg-red-950/90 border-red-500/40 text-red-300'
+        }`}>
+          <span className="text-base">{toast.type === 'success' ? '✓' : '✕'}</span>
+          {toast.msg}
+        </div>
+      )}
     </div>
   );
 }

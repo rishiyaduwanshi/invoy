@@ -96,6 +96,7 @@ export default function InvoiceApp() {
       const html2pdf = (await import('html2pdf.js')).default;
       await html2pdf().from(element).set(opt).save();
       showToast('success', `${filename} → Downloads folder ✓`);
+      setMobileTab('form'); // reset nav back to form view
     } catch (err) {
       console.error('PDF export failed:', err);
       showToast('error', 'PDF generation failed. Please try again.');
@@ -140,7 +141,7 @@ export default function InvoiceApp() {
               <EditIcon /> Form
             </button>
             <button onClick={() => setMobileTab('preview')} className={`flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${mobileTab === 'preview' ? 'bg-indigo-600 text-white' : 'text-neutral-400 hover:text-white'}`}>
-              <EyeIcon /> Previeww
+              <EyeIcon /> Preview
             </button>
           </div>
 

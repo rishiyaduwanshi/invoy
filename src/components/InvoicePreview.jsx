@@ -20,8 +20,8 @@ function calcTax({ items, taxSettings, senderDetails, clientDetails }) {
 // Status badge with inline hex colors (safe for PDF)
 const StatusBadge = ({ status }) => {
   const colors = {
-    Paid:    { bg: '#16a34a', text: '#fff' },
-    Unpaid:  { bg: '#dc2626', text: '#fff' },
+    Paid: { bg: '#16a34a', text: '#fff' },
+    Unpaid: { bg: '#dc2626', text: '#fff' },
     Partial: { bg: '#d97706', text: '#fff' },
   };
   const c = colors[status] || colors.Unpaid;
@@ -80,8 +80,8 @@ function InvoiceBottom({ senderDetails, contentOptions, paymentDetails, declarat
               {senderDetails.signature
                 ? <img src={senderDetails.signature} alt="Signature" style={{ height: 56, objectFit: 'contain', marginBottom: 8 }} />
                 : <div style={{ height: 56, width: '100%', border: '1px dashed #d1d5db', borderRadius: 4, display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 8 }}>
-                    <span style={{ fontSize: 10, color: '#9ca3af', fontStyle: 'italic' }}>Signature</span>
-                  </div>
+                  <span style={{ fontSize: 10, color: '#9ca3af', fontStyle: 'italic' }}>Signature</span>
+                </div>
               }
               <div style={{ width: '100%', borderTop: '1px solid #9ca3af', paddingTop: 4, textAlign: 'center', fontSize: 11, fontWeight: 600, color: '#1f2937' }}>
                 {senderDetails.businessName || senderDetails.name || 'Authorised Signatory'}
@@ -183,7 +183,7 @@ function ClassicTemplate({ senderDetails, clientDetails, invoiceMeta, items, tax
           <tbody>
             {items.map((item, i) => (
               <tr key={item.id} style={{ borderBottom: '1px solid #e5e7eb', backgroundColor: i % 2 === 0 ? '#fff' : '#fafafa' }}>
-                <td style={{ padding: '12px 16px', fontSize: 13, color: '#1f2937' }}>{item.description || '—'}</td>
+                <td style={{ padding: '12px 16px', fontSize: 13, color: '#1f2937' }}>{item.description || '-'}</td>
                 <td style={{ padding: '12px 16px', fontSize: 13, textAlign: 'center', color: '#1f2937' }}>{item.quantity}</td>
                 <td style={{ padding: '12px 16px', fontSize: 13, textAlign: 'right', color: '#1f2937' }}>{fmt(item.rate)}</td>
                 <td style={{ padding: '12px 16px', fontSize: 13, textAlign: 'right', fontWeight: 600, color: '#111827' }}>{fmt(item.quantity * item.rate)}</td>
@@ -281,7 +281,7 @@ function ModernTemplate({ senderDetails, clientDetails, invoiceMeta, items, taxS
           <tbody>
             {items.map((item) => (
               <tr key={item.id} style={{ borderBottom: '1px solid #f3f4f6' }}>
-                <td style={{ padding: '14px 8px', fontSize: 13, color: '#1f2937' }}>{item.description || '—'}</td>
+                <td style={{ padding: '14px 8px', fontSize: 13, color: '#1f2937' }}>{item.description || '-'}</td>
                 <td style={{ padding: '14px 8px', fontSize: 13, color: '#1f2937', textAlign: 'center' }}>{item.quantity}</td>
                 <td style={{ padding: '14px 8px', fontSize: 13, color: '#1f2937', textAlign: 'right' }}>{fmt(item.rate)}</td>
                 <td style={{ padding: '14px 8px', fontSize: 13, fontWeight: 600, color: '#111827', textAlign: 'right' }}>{fmt(item.quantity * item.rate)}</td>

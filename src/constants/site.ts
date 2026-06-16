@@ -1,6 +1,6 @@
 // ── Site Configuration ─────────────────────────────────────────────────
 // Single source of truth for all site-wide constants.
-// Update here — reflects everywhere.
+// Update here - reflects everywhere.
 
 export const SITE = {
   name: 'Invoy',

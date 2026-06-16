@@ -1,6 +1,6 @@
 ---
-import "../global.css"
-import InvoiceApp from '../components/InvoiceApp.jsx';
+import "../global.css";
+import InvoiceApp from "../components/InvoiceApp.jsx";
 ---
 
 <html lang="en">
@@ -8,21 +8,59 @@ import InvoiceApp from '../components/InvoiceApp.jsx';
 		<meta charset="utf-8" />
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<link rel="preconnect" href="https://fonts.googleapis.com">
-		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-		<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@400;500;700;800;900&display=swap" rel="stylesheet">
-		<title>Invoice Generator — Invoy</title>
-		<meta name="description" content="Create professional, GST-compliant invoices instantly. Invoy is free, private, and works 100% in your browser." />
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@400;500;700;800;900&display=swap"
+			rel="stylesheet"
+		/>
+		<title>Invoice Generator - Invoy</title>
+		<meta
+			name="description"
+			content="Create professional, GST-compliant invoices instantly. Invoy is free, private, and works 100% in your browser."
+		/>
 	</head>
-	<body class="bg-[#050505] min-h-screen text-white font-sans antialiased overflow-x-hidden">
-		
+	<body
+		class="bg-[#050505] min-h-screen text-white font-sans antialiased overflow-x-hidden"
+	>
 		{/* Ambient Background Glows */}
-		<div class="fixed top-[-10%] left-[-10%] w-[40%] h-[40%] rounded-full bg-blue-600/10 blur-[120px] pointer-events-none z-0"></div>
-		<div class="fixed bottom-[-10%] right-[-10%] w-[40%] h-[40%] rounded-full bg-purple-600/10 blur-[120px] pointer-events-none z-0"></div>
+		<div
+			class="fixed top-[-10%] left-[-10%] w-[40%] h-[40%] rounded-full bg-blue-600/10 blur-[120px] pointer-events-none z-0"
+		>
+		</div>
+		<div
+			class="fixed bottom-[-10%] right-[-10%] w-[40%] h-[40%] rounded-full bg-purple-600/10 blur-[120px] pointer-events-none z-0"
+		>
+		</div>
 
 		<main class="relative z-10">
 			<InvoiceApp client:only="react" />
 		</main>
 
+		{/* Tawk.to Live Chat */}
+		<script
+			define:vars={{
+				tawkPropertyId: import.meta.env.PUBLIC_TAWK_PROPERTY_ID,
+				tawkWidgetId: import.meta.env.PUBLIC_TAWK_WIDGET_ID,
+			}}
+		>
+			if (tawkPropertyId && tawkPropertyId !== "your_property_id_here") {
+				var Tawk_API = Tawk_API || {},
+					Tawk_LoadStart = new Date();
+				(function () {
+					var s1 = document.createElement("script"),
+						s0 = document.getElementsByTagName("script")[0];
+					s1.async = true;
+					s1.src =
+						"https://embed.tawk.to/" +
+						tawkPropertyId +
+						"/" +
+						tawkWidgetId;
+					s1.charset = "UTF-8";
+					s1.setAttribute("crossorigin", "*");
+					s0.parentNode.insertBefore(s1, s0);
+				})();
+			}
+		</script>
 	</body>
 </html>

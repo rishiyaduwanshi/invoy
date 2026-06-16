@@ -1,22 +1,53 @@
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { TEMPLATES } from '../templates/index.ts';
+import { PlusIcon, TrashIcon, UploadIcon } from '../constants/icons.tsx';
 
-// Inline SVG components to bypass lucide-react SSR CommonJS bugs
-const Plus = (props) => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><line x1="12" x2="12" y1="5" y2="19"/><line x1="5" x2="19" y1="12" y2="12"/></svg>;
-const Trash2 = (props) => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/><line x1="10" x2="10" y1="11" y2="17"/><line x1="14" x2="14" y1="11" y2="17"/></svg>;
-
-
-const InputLabel = ({ children }) => (
-  <label className="block text-xs font-semibold text-indigo-200/70 uppercase tracking-widest mb-1.5">{children}</label>
+// ── Base Components ────────────────────────────────────────────────────
+const Label = ({ children }) => (
+  <label className="block text-[10px] font-bold text-indigo-200/60 uppercase tracking-widest mb-1.5">{children}</label>
 );
 
-const Input = (props) => (
-  <input 
-    {...props} 
-    className={`w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-sm text-white placeholder-neutral-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-400 focus:bg-white/10 transition-all duration-300 shadow-inner shadow-black/20 ${props.className || ''}`}
+const Input = ({ className = '', ...props }) => (
+  <input
+    {...props}
+    className={`w-full bg-white/5 border border-white/10 rounded-xl px-3.5 py-2.5 text-sm text-white placeholder-neutral-600 focus:outline-none focus:ring-2 focus:ring-indigo-500/40 focus:border-indigo-400/60 focus:bg-white/8 transition-all duration-200 ${className}`}
   />
 );
 
+const Toggle = ({ checked, onChange, label, description }) => (
+  <div className="flex items-center justify-between gap-4">
+    <div>
+      <p className="text-sm font-semibold text-white">{label}</p>
+      {description && <p className="text-xs text-neutral-500 mt-0.5">{description}</p>}
+    </div>
+    <label className="relative inline-flex items-center cursor-pointer shrink-0">
+      <input type="checkbox" checked={checked} onChange={onChange} className="sr-only peer" />
+      <div className="w-10 h-5 bg-neutral-700 rounded-full peer peer-checked:after:translate-x-5 after:content-[''] after:absolute after:top-0.5 after:left-0.5 after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-indigo-600" />
+    </label>
+  </div>
+);
+
+const SectionCard = ({ children, className = '' }) => (
+  <div className={`bg-white/[0.04] rounded-2xl p-5 border border-white/8 ${className}`}>
+    {children}
+  </div>
+);
+
+const SectionTitle = ({ color = 'indigo', children }) => {
+  const colors = {
+    indigo: 'bg-indigo-500', purple: 'bg-purple-500', blue: 'bg-blue-500',
+    emerald: 'bg-emerald-500', yellow: 'bg-yellow-500', pink: 'bg-pink-500', red: 'bg-red-500',
+  };
+  return (
+    <h2 className="text-base font-bold text-white mb-4 flex items-center gap-2">
+      <span className={`w-1 h-4 ${colors[color]} rounded-full`} />
+      {children}
+    </h2>
+  );
+};
+
+// ── Main Form ──────────────────────────────────────────────────────────
 export default function InvoiceForm({
   selectedTemplate, setSelectedTemplate,
   senderDetails, setSenderDetails,
@@ -24,277 +55,326 @@ export default function InvoiceForm({
   invoiceMeta, setInvoiceMeta,
   items, setItems,
   taxSettings, setTaxSettings,
+  contentOptions, setContentOptions,
   paymentDetails, setPaymentDetails,
-  declaration, setDeclaration
+  declaration, setDeclaration,
 }) {
-  const handleItemChange = (id, field, value) => {
-    setItems(items.map(item => item.id === id ? { ...item, [field]: value } : item));
-  };
-
-  const addItem = () => {
-    setItems([...items, { id: Date.now(), description: '', quantity: 1, rate: 0 }]);
-  };
-
-  const removeItem = (id) => {
-    setItems(items.filter(item => item.id !== id));
-  };
+  const S = (field) => (val) => setSenderDetails(p => ({ ...p, [field]: val }));
+  const C = (field) => (val) => setClientDetails(p => ({ ...p, [field]: val }));
+  const M = (field) => (val) => setInvoiceMeta(p => ({ ...p, [field]: val }));
+  const T = (field) => (val) => setTaxSettings(p => ({ ...p, [field]: val }));
+  const CO = (field) => (val) => setContentOptions(p => ({ ...p, [field]: val }));
+  const P = (field) => (val) => setPaymentDetails(p => ({ ...p, [field]: val }));
 
   const handleLogoUpload = (e) => {
     const file = e.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setSenderDetails({ ...senderDetails, logo: reader.result });
-      };
-      reader.readAsDataURL(file);
-    }
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onloadend = () => S('logo')(reader.result);
+    reader.readAsDataURL(file);
   };
 
   const handleSignatureUpload = (e) => {
     const file = e.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setSenderDetails({ ...senderDetails, signature: reader.result });
-      };
-      reader.readAsDataURL(file);
-    }
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onloadend = () => S('signature')(reader.result);
+    reader.readAsDataURL(file);
   };
 
+  const addItem = () => setItems(p => [...p, { id: Date.now(), description: '', quantity: 1, rate: 0 }]);
+  const removeItem = (id) => setItems(p => p.filter(i => i.id !== id));
+  const updateItem = (id, field, value) => setItems(p => p.map(i => i.id === id ? { ...i, [field]: value } : i));
+
   return (
-    <div className="space-y-6 pb-20 font-['Inter'] w-full overflow-x-hidden">
+    <div className="space-y-4 pb-20 w-full overflow-x-hidden">
 
-      {/* Template Selection */}
-      <section className="bg-white/5 backdrop-blur-md rounded-2xl p-6 border border-white/10 shadow-[0_8px_30px_rgb(0,0,0,0.12)]">
-        <h2 className="text-xl font-bold text-white mb-5 flex items-center gap-2"><span className="w-1.5 h-5 bg-pink-500 rounded-full"></span>Select Template</h2>
-        <div className="flex gap-4">
-          <button 
-            onClick={() => setSelectedTemplate('modern')}
-            className={`flex-1 py-3 px-4 rounded-xl font-semibold border transition-all ${selectedTemplate === 'modern' ? 'bg-indigo-600 border-indigo-500 text-white shadow-[0_0_15px_rgba(79,70,229,0.5)]' : 'bg-white/5 border-white/10 text-neutral-400 hover:text-white hover:bg-white/10'}`}
-          >
-            Modern
-          </button>
-          <button 
-            onClick={() => setSelectedTemplate('classic')}
-            className={`flex-1 py-3 px-4 rounded-xl font-semibold border transition-all ${selectedTemplate === 'classic' ? 'bg-indigo-600 border-indigo-500 text-white shadow-[0_0_15px_rgba(79,70,229,0.5)]' : 'bg-white/5 border-white/10 text-neutral-400 hover:text-white hover:bg-white/10'}`}
-          >
-            Classic (MSME)
-          </button>
+      {/* ── 1. Template ─────────────────────────────────── */}
+      <SectionCard>
+        <SectionTitle color="pink">Template</SectionTitle>
+        <div className="grid grid-cols-2 gap-3">
+          {TEMPLATES.map((t) => (
+            <button
+              key={t.id}
+              onClick={() => setSelectedTemplate(t.id)}
+              className={`py-2.5 px-3 rounded-xl text-sm font-semibold border transition-all ${
+                selectedTemplate === t.id
+                  ? 'bg-indigo-600 border-indigo-500 text-white shadow-[0_0_15px_rgba(79,70,229,0.4)]'
+                  : 'bg-white/5 border-white/10 text-neutral-400 hover:text-white hover:bg-white/8'
+              }`}
+            >
+              {t.emoji} {t.name}
+            </button>
+          ))}
         </div>
-      </section>
-      
-      {/* Sender Details */}
-      <section className="bg-white/5 backdrop-blur-md rounded-2xl p-6 border border-white/10 shadow-[0_8px_30px_rgb(0,0,0,0.12)]">
-        <h2 className="text-xl font-bold text-white mb-5 flex items-center gap-2"><span className="w-1.5 h-5 bg-indigo-500 rounded-full"></span>Your Details (Sender)</h2>
-        <div className="space-y-4">
-          <div>
-            <InputLabel>Business Logo</InputLabel>
-            <input type="file" accept="image/*" onChange={handleLogoUpload}
-              className="w-full text-sm text-neutral-400 file:mr-3 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-sm file:font-semibold file:bg-white/10 file:text-white hover:file:bg-white/20 transition-all" />
-          </div>
-          <div>
-            <InputLabel>Authorised Signature</InputLabel>
-            <input type="file" accept="image/*" onChange={handleSignatureUpload}
-              className="w-full text-sm text-neutral-400 file:mr-3 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-sm file:font-semibold file:bg-white/10 file:text-white hover:file:bg-white/20 transition-all" />
-          </div>
-          <div>
-            <InputLabel>Business Name</InputLabel>
-            <Input value={senderDetails.businessName} onChange={(e) => setSenderDetails({...senderDetails, businessName: e.target.value})} placeholder="Your Company / Business Name" />
-          </div>
-          <div className="grid grid-cols-2 gap-4">
-            <div>
-              <InputLabel>Owner / Contact Name</InputLabel>
-              <Input value={senderDetails.name} onChange={(e) => setSenderDetails({...senderDetails, name: e.target.value})} placeholder="Your Full Name" />
-            </div>
-            <div>
-              <InputLabel>Email</InputLabel>
-              <Input value={senderDetails.email} onChange={(e) => setSenderDetails({...senderDetails, email: e.target.value})} placeholder="Email" />
-            </div>
-          </div>
-          <div className="grid grid-cols-2 gap-4">
-            <div>
-              <InputLabel>Phone</InputLabel>
-              <Input value={senderDetails.phone} onChange={(e) => setSenderDetails({...senderDetails, phone: e.target.value})} placeholder="Phone Number" />
-            </div>
-            <div>
-              <InputLabel>Udyam Reg No</InputLabel>
-              <Input value={senderDetails.udyamNo} onChange={(e) => setSenderDetails({...senderDetails, udyamNo: e.target.value})} placeholder="UDYAM-XX-XX-XXXX" />
-            </div>
-          </div>
-          <div>
-            <InputLabel>Address</InputLabel>
-            <Input value={senderDetails.address} onChange={(e) => setSenderDetails({...senderDetails, address: e.target.value})} placeholder="Full Address" />
-          </div>
-          <div className="grid grid-cols-2 gap-4">
-            <div>
-              <InputLabel>GSTIN</InputLabel>
-              <Input value={senderDetails.gstin} onChange={(e) => setSenderDetails({...senderDetails, gstin: e.target.value})} placeholder="Optional GSTIN" />
-            </div>
-            <div>
-              <InputLabel>State</InputLabel>
-              <Input value={taxSettings.senderState} onChange={(e) => setTaxSettings({...taxSettings, senderState: e.target.value})} placeholder="e.g. Delhi" />
-            </div>
-          </div>
-        </div>
-      </section>
+      </SectionCard>
 
-      {/* Client Details */}
-      <section className="bg-white/5 backdrop-blur-md rounded-2xl p-6 border border-white/10 shadow-[0_8px_30px_rgb(0,0,0,0.12)]">
-        <h2 className="text-xl font-bold text-white mb-5 flex items-center gap-2"><span className="w-1.5 h-5 bg-purple-500 rounded-full"></span>Bill To (Client)</h2>
-        <div className="space-y-4">
-          <div className="grid grid-cols-2 gap-4">
-            <div>
-              <InputLabel>Client Name</InputLabel>
-              <Input value={clientDetails.name} onChange={(e) => setClientDetails({...clientDetails, name: e.target.value})} placeholder="Client Company or Name" />
-            </div>
-            <div>
-              <InputLabel>Client Email</InputLabel>
-              <Input value={clientDetails.email} onChange={(e) => setClientDetails({...clientDetails, email: e.target.value})} placeholder="Client Email Address" />
-            </div>
-          </div>
-          <div>
-            <InputLabel>Address</InputLabel>
-            <Input value={clientDetails.address} onChange={(e) => setClientDetails({...clientDetails, address: e.target.value})} placeholder="Client Address" />
-          </div>
-          <div>
-            <InputLabel>State of Supply (For IGST/CGST logic)</InputLabel>
-            <Input value={clientDetails.state} onChange={(e) => setClientDetails({...clientDetails, state: e.target.value})} placeholder="e.g. Maharashtra" />
-          </div>
-        </div>
-      </section>
-
-      {/* Invoice Meta */}
-      <section className="bg-white/5 backdrop-blur-md rounded-2xl p-6 border border-white/10 shadow-[0_8px_30px_rgb(0,0,0,0.12)]">
-        <h2 className="text-xl font-bold text-white mb-5 flex items-center gap-2"><span className="w-1.5 h-5 bg-blue-500 rounded-full"></span>Invoice Meta</h2>
-        <div className="grid grid-cols-3 gap-4">
-          <div>
-            <InputLabel>Invoice #</InputLabel>
-            <Input value={invoiceMeta.invoiceNumber} onChange={(e) => setInvoiceMeta({...invoiceMeta, invoiceNumber: e.target.value})} />
-          </div>
-          <div>
-            <InputLabel>Date</InputLabel>
-            <Input type="date" value={invoiceMeta.date} onChange={(e) => setInvoiceMeta({...invoiceMeta, date: e.target.value})} />
-          </div>
-          <div>
-            <InputLabel>Due Date</InputLabel>
-            <Input type="date" value={invoiceMeta.dueDate} onChange={(e) => setInvoiceMeta({...invoiceMeta, dueDate: e.target.value})} />
-          </div>
-        </div>
-      </section>
-
-      {/* Items */}
-      <section className="bg-white/5 backdrop-blur-md rounded-2xl p-6 border border-white/10 shadow-[0_8px_30px_rgb(0,0,0,0.12)]">
-        <div className="flex justify-between items-center mb-5">
-          <h2 className="text-xl font-bold text-white flex items-center gap-2"><span className="w-1.5 h-5 bg-emerald-500 rounded-full"></span>Line Items</h2>
-        </div>
-        
+      {/* ── 2. Your Business ────────────────────────────── */}
+      <SectionCard>
+        <SectionTitle color="indigo">Your Business</SectionTitle>
         <div className="space-y-3">
+          <div>
+            <Label>Business / Company Name</Label>
+            <Input value={senderDetails.businessName} onChange={e => S('businessName')(e.target.value)} placeholder="e.g. Invoy Technologies" />
+          </div>
+          <div className="grid grid-cols-2 gap-3">
+            <div>
+              <Label>Owner / Your Name</Label>
+              <Input value={senderDetails.name} onChange={e => S('name')(e.target.value)} placeholder="Full Name" />
+            </div>
+            <div>
+              <Label>Email</Label>
+              <Input type="email" value={senderDetails.email} onChange={e => S('email')(e.target.value)} placeholder="you@email.com" />
+            </div>
+          </div>
+          <div className="grid grid-cols-2 gap-3">
+            <div>
+              <Label>Phone</Label>
+              <Input value={senderDetails.phone} onChange={e => S('phone')(e.target.value)} placeholder="+91 XXXXX XXXXX" />
+            </div>
+            <div>
+              <Label>State</Label>
+              <Input value={taxSettings.senderState} onChange={e => T('senderState')(e.target.value)} placeholder="e.g. Delhi" />
+            </div>
+          </div>
+          <div>
+            <Label>Address</Label>
+            <Input value={senderDetails.address} onChange={e => S('address')(e.target.value)} placeholder="Full business address" />
+          </div>
+          <div className="grid grid-cols-2 gap-3">
+            <div>
+              <Label>GSTIN (optional)</Label>
+              <Input value={senderDetails.gstin} onChange={e => S('gstin')(e.target.value)} placeholder="22AAAAA0000A1Z5" />
+            </div>
+            <div>
+              <Label>Udyam Reg No (optional)</Label>
+              <Input value={senderDetails.udyamNo} onChange={e => S('udyamNo')(e.target.value)} placeholder="UDYAM-XX-00-0000000" />
+            </div>
+          </div>
+          {/* Logo */}
+          <div>
+            <Label>Business Logo <span className="text-neutral-600 font-normal normal-case">(optional)</span></Label>
+            <div className="flex items-center gap-3">
+              {senderDetails.logo ? (
+                <>
+                  <img src={senderDetails.logo} alt="logo" className="h-10 w-10 object-contain rounded-lg border border-white/10 bg-white/5" />
+                  <button onClick={() => S('logo')(null)} className="text-xs text-red-400 hover:text-red-300 transition-colors">Remove</button>
+                </>
+              ) : (
+                <label className="flex items-center gap-2 cursor-pointer text-xs text-neutral-400 bg-white/5 border border-white/10 rounded-xl px-3 py-2 hover:bg-white/10 transition-all">
+                  <UploadIcon width={14} height={14} />
+                  Choose logo image
+                  <input type="file" accept="image/*" onChange={handleLogoUpload} className="hidden" />
+                </label>
+              )}
+            </div>
+          </div>
+        </div>
+      </SectionCard>
+
+      {/* ── 3. Bill To ──────────────────────────────────── */}
+      <SectionCard>
+        <SectionTitle color="purple">Bill To (Client)</SectionTitle>
+        <div className="space-y-3">
+          <div className="grid grid-cols-2 gap-3">
+            <div>
+              <Label>Client Name / Company</Label>
+              <Input value={clientDetails.name} onChange={e => C('name')(e.target.value)} placeholder="Client Name" />
+            </div>
+            <div>
+              <Label>Client Email</Label>
+              <Input type="email" value={clientDetails.email} onChange={e => C('email')(e.target.value)} placeholder="client@email.com" />
+            </div>
+          </div>
+          <div>
+            <Label>Client Address</Label>
+            <Input value={clientDetails.address} onChange={e => C('address')(e.target.value)} placeholder="Client's full address" />
+          </div>
+          <div>
+            <Label>Client State (for GST calculation)</Label>
+            <Input value={clientDetails.state} onChange={e => C('state')(e.target.value)} placeholder="e.g. Maharashtra" />
+          </div>
+        </div>
+      </SectionCard>
+
+      {/* ── 4. Invoice Details ──────────────────────────── */}
+      <SectionCard>
+        <SectionTitle color="blue">Invoice Details</SectionTitle>
+        <div className="grid grid-cols-3 gap-3">
+          <div>
+            <Label>Invoice #</Label>
+            <Input value={invoiceMeta.invoiceNumber} onChange={e => M('invoiceNumber')(e.target.value)} />
+          </div>
+          <div>
+            <Label>Date</Label>
+            <Input type="date" value={invoiceMeta.date} onChange={e => M('date')(e.target.value)} />
+          </div>
+          <div>
+            <Label>Due Date</Label>
+            <Input type="date" value={invoiceMeta.dueDate} onChange={e => M('dueDate')(e.target.value)} placeholder="Optional" />
+          </div>
+        </div>
+      </SectionCard>
+
+      {/* ── 5. Line Items ───────────────────────────────── */}
+      <SectionCard>
+        <SectionTitle color="emerald">Line Items</SectionTitle>
+        <div className="space-y-2">
           <AnimatePresence>
             {items.map((item, index) => (
-              <motion.div 
+              <motion.div
                 key={item.id}
-                initial={{ opacity: 0, y: -10 }}
+                initial={{ opacity: 0, y: -8 }}
                 animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, x: -20 }}
-                className="bg-neutral-900/50 p-3 rounded-lg border border-neutral-700/30 space-y-2"
+                exit={{ opacity: 0, x: -16 }}
+                className="bg-black/20 rounded-xl p-3 border border-white/5 space-y-2"
               >
-                {/* Description - full width */}
                 <div>
-                  {index === 0 && <InputLabel>Description</InputLabel>}
-                  <Input value={item.description} onChange={(e) => handleItemChange(item.id, 'description', e.target.value)} placeholder="Item description" />
+                  {index === 0 && <Label>Description</Label>}
+                  <Input value={item.description} onChange={e => updateItem(item.id, 'description', e.target.value)} placeholder="Service or product description" />
                 </div>
-                {/* Qty, Rate, Delete - in a row */}
-                <div className="flex items-end gap-2">
+                <div className="flex gap-2 items-end">
                   <div className="flex-1">
-                    {index === 0 && <InputLabel>Qty</InputLabel>}
-                    <Input type="number" min="1" value={item.quantity} onChange={(e) => handleItemChange(item.id, 'quantity', parseFloat(e.target.value) || 0)} />
+                    {index === 0 && <Label>Qty</Label>}
+                    <Input type="number" min="0" value={item.quantity} onChange={e => updateItem(item.id, 'quantity', parseFloat(e.target.value) || 0)} />
                   </div>
                   <div className="flex-[2]">
-                    {index === 0 && <InputLabel>Rate (₹)</InputLabel>}
-                    <Input type="number" value={item.rate} onChange={(e) => handleItemChange(item.id, 'rate', parseFloat(e.target.value) || 0)} />
+                    {index === 0 && <Label>Rate (₹)</Label>}
+                    <Input type="number" min="0" value={item.rate} onChange={e => updateItem(item.id, 'rate', parseFloat(e.target.value) || 0)} />
                   </div>
-                  <button onClick={() => removeItem(item.id)} className="shrink-0 text-neutral-500 hover:text-red-400 transition-colors pb-1.5">
-                    <Trash2 className="w-5 h-5" />
+                  <button onClick={() => removeItem(item.id)} disabled={items.length === 1} className="shrink-0 text-neutral-600 hover:text-red-400 transition-colors pb-1.5 disabled:opacity-30">
+                    <TrashIcon width={15} height={15} />
                   </button>
                 </div>
               </motion.div>
             ))}
           </AnimatePresence>
         </div>
-        
-        <button onClick={addItem} className="mt-4 flex items-center gap-2 text-sm text-blue-400 hover:text-blue-300 font-medium transition-colors">
-          <Plus className="w-4 h-4" /> Add Item
+        <button onClick={addItem} className="mt-3 flex items-center gap-1.5 text-sm text-indigo-400 hover:text-indigo-300 font-semibold transition-colors">
+          <PlusIcon width={15} height={15} /> Add Item
         </button>
-      </section>
+      </SectionCard>
 
-      {/* Tax Settings */}
-      <section className="bg-gradient-to-r from-indigo-900/40 to-purple-900/40 backdrop-blur-md rounded-2xl p-6 border border-indigo-500/20 shadow-[0_8px_30px_rgb(0,0,0,0.2)]">
-        <div className="flex flex-wrap items-center justify-between gap-4">
-          <div>
-            <h2 className="text-xl font-bold text-white mb-1">Apply GST</h2>
-            <p className="text-sm text-indigo-200/70">Calculates CGST/SGST or IGST based on State.</p>
-          </div>
-          <div className="flex items-center gap-4 shrink-0">
-            <label className="relative inline-flex items-center cursor-pointer">
-              <input type="checkbox" checked={taxSettings.applyGst} onChange={(e) => setTaxSettings({...taxSettings, applyGst: e.target.checked})} className="sr-only peer" />
-              <div className="w-11 h-6 bg-neutral-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-neutral-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
-            </label>
-            {taxSettings.applyGst && (
-              <select 
-                value={taxSettings.gstRate} 
-                onChange={(e) => setTaxSettings({...taxSettings, gstRate: parseFloat(e.target.value)})}
-                className="bg-neutral-900 border border-neutral-700 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2"
-              >
-                <option value="5">5%</option>
-                <option value="12">12%</option>
-                <option value="18">18%</option>
-                <option value="28">28%</option>
-              </select>
-            )}
-          </div>
-        </div>
-      </section>
-
-      {/* Payment Details */}
-      {selectedTemplate === 'classic' && (
-        <section className="bg-white/5 backdrop-blur-md rounded-2xl p-6 border border-white/10 shadow-[0_8px_30px_rgb(0,0,0,0.12)]">
-          <h2 className="text-xl font-bold text-white mb-5 flex items-center gap-2"><span className="w-1.5 h-5 bg-yellow-500 rounded-full"></span>Payment Details</h2>
-          <div className="grid grid-cols-3 gap-4">
-            <div>
-              <InputLabel>Payment Mode</InputLabel>
-              <Input value={paymentDetails.mode} onChange={(e) => setPaymentDetails({...paymentDetails, mode: e.target.value})} placeholder="Bank Transfer, UPI, etc." />
-            </div>
-            <div>
-              <InputLabel>Payment Status</InputLabel>
-              <select 
-                value={paymentDetails.status} 
-                onChange={(e) => setPaymentDetails({...paymentDetails, status: e.target.value})}
-                className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-400 focus:bg-white/10 transition-all duration-300"
-              >
-                <option value="Paid" className="bg-neutral-800">Paid</option>
-                <option value="Unpaid" className="bg-neutral-800">Unpaid</option>
-              </select>
-            </div>
-            <div>
-              <InputLabel>Transaction ID</InputLabel>
-              <Input value={paymentDetails.transactionId} onChange={(e) => setPaymentDetails({...paymentDetails, transactionId: e.target.value})} placeholder="e.g. TXN123456" />
-            </div>
-          </div>
-        </section>
-      )}
-
-      {/* Declaration */}
-      {selectedTemplate === 'classic' && (
-        <section className="bg-white/5 backdrop-blur-md rounded-2xl p-6 border border-white/10 shadow-[0_8px_30px_rgb(0,0,0,0.12)]">
-          <h2 className="text-xl font-bold text-white mb-5 flex items-center gap-2"><span className="w-1.5 h-5 bg-red-500 rounded-full"></span>Declaration</h2>
-          <textarea 
-            value={declaration}
-            onChange={(e) => setDeclaration(e.target.value)}
-            className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-sm text-white placeholder-neutral-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-400 focus:bg-white/10 transition-all duration-300 shadow-inner shadow-black/20 min-h-[100px]"
-            placeholder="Enter declaration bullet points"
+      {/* ── 6. GST / Tax ────────────────────────────────── */}
+      <SectionCard>
+        <SectionTitle color="blue">Tax Settings</SectionTitle>
+        <div className="space-y-4">
+          <Toggle
+            checked={taxSettings.applyGst}
+            onChange={e => T('applyGst')(e.target.checked)}
+            label="Apply GST"
+            description="Calculates CGST/SGST or IGST based on states"
           />
-        </section>
-      )}
+          {taxSettings.applyGst && (
+            <div>
+              <Label>GST Rate</Label>
+              <div className="flex gap-2">
+                {[5, 12, 18, 28].map(rate => (
+                  <button
+                    key={rate}
+                    onClick={() => T('gstRate')(rate)}
+                    className={`flex-1 py-2 rounded-xl text-sm font-bold border transition-all ${
+                      taxSettings.gstRate === rate
+                        ? 'bg-indigo-600 border-indigo-500 text-white'
+                        : 'bg-white/5 border-white/10 text-neutral-400 hover:text-white'
+                    }`}
+                  >
+                    {rate}%
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+      </SectionCard>
+
+      {/* ── 7. Optional Sections (toggles) ──────────────── */}
+      <SectionCard>
+        <SectionTitle color="yellow">Optional Sections</SectionTitle>
+        <div className="space-y-4">
+          <Toggle
+            checked={contentOptions.showSignature}
+            onChange={e => CO('showSignature')(e.target.checked)}
+            label="Authorised Signature"
+            description="Show signature on the invoice"
+          />
+          {contentOptions.showSignature && (
+          <div>
+            <Label>Upload Signature Image</Label>
+            <div className="flex items-center gap-3">
+              {senderDetails.signature ? (
+                <>
+                  <img src={senderDetails.signature} alt="signature" className="h-10 object-contain rounded border border-white/10 bg-white/5 px-2" />
+                  <button onClick={() => S('signature')(null)} className="text-xs text-red-400 hover:text-red-300 transition-colors">Remove</button>
+                </>
+              ) : (
+                <label className="flex items-center gap-2 cursor-pointer text-xs text-neutral-400 bg-white/5 border border-white/10 rounded-xl px-3 py-2 hover:bg-white/10 transition-all">
+                  <UploadIcon width={14} height={14} />
+                  Choose signature image
+                  <input type="file" accept="image/*" onChange={handleSignatureUpload} className="hidden" />
+                </label>
+              )}
+            </div>
+          </div>
+          )}
+
+          <div className="border-t border-white/5 pt-4">
+            <Toggle
+              checked={contentOptions.showPaymentDetails}
+              onChange={e => CO('showPaymentDetails')(e.target.checked)}
+              label="Payment Details"
+              description="Show payment mode, status and transaction ID"
+            />
+          </div>
+          {contentOptions.showPaymentDetails && (
+            <div className="pl-4 border-l border-white/10 space-y-3">
+              <div>
+                <Label>Payment Mode</Label>
+                <Input value={paymentDetails.mode} onChange={e => P('mode')(e.target.value)} placeholder="Bank Transfer, UPI, Cash..." />
+              </div>
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <Label>Payment Status</Label>
+                  <select
+                    value={paymentDetails.status}
+                    onChange={e => P('status')(e.target.value)}
+                    className="w-full bg-white/5 border border-white/10 rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:ring-2 focus:ring-indigo-500/40 transition-all"
+                  >
+                    <option value="Paid" className="bg-neutral-900">Paid</option>
+                    <option value="Unpaid" className="bg-neutral-900">Unpaid</option>
+                    <option value="Partial" className="bg-neutral-900">Partial</option>
+                  </select>
+                </div>
+                <div>
+                  <Label>Transaction ID</Label>
+                  <Input value={paymentDetails.transactionId} onChange={e => P('transactionId')(e.target.value)} placeholder="TXN..." />
+                </div>
+              </div>
+            </div>
+          )}
+
+          <div className="border-t border-white/5 pt-4">
+            <Toggle
+              checked={contentOptions.showDeclaration}
+              onChange={e => CO('showDeclaration')(e.target.checked)}
+              label="Declaration / Terms"
+              description="Add custom terms or a declaration at the bottom"
+            />
+          </div>
+          {contentOptions.showDeclaration && (
+            <div className="pl-4 border-l border-white/10">
+              <Label>Declaration Text</Label>
+              <textarea
+                value={declaration}
+                onChange={e => setDeclaration(e.target.value)}
+                rows={4}
+                className="w-full bg-white/5 border border-white/10 rounded-xl px-3.5 py-2.5 text-sm text-white placeholder-neutral-600 focus:outline-none focus:ring-2 focus:ring-indigo-500/40 transition-all resize-none"
+                placeholder="Enter your terms, conditions or declaration..."
+              />
+            </div>
+          )}
+        </div>
+      </SectionCard>
 
     </div>
   );

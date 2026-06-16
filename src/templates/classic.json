@@ -1,0 +1,8 @@
+{
+  "id": "classic",
+  "name": "Classic (MSME)",
+  "emoji": "⭐",
+  "description": "Formal Govt-style layout for MSMEs with Udyam branding",
+  "accentColor": "#4472C4",
+  "features": ["Govt MSME branding", "Udyam Reg No", "Blue title bar", "Declaration section"]
+}

@@ -1,5 +1,6 @@
 ---
 import "../global.css"
+import { SITE } from "../constants/site.ts"
 ---
 
 <html lang="en" class="scroll-smooth">
@@ -10,8 +11,8 @@ import "../global.css"
 		<link rel="preconnect" href="https://fonts.googleapis.com">
 		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 		<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@400;500;700;800;900&display=swap" rel="stylesheet">
-		<title>Invoy - Free Online Invoice Generator for India</title>
-		<meta name="description" content="Create professional, GST-compliant invoices in seconds. Invoy is the fastest, completely free invoice generator for Indian freelancers and MSMEs." />
+		<title>{SITE.name} — {SITE.tagline}</title>
+		<meta name="description" content={SITE.description} />
 		
 		{/* JSON-LD for SoftwareApplication and AEO */}
 		<script type="application/ld+json">

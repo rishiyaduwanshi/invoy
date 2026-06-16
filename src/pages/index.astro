@@ -6,7 +6,7 @@ import "../global.css"
 	<head>
 		<meta charset="utf-8" />
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<meta name="viewport" content="width=device-width" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<link rel="preconnect" href="https://fonts.googleapis.com">
 		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 		<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@400;500;700;800;900&display=swap" rel="stylesheet">
@@ -59,7 +59,7 @@ import "../global.css"
 
 		{/* Header */}
 		<header class="fixed top-0 w-full z-50 bg-black/50 backdrop-blur-xl border-b border-white/5 transition-all duration-300">
-			<div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
+			<div class="max-w-7xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
 				<div class="flex items-center gap-2">
 					<div class="w-8 h-8 rounded-lg bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center font-bold text-lg shadow-[0_0_15px_rgba(79,70,229,0.5)]">
 						I
@@ -71,7 +71,7 @@ import "../global.css"
 					<a href="#how-it-works" class="hover:text-white transition-colors">How it Works</a>
 					<a href="#faq" class="hover:text-white transition-colors">FAQ</a>
 				</nav>
-				<a href="/app" class="bg-white text-black px-6 py-2.5 rounded-full font-bold text-sm hover:scale-105 hover:bg-neutral-200 transition-all shadow-[0_0_20px_rgba(255,255,255,0.2)]">
+				<a href="/app" class="bg-white text-black px-4 sm:px-6 py-2 sm:py-2.5 rounded-full font-bold text-sm hover:scale-105 hover:bg-neutral-200 transition-all shadow-[0_0_20px_rgba(255,255,255,0.2)] shrink-0">
 					Open App
 				</a>
 			</div>
@@ -80,27 +80,27 @@ import "../global.css"
 		<main class="relative z-10 pt-32">
 			
 			{/* Hero Section */}
-			<section class="min-h-[85vh] flex flex-col items-center justify-center text-center px-4 relative">
+			<section class="min-h-[90vh] flex flex-col items-center justify-center text-center px-4 sm:px-6 relative pt-8">
 				<div class="inline-block mb-6 px-4 py-1.5 rounded-full border border-indigo-500/30 bg-indigo-500/10 text-indigo-300 text-sm font-semibold tracking-wide backdrop-blur-md animate-fade-in">
 					✨ Launching Invoy 1.0
 				</div>
-				<h1 class="text-5xl md:text-7xl font-black font-['Outfit'] tracking-tight max-w-4xl leading-tight mb-8 drop-shadow-2xl opacity-0 animate-fade-in-up" style="animation-delay: 100ms; animation-fill-mode: forwards;">
+				<h1 class="text-4xl sm:text-5xl md:text-7xl font-black font-['Outfit'] tracking-tight max-w-4xl leading-tight mb-6 sm:mb-8 drop-shadow-2xl opacity-0 animate-fade-in-up" style="animation-delay: 100ms; animation-fill-mode: forwards;">
 					Create Professional <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-indigo-400 to-purple-400">GST Invoices</span> in Seconds
 				</h1>
-				<p class="text-lg md:text-xl text-neutral-400 max-w-2xl mb-12 leading-relaxed opacity-0 animate-fade-in-up" style="animation-delay: 200ms; animation-fill-mode: forwards;">
+				<p class="text-base sm:text-lg md:text-xl text-neutral-400 max-w-2xl mb-8 sm:mb-12 leading-relaxed opacity-0 animate-fade-in-up" style="animation-delay: 200ms; animation-fill-mode: forwards;">
 					The fastest, completely free invoice generator tailored for Indian MSMEs and freelancers. No subscriptions, no watermarks, 100% privacy.
 				</p>
-				<div class="flex flex-col sm:flex-row gap-4 opacity-0 animate-fade-in-up" style="animation-delay: 300ms; animation-fill-mode: forwards;">
-					<a href="/app" class="px-8 py-4 bg-gradient-to-r from-indigo-600 to-purple-600 rounded-full font-bold text-lg hover:scale-105 hover:shadow-[0_0_30px_rgba(79,70,229,0.5)] transition-all ring-1 ring-white/20">
+				<div class="flex flex-col sm:flex-row gap-3 sm:gap-4 opacity-0 animate-fade-in-up w-full sm:w-auto px-4 sm:px-0" style="animation-delay: 300ms; animation-fill-mode: forwards;">
+					<a href="/app" class="px-8 py-4 bg-gradient-to-r from-indigo-600 to-purple-600 rounded-full font-bold text-base sm:text-lg hover:scale-105 hover:shadow-[0_0_30px_rgba(79,70,229,0.5)] transition-all ring-1 ring-white/20 text-center">
 						Create Free Invoice
 					</a>
-					<a href="#features" class="px-8 py-4 bg-white/5 backdrop-blur-md border border-white/10 rounded-full font-bold text-lg hover:bg-white/10 transition-all text-neutral-300 hover:text-white">
+					<a href="#features" class="px-8 py-4 bg-white/5 backdrop-blur-md border border-white/10 rounded-full font-bold text-base sm:text-lg hover:bg-white/10 transition-all text-neutral-300 hover:text-white text-center">
 						Explore Features
 					</a>
 				</div>
 
-				{/* Floating UI Mockup Representation */}
-				<div class="mt-20 relative w-full max-w-5xl mx-auto opacity-0 animate-fade-in-up" style="animation-delay: 500ms; animation-fill-mode: forwards;">
+				{/* UI Mockup - hidden on very small screens */}
+				<div class="mt-12 sm:mt-20 relative w-full max-w-5xl mx-auto opacity-0 animate-fade-in-up hidden sm:block" style="animation-delay: 500ms; animation-fill-mode: forwards;">
 					<div class="absolute inset-0 bg-gradient-to-t from-[#050505] via-transparent to-transparent z-10 h-full"></div>
 					<div class="bg-white/5 border border-white/10 backdrop-blur-3xl rounded-t-3xl p-4 shadow-2xl relative overflow-hidden">
 						<div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-500 via-indigo-500 to-purple-500"></div>
@@ -122,7 +122,7 @@ import "../global.css"
 			</section>
 
 			{/* Features Section */}
-			<section id="features" class="py-24 px-6 max-w-7xl mx-auto border-t border-white/5 mt-[-100px] relative z-20">
+			<section id="features" class="py-16 sm:py-24 px-4 sm:px-6 max-w-7xl mx-auto border-t border-white/5 mt-0 sm:mt-[-100px] relative z-20">
 				<div class="text-center mb-16">
 					<h2 class="text-3xl md:text-5xl font-black font-['Outfit'] mb-4">Why choose Invoy?</h2>
 					<p class="text-neutral-400 max-w-2xl mx-auto">Everything you need to bill clients professionally, without the complexity of bloated accounting software.</p>
@@ -156,7 +156,7 @@ import "../global.css"
 			</section>
 
 			{/* How it Works */}
-			<section id="how-it-works" class="py-24 px-6 bg-white/5 border-y border-white/5">
+			<section id="how-it-works" class="py-16 sm:py-24 px-4 sm:px-6 bg-white/5 border-y border-white/5">
 				<div class="max-w-4xl mx-auto text-center">
 					<h2 class="text-3xl md:text-5xl font-black font-['Outfit'] mb-16">3 Simple Steps</h2>
 					<div class="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -180,7 +180,7 @@ import "../global.css"
 			</section>
 
 			{/* FAQ Section */}
-			<section id="faq" class="py-24 px-6 max-w-3xl mx-auto">
+			<section id="faq" class="py-16 sm:py-24 px-4 sm:px-6 max-w-3xl mx-auto">
 				<div class="text-center mb-16">
 					<h2 class="text-3xl md:text-5xl font-black font-['Outfit'] mb-4">Frequently Asked Questions</h2>
 				</div>

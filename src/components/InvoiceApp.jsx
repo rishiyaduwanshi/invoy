@@ -90,12 +90,12 @@ export default function InvoiceApp() {
         margin: 0,
         filename,
         image: { type: 'jpeg', quality: 0.98 },
-        html2canvas: { scale: 2, useCORS: true },
+        html2canvas: { scale: 2, useCORS: true, allowTaint: true },
         jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' },
       };
       const html2pdf = (await import('html2pdf.js')).default;
       await html2pdf().from(element).set(opt).save();
-      showToast('success', `${filename} saved to your Downloads folder ✓`);
+      showToast('success', `${filename} → Downloads folder ✓`);
     } catch (err) {
       console.error('PDF export failed:', err);
       showToast('error', 'PDF generation failed. Please try again.');
@@ -140,7 +140,7 @@ export default function InvoiceApp() {
               <EditIcon /> Form
             </button>
             <button onClick={() => setMobileTab('preview')} className={`flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${mobileTab === 'preview' ? 'bg-indigo-600 text-white' : 'text-neutral-400 hover:text-white'}`}>
-              <EyeIcon /> Preview
+              <EyeIcon /> Previeww
             </button>
           </div>
 

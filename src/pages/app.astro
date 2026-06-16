@@ -21,7 +21,7 @@ import InvoiceApp from '../components/InvoiceApp.jsx';
 		<div class="fixed bottom-[-10%] right-[-10%] w-[40%] h-[40%] rounded-full bg-purple-600/10 blur-[120px] pointer-events-none z-0"></div>
 
 		<main class="relative z-10">
-			<InvoiceApp client:load />
+			<InvoiceApp client:only="react" />
 		</main>
 
 	</body>

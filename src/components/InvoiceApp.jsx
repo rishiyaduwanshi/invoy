@@ -12,8 +12,8 @@ export default function InvoiceApp() {
   const [selectedTemplate, setSelectedTemplate] = useState('modern');
 
   const [senderDetails, setSenderDetails] = useState({
-    name: 'Abhinav',
-    email: 'abhinav@example.com',
+    name: '',
+    email: '',
     address: '',
     gstin: '',
     logo: null,
@@ -77,15 +77,17 @@ export default function InvoiceApp() {
       <nav className="w-full border-b border-white/5 bg-white/5 backdrop-blur-md relative z-20">
         <div className="max-w-7xl mx-auto px-4 h-14 flex items-center justify-between">
           <div className="text-sm font-semibold tracking-widest text-indigo-400 uppercase">
-            iamabhinav.dev
+            INVOY
           </div>
-          <div className="flex items-center gap-6 text-sm font-medium">
-            <a href="https://iamabhinav.dev" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-neutral-400 hover:text-white transition-colors">
-              <Globe className="w-4 h-4" /> Portfolio
-            </a>
-            <a href="https://github.iamabhinav.dev" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-neutral-400 hover:text-white transition-colors">
-              <Github className="w-4 h-4" /> GitHub
-            </a>
+          <div className="flex items-center gap-6">
+          <a href="https://invoy.in" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-sm font-semibold text-neutral-300 hover:text-white transition-colors">
+            <Globe className="w-4 h-4" />
+            Website
+          </a>
+          <a href="https://github.com/rishiyaduwanshi/invoy" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-sm font-semibold text-neutral-300 hover:text-white transition-colors">
+            <Github className="w-4 h-4" />
+            GitHub
+          </a>
           </div>
         </div>
       </nav>

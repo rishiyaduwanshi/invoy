@@ -2,477 +2,604 @@
 import "../global.css";
 import { SITE } from "../constants/site.ts";
 import { icons } from "../constants/icons.ts";
-import nav      from "../data/nav.json";
-import stats    from "../data/stats.json";
-import steps    from "../data/steps.json";
+import nav from "../data/nav.json";
+import steps from "../data/steps.json";
 import features from "../data/features.json";
-import faq      from "../data/faq.json";
+import faq from "../data/faq.json";
+import InvoiceCard from "../components/InvoiceCard.astro";
 ---
 
 <html lang="en" class="scroll-smooth">
-<head>
-  <meta charset="utf-8" />
-  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@400;500;700;800;900&family=Caveat:wght@600;700&display=swap" rel="stylesheet" />
-  <title>{SITE.name} — {SITE.tagline}</title>
-  <meta name="description" content={SITE.description} />
-  <script type="application/ld+json" set:html={JSON.stringify({
-    "@context": "https://schema.org",
-    "@type": "SoftwareApplication",
-    "name": SITE.name,
-    "operatingSystem": "Web",
-    "applicationCategory": "BusinessApplication",
-    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "INR" },
-    "description": SITE.description,
-    "url": SITE.url,
-  })} />
-</head>
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" type="image/svg+xml" href="/invoy_favicon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@400;500;700;800;900&family=Caveat:wght@600;700&display=swap"
+      rel="stylesheet"
+    />
+    <title>{SITE.name} - {SITE.tagline}</title>
+    <meta name="description" content={SITE.description} />
+    <script
+      type="application/ld+json"
+      set:html={JSON.stringify({
+        "@context": "https://schema.org",
+        "@type": "SoftwareApplication",
+        name: SITE.name,
+        operatingSystem: "Web",
+        applicationCategory: "BusinessApplication",
+        offers: { "@type": "Offer", price: "0", priceCurrency: "INR" },
+        description: SITE.description,
+        url: SITE.url,
+      })}
+    />
+  </head>
 
-<body class="font-['Inter'] antialiased overflow-x-hidden">
-
-<!-- ══════════════════════════════════════════════════════════════════
-     NAVBAR — dark
+  <body class="font-['Inter'] antialiased overflow-x-hidden">
+    <!-- ══════════════════════════════════════════════════════════════════
+     NAVBAR - dark
 ══════════════════════════════════════════════════════════════════ -->
-<header class="sticky top-0 z-50 bg-[#0a0a0a]/95 backdrop-blur-xl border-b border-white/8">
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 h-14 flex items-center justify-between gap-4">
-
-    <a href="/" class="flex items-center gap-1.5 shrink-0">
-      <span class="w-7 h-7 rounded-lg bg-[#22c55e] flex items-center justify-center text-black font-black text-base leading-none">✓</span>
-      <span class="font-['Outfit'] font-black text-white text-lg tracking-normal lowercase">{SITE.name}</span>
-    </a>
-
-    <nav class="hidden md:flex items-center gap-8">
-      {nav.links.map(l => (
-        <a href={l.href} class="text-sm text-neutral-300 hover:text-white transition-colors font-medium">{l.label}</a>
-      ))}
-    </nav>
-
-    <div class="flex items-center gap-2">
-      <button id="nav-request-btn"
-        class="hidden sm:flex items-center gap-1.5 px-4 py-1.5 rounded-md text-sm font-semibold border border-[#22c55e]/60 text-[#22c55e] hover:bg-[#22c55e]/8 transition-all">
-        <Fragment set:html={icons["zap"]} />
-        Request a Feature
-      </button>
-      <a href={`mailto:${SITE.support.email}`}
-        class="flex items-center gap-1.5 px-4 py-1.5 rounded-md text-sm font-bold bg-[#f97316] text-white hover:bg-orange-500 transition-all">
-        <Fragment set:html={icons["heart"]} />
-        Support Invoy
-      </a>
-    </div>
-  </div>
-</header>
-
-<!-- ══════════════════════════════════════════════════════════════════
-     HERO — dark bg
-══════════════════════════════════════════════════════════════════ -->
-<section class="relative bg-[#0c100c] min-h-[92vh] flex items-center overflow-hidden">
-  <!-- green ambient glow -->
-  <div class="absolute top-[-10%] left-[-5%] w-[600px] h-[600px] rounded-full bg-[#22c55e]/10 blur-[130px] pointer-events-none"></div>
-  <div class="absolute bottom-0 right-0 w-[400px] h-[400px] rounded-full bg-[#22c55e]/5 blur-[100px] pointer-events-none"></div>
-
-  <div class="relative max-w-7xl mx-auto px-4 sm:px-6 py-16 w-full grid lg:grid-cols-[1fr_1.1fr] gap-10 items-center">
-
-    <!-- Left -->
-    <div class="space-y-7 z-10">
-      <!-- Badge -->
-      <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-[#22c55e]/40 bg-[#22c55e]/10 text-[#22c55e] text-xs font-semibold tracking-wide">
-        <span class="w-1.5 h-1.5 rounded-full bg-[#22c55e] animate-pulse shrink-0"></span>
-        No Sign Up • No Limits • No Watermarks
-      </span>
-
-      <!-- Headline -->
-      <div>
-        <h1 class="text-[2.8rem] sm:text-[3.5rem] lg:text-[4rem] font-black font-['Outfit'] leading-[1.08] text-white tracking-tight">
-          Create Professional<br/>Invoices.
-        </h1>
-        <h2 class="text-[2.8rem] sm:text-[3.5rem] lg:text-[4rem] font-black font-['Outfit'] leading-[1.08] tracking-tight mt-1">
-          <span class="text-white">Fast. </span><span class="text-[#22c55e]">Simple. </span>
-          <span class="relative inline-block text-[#f97316] italic pb-3">
-            Free.
-            <!-- Filled brush-stroke underline -->
-            <svg class="absolute left-[-4%] w-[108%]" style="bottom:-6px" viewBox="0 0 200 22" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
-              <path d="M2 13 C 18 8, 50 15, 90 11 C 130 7, 165 14, 198 10 L 198 15 C 163 19, 128 13, 90 16 C 52 19, 19 14, 2 17 Z" fill="#f97316" opacity="0.88"/>
-              <path d="M8 12 Q 60 8, 120 11 Q 160 8, 195 12" stroke="#f97316" stroke-width="1" stroke-linecap="round" fill="none" opacity="0.4"/>
-            </svg>
-            <!-- Curved "It's free!" text following an arc path -->
-            <svg class="absolute left-[-10%] w-[120%]" style="bottom:-46px" viewBox="0 0 220 48" xmlns="http://www.w3.org/2000/svg">
-              <defs>
-          </span>
-        </h2>
-      </div>
-
-      <p class="text-neutral-400 text-lg leading-relaxed max-w-[420px]">
-        The fastest way for freelancers and small businesses to create GST invoices and download them instantly.
-      </p>
-
-      <!-- CTA -->
-      <div class="flex flex-wrap items-center gap-5 pt-2">
-        <a href="/app"
-          class="inline-flex items-center gap-2.5 px-6 py-3.5 rounded-xl bg-[#22c55e] text-black font-bold text-base
-                 shadow-[0_0_30px_rgba(34,197,94,0.35)] hover:bg-[#16a34a] hover:shadow-[0_0_40px_rgba(34,197,94,0.5)]
-                 hover:scale-[1.02] active:scale-[0.98] transition-all">
-          Create Invoice Now
-          <Fragment set:html={icons["arrow-right"]} />
-        </a>
-        <!-- "↩ It's free!" — cursive, beside button, pointing left with curved arrow -->
-        <div style="transform:rotate(-10deg);transform-origin:left center">
-          <svg width="110" height="40" viewBox="0 0 110 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <!-- Curved arrow pointing left toward button -->
-            <path d="M18 12 C14 16, 10 22, 12 30" stroke="#9ca3af" stroke-width="1.5" stroke-linecap="round" fill="none"/>
-            <path d="M10 27 L12 31 L16 28" stroke="#9ca3af" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
-            <!-- "It's free!" in cursive Caveat font -->
-            <text x="22" y="26" font-family="Caveat, cursive" font-size="20" font-weight="700" fill="#9ca3af">It's free!</text>
-          </svg>
-        </div>
-      </div>
-
-      <!-- Trust strip -->
-      <div class="grid grid-cols-2 sm:grid-cols-4 gap-x-6 gap-y-3 pt-1">
-        {[
-          { i: "shield",      l: "No Sign Up Required" },
-          { i: "receipt",     l: "GST Ready" },
-          { i: "download",    l: "Instant PDF Download" },
-          { i: "lock",        l: "100% Private & Secure" },
-        ].map(b => (
-          <div class="flex items-center gap-2 text-xs text-neutral-400">
-            <span class="text-[#22c55e] shrink-0"><Fragment set:html={icons[b.i]} /></span>
-            {b.l}
-          </div>
-        ))}
-      </div>
-    </div>
-
-    <!-- Right: Invoice mockup cards -->
-    <div class="relative flex items-center justify-center lg:justify-end z-10">
-      <!-- stacked shadow cards -->
-      <div class="absolute w-[310px] sm:w-[360px] h-[430px] bg-white/6  rounded-2xl rotate-[6deg]  right-2 top-4 shadow-xl border border-white/5"></div>
-      <div class="absolute w-[310px] sm:w-[360px] h-[430px] bg-white/10 rounded-2xl rotate-[3deg]  right-4 top-2 shadow-xl border border-white/8"></div>
-
-      <!-- Main invoice card -->
-      <div class="relative w-[310px] sm:w-[360px] bg-white rounded-2xl shadow-[0_30px_80px_rgba(0,0,0,0.7)] overflow-hidden border border-gray-100">
-        <!-- Card header -->
-        <div class="px-5 pt-5 pb-3 border-b border-gray-100 flex justify-between items-start">
-          <div>
-            <div class="flex items-center gap-1.5 mb-2">
-              <span class="w-5 h-5 rounded bg-[#22c55e] flex items-center justify-center text-white text-[9px] font-black leading-none">✓</span>
-              <span class="text-[11px] font-bold text-gray-800 lowercase">invoy</span>
-            </div>
-            <p class="text-[10px] font-semibold text-gray-700">Acme Studio</p>
-            <p class="text-[8.5px] text-gray-400 leading-tight mt-0.5">123 Business Street<br/>Delhi, India 110001<br/>GSTIN: 27ABCDE1234F1Z5<br/>+91 98765-43210<br/>hello@acmestudio.com</p>
-          </div>
-          <div class="text-right">
-            <p class="text-[20px] font-black text-[#22c55e] font-['Outfit'] tracking-wide">INVOICE</p>
-            <p class="text-[8.5px] text-gray-500 mt-1">Invoice No: <strong class="text-gray-700">INV-0001</strong></p>
-            <p class="text-[8.5px] text-gray-500">Date: <strong class="text-gray-700">17 May 2024</strong></p>
-            <p class="text-[8.5px] text-gray-500">Due Date: <strong class="text-gray-700">24 May 2024</strong></p>
-          </div>
-        </div>
-
-        <!-- Bill To -->
-        <div class="px-5 py-2 border-b border-gray-100">
-          <p class="text-[8px] font-bold text-gray-400 uppercase tracking-widest mb-1">Bill To</p>
-          <p class="text-[10px] font-bold text-gray-800">John Doe</p>
-          <p class="text-[8.5px] text-gray-500 leading-tight">123 Client Street<br/>Mumbai, India 400001<br/>john@example.com</p>
-        </div>
-
-        <!-- Table -->
-        <div class="px-5 py-3">
-          <table class="w-full text-[8.5px]">
-            <thead>
-              <tr class="border-b border-gray-200 text-gray-500">
-                <th class="pb-1 text-left font-semibold w-[40%]">#</th>
-                <th class="pb-1 text-left font-semibold">Item & Description</th>
-                <th class="pb-1 text-center font-semibold">Qty</th>
-                <th class="pb-1 text-right font-semibold">Price</th>
-                <th class="pb-1 text-right font-semibold">GST (%)</th>
-                <th class="pb-1 text-right font-semibold">Total</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr class="border-b border-gray-100">
-                <td class="py-1.5 text-gray-400">1</td>
-                <td class="py-1.5">
-                  <p class="font-semibold text-gray-800">Web Design Services</p>
-                  <p class="text-gray-400 text-[7.5px]">Website design and development</p>
-                </td>
-                <td class="py-1.5 text-center text-gray-600">1</td>
-                <td class="py-1.5 text-right text-gray-600">₹5,000.00</td>
-                <td class="py-1.5 text-right text-gray-600">₹900.00</td>
-                <td class="py-1.5 text-right font-bold text-gray-800">₹5,900.00</td>
-              </tr>
-            </tbody>
-          </table>
-          <div class="mt-2 space-y-0.5 border-t border-gray-200 pt-2">
-            <div class="flex justify-between text-[8.5px] text-gray-500"><span>Subtotal</span><span>₹5,000.00</span></div>
-            <div class="flex justify-between text-[8.5px] text-gray-500"><span>GST (18%)</span><span>₹900.00</span></div>
-            <div class="flex justify-between text-[10px] font-black text-gray-900 pt-1 border-t border-gray-200 mt-1">
-              <span>Total</span>
-              <span class="text-[#22c55e]">₹5,900.00</span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ══════════════════════════════════════════════════════════════════
-     STATS BAR — white bg
-══════════════════════════════════════════════════════════════════ -->
-<div class="bg-white border-y border-gray-200">
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 py-5 grid grid-cols-2 md:grid-cols-4 gap-6 md:divide-x divide-gray-200">
-
-    <!-- 1 -->
-    <div class="flex flex-col justify-center">
-      <p class="text-sm font-semibold text-gray-800 leading-snug">Built for freelancers,<br/>agencies and small businesses</p>
-    </div>
-
-    <!-- 2 -->
-    <div class="flex items-center gap-3 md:pl-6">
-      <div class="flex -space-x-2 shrink-0">
-        {['#f97316','#22c55e','#6366f1'].map(c => (
-          <div style={`background:${c}`} class="w-7 h-7 rounded-full border-2 border-white flex items-center justify-center text-white text-[10px] font-bold">
-            {c === '#f97316' ? 'R' : c === '#22c55e' ? 'A' : 'P'}
-          </div>
-        ))}
-      </div>
-      <div>
-        <p class="text-sm font-bold text-gray-900">Loved by 10,000+</p>
-        <p class="text-xs text-gray-500">freelancers</p>
-      </div>
-    </div>
-
-    <!-- 3 -->
-    <div class="flex items-center gap-2 md:pl-6">
-      <span class="text-yellow-400 text-xl">★</span>
-      <div>
-        <p class="text-sm font-bold text-gray-900">4.8/5</p>
-        <p class="text-xs text-gray-500">From happy users</p>
-      </div>
-    </div>
-
-    <!-- 4 -->
-    <div class="flex items-center gap-2 md:pl-6">
-      <span class="text-[#22c55e]"><Fragment set:html={icons["shield"]} /></span>
-      <div>
-        <p class="text-sm font-bold text-gray-900">Always free.</p>
-        <p class="text-xs text-gray-500">Always will be.</p>
-      </div>
-    </div>
-
-  </div>
-</div>
-
-<!-- ══════════════════════════════════════════════════════════════════
-     HOW IT WORKS — white bg
-══════════════════════════════════════════════════════════════════ -->
-<section id="how-it-works" class="bg-white py-14 sm:py-18 px-4 sm:px-6">
-  <div class="max-w-5xl mx-auto">
-
-    <div class="text-center mb-12">
-      <h2 class="text-3xl sm:text-4xl font-black font-['Outfit'] text-gray-900">
-        How <span class="text-[#22c55e]">{SITE.name}</span> Works
-      </h2>
-    </div>
-
-    <div class="flex flex-col md:flex-row items-start justify-center gap-0">
-      {steps.map((s, i) => (
-        <>
-          <div class="flex flex-col items-center text-center px-6 py-4 flex-1">
-            <div class="w-[88px] h-[88px] rounded-full bg-[#22c55e]/10 border-2 border-[#22c55e]/20 flex items-center justify-center text-[#22c55e] mb-4">
-              <Fragment set:html={icons[s.icon === 'eye' ? 'eye-lg' : s.icon === 'download' ? 'download-lg' : s.icon]} />
-            </div>
-            <h3 class="text-sm font-bold text-gray-900 mb-1.5">{s.step}. {s.title}</h3>
-            <p class="text-xs text-gray-500 leading-relaxed max-w-[160px]">{s.desc}</p>
-          </div>
-          {i < steps.length - 1 && (
-            <div class="hidden md:flex items-center justify-center self-start mt-11 shrink-0">
-              <svg width="48" height="16" viewBox="0 0 48 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <line x1="0" y1="8" x2="36" y2="8" stroke="#d1d5db" stroke-width="1.5" stroke-dasharray="4 3"/>
-                <polyline points="34,4 40,8 34,12" stroke="#d1d5db" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-              </svg>
-            </div>
-          )}
-        </>
-      ))}
-    </div>
-  </div>
-</section>
-
-<!-- ══════════════════════════════════════════════════════════════════
-     FEATURES — white bg
-══════════════════════════════════════════════════════════════════ -->
-<section id="features" class="bg-white py-14 sm:py-18 px-4 sm:px-6 border-t border-gray-100">
-  <div class="max-w-6xl mx-auto">
-
-    <div class="text-center mb-14">
-      <h2 class="text-3xl sm:text-4xl font-black font-['Outfit'] text-gray-900">
-        Powerful Features. <span class="text-[#f97316]">Zero Complexity.</span>
-      </h2>
-    </div>
-
-    <div class="grid grid-cols-4 sm:grid-cols-4 lg:grid-cols-8 gap-6">
-      {features.map((f) => (
-        <div class="flex flex-col items-center text-center group cursor-default">
-          <div class="w-14 h-14 rounded-2xl bg-[#22c55e]/10 flex items-center justify-center text-[#22c55e] mb-3 group-hover:bg-[#22c55e]/15 group-hover:scale-105 transition-all">
-            <Fragment set:html={icons[f.icon]} />
-          </div>
-          <h3 class="text-xs font-bold text-gray-800 mb-1 leading-tight">{f.title}</h3>
-          <p class="text-[10px] text-gray-500 leading-snug">{f.desc}</p>
-        </div>
-      ))}
-    </div>
-  </div>
-</section>
-
-<!-- ══════════════════════════════════════════════════════════════════
-     FEATURE REQUEST CTA — warm light bg
-══════════════════════════════════════════════════════════════════ -->
-<section class="bg-[#fff8f3] border-y border-orange-100 py-10 px-4 sm:px-6">
-  <div class="max-w-5xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-6">
-    <div class="flex items-center gap-4">
-      <span class="text-3xl">💡</span>
-      <div>
-        <h3 class="text-lg font-bold text-gray-900">Have an idea to make {SITE.name} even better?</h3>
-        <p class="text-sm text-gray-500 mt-0.5">We'd love to hear it. Request a feature and we might build it!</p>
-      </div>
-    </div>
-    <button id="cta-request-btn"
-      class="shrink-0 flex items-center gap-2 px-6 py-3 rounded-xl bg-[#f97316] text-white font-bold text-sm
-             hover:bg-orange-500 transition-all shadow-[0_4px_20px_rgba(249,115,22,0.35)] hover:shadow-[0_4px_30px_rgba(249,115,22,0.5)]">
-      <Fragment set:html={icons["message"]} />
-      Request a Feature
-    </button>
-  </div>
-</section>
-
-<!-- ══════════════════════════════════════════════════════════════════
-     FAQ — white bg
-══════════════════════════════════════════════════════════════════ -->
-<section id="faq" class="bg-white py-14 sm:py-18 px-4 sm:px-6">
-  <div class="max-w-4xl mx-auto">
-
-    <div class="text-center mb-14">
-      <h2 class="text-3xl sm:text-4xl font-black font-['Outfit'] text-gray-900">
-        Frequently Asked <span class="text-[#22c55e]">Questions</span>
-      </h2>
-    </div>
-
-    <div class="grid md:grid-cols-2 gap-3">
-      {faq.map((item, i) => (
-        <div class="faq-item border border-gray-200 rounded-xl overflow-hidden bg-white">
-          <button
-            class="faq-btn w-full flex items-center justify-between gap-3 px-5 py-4 text-left text-sm font-semibold text-gray-800 hover:bg-gray-50 transition-all"
-            data-idx={i}
+    <header
+      class="sticky top-0 z-50 bg-[#0a0a0a]/95 backdrop-blur-xl border-b border-white/8"
+    >
+      <div
+        class="max-w-7xl mx-auto px-4 sm:px-6 h-14 flex items-center justify-between gap-4"
+      >
+        <a href="/" class="flex items-center gap-1.5 shrink-0">
+          <img src="/invoy_favicon.png" alt="" class="size-8" />
+          <span
+            class="font-['Outfit'] font-black text-white text-xl tracking-normal lowercase"
+            >{SITE.name}</span
           >
-            {item.q}
-            <svg class="faq-chevron shrink-0 text-gray-400 transition-transform duration-200" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+        </a>
+
+        <nav class="hidden md:flex items-center gap-8">
+          {
+            nav.links.map((l) => (
+              <a
+                href={l.href}
+                class="text-sm text-neutral-300 hover:text-white transition-colors font-medium"
+              >
+                {l.label}
+              </a>
+            ))
+          }
+        </nav>
+
+        <div class="flex items-center gap-2">
+          <button
+            id="nav-request-btn"
+            class="hidden sm:flex items-center gap-1.5 px-4 py-1.5 rounded-md text-sm font-semibold border border-[#22c55e]/60 text-[#22c55e] hover:bg-[#22c55e]/8 transition-all"
+          >
+            <Fragment set:html={icons["zap"]} />
+            Request a Feature
           </button>
-          <div class="faq-answer hidden px-5 pb-4 border-t border-gray-100">
-            <p class="text-sm text-gray-500 leading-relaxed pt-3">{item.a}</p>
+          <a
+            href={`mailto:${SITE.support.email}`}
+            class="flex items-center gap-1.5 px-4 py-1.5 rounded-md text-sm font-bold bg-[#f97316] text-white hover:bg-orange-500 transition-all"
+          >
+            <Fragment set:html={icons["heart"]} />
+            Support Invoy
+          </a>
+        </div>
+      </div>
+    </header>
+
+    <!-- ══════════════════════════════════════════════════════════════════
+     HERO - dark bg
+══════════════════════════════════════════════════════════════════ -->
+    <section
+      class="relative bg-[#0c100c] min-h-[92vh] flex items-center overflow-hidden"
+    >
+      <!-- green ambient glow -->
+      <div
+        class="absolute top-[-10%] left-[-5%] w-[600px] h-[600px] rounded-full bg-[#22c55e]/10 blur-[130px] pointer-events-none"
+      >
+      </div>
+      <div
+        class="absolute bottom-0 right-0 w-[400px] h-[400px] rounded-full bg-[#22c55e]/5 blur-[100px] pointer-events-none"
+      >
+      </div>
+
+      <div
+        class="mx-auto px-4 sm:px-6 py-16 grid grid-cols-2 gap-8 lg:gap-4 "
+      >
+        <!-- Left -->
+        <div class="space-y-7 z-10 ">
+          <!-- Badge -->
+          <span
+            class="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-[#22c55e]/40 bg-[#22c55e]/10 text-[#22c55e] text-xs font-semibold tracking-wide"
+          >
+            <span
+              class="w-1.5 h-1.5 rounded-full bg-[#22c55e] animate-pulse shrink-0"
+            ></span>
+            No Sign Up • No Limits • No Watermarks
+          </span>
+
+          <!-- Headline -->
+          <div>
+            <h1
+              class="text-[2.6rem] sm:text-[3.2rem] lg:text-[3.6rem] font-black font-['Outfit'] leading-[1.08] text-white tracking-tight"
+            >
+              Create Professional<br />Invoices.
+            </h1>
+            <h2
+              class="text-[2.6rem] sm:text-[3.2rem] lg:text-[3.6rem] font-black font-['Outfit'] leading-[1.15] tracking-tight mt-1"
+            >
+              <span class="text-white">Fast. </span><span class="text-[#22c55e]"
+                >Simple.
+              </span>
+              <span
+                class="relative inline-block text-[#f97316] italic"
+                style="padding-bottom: .5rem;"
+              >
+                Free.
+                <!-- dual_underline.svg — flipped horizontally so stroke goes left→right -->
+                <img
+                  src="/dual_underline.svg"
+                  alt=""
+                  class="absolute left-[-6%] w-[112%] pointer-events-none select-none"
+                  style="bottom: -4px; transform: scaleY(-1.3); height: 18px;"
+                />
+              </span>
+            </h2>
+          </div>
+
+          <p class="text-neutral-400 text-lg leading-relaxed max-w-[420px]">
+            The fastest way for freelancers and small businesses to create GST
+            invoices and download them instantly.
+          </p>
+
+          <!-- CTA -->
+          <div class="flex flex-wrap items-center gap-3 pt-2">
+            <a
+              href="/app"
+              class="inline-flex items-center gap-2.5 px-6 py-3.5 rounded-xl bg-[#22c55e] text-black font-bold text-base
+                 shadow-[0_0_30px_rgba(34,197,94,0.35)] hover:bg-[#16a34a] hover:shadow-[0_0_40px_rgba(34,197,94,0.5)]
+                 hover:scale-[1.02] active:scale-[0.98] transition-all"
+            >
+              Create Invoice Now
+              <Fragment set:html={icons["arrow-right"]} />
+            </a>
+            <!-- "It's free!" beside button — clean arrow SVG + cursive text -->
+            <div
+              class="flex items-center gap-1 -ml-4"
+              style="transform:rotate(-8deg);transform-origin:left center;margin-top:2px"
+            >
+              <img
+                src="/arrow_it_free.svg"
+                alt=""
+                style="width:44px;height:44px;"
+                class="shrink-0"
+              />
+              <span
+                class="font-['Caveat'] font-bold text-neutral-400 text-[1.35rem] leading-none tracking-wide"
+                >It's free!</span
+              >
+            </div>
+          </div>
+
+          <!-- Trust strip -->
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-x-6 gap-y-3 pt-1">
+            {
+              [
+                { i: "shield", l: "No Sign Up Required" },
+                { i: "receipt", l: "GST Ready" },
+                { i: "download", l: "Instant PDF Download" },
+                { i: "lock", l: "100% Private & Secure" },
+              ].map((b) => (
+                <div class="flex items-center gap-2 text-xs text-neutral-400">
+                  <span class="text-[#22c55e] shrink-0">
+                    <Fragment set:html={icons[b.i]} />
+                  </span>
+                  {b.l}
+                </div>
+              ))
+            }
+          </div>
+        </div><!-- /left col -->
+
+        <!-- Right -->
+        <div class="invoice-stack lg:ml-8">
+          <InvoiceCard className="bg-white invoice-card-3" invoice_text_color="text-green-500" />
+          <InvoiceCard className="bg-white invoice-card-2" invoice_text_color="text-orange-500" />
+          <InvoiceCard className="bg-white invoice-card-1" invoice_text_color="text-green-500"/>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════════════════════════════════════════
+     STATS BAR - white bg
+══════════════════════════════════════════════════════════════════ -->
+    <div class="bg-white border-y border-gray-200">
+      <div
+        class="max-w-7xl mx-auto px-4 sm:px-6 py-5 grid grid-cols-2 md:grid-cols-4 gap-6 md:divide-x divide-gray-200"
+      >
+        <!-- 1 -->
+        <div class="flex flex-col justify-center">
+          <p class="text-sm font-semibold text-gray-800 leading-snug">
+            Built for freelancers,<br />agencies and small businesses
+          </p>
+        </div>
+
+        <!-- 2 -->
+        <div class="flex items-center gap-3 md:pl-6">
+          <div class="flex -space-x-2 shrink-0">
+            {
+              ["#f97316", "#22c55e", "#6366f1"].map((c) => (
+                <div
+                  style={`background:${c}`}
+                  class="w-7 h-7 rounded-full border-2 border-white flex items-center justify-center text-white text-[10px] font-bold"
+                >
+                  {c === "#f97316" ? "R" : c === "#22c55e" ? "A" : "P"}
+                </div>
+              ))
+            }
+          </div>
+          <div>
+            <p class="text-sm font-bold text-gray-900">Loved by 1,000+</p>
+            <p class="text-xs text-gray-500">freelancers</p>
           </div>
         </div>
-      ))}
-    </div>
-  </div>
-</section>
 
-<!-- ══════════════════════════════════════════════════════════════════
-     FOOTER — dark bg
-══════════════════════════════════════════════════════════════════ -->
-<footer class="bg-[#0f0f0f] border-t border-white/8">
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 py-12 grid grid-cols-1 md:grid-cols-4 gap-10">
+        <!-- 3 -->
+        <div class="flex items-center gap-2 md:pl-6">
+          <span class="text-yellow-400 text-xl">★</span>
+          <div>
+            <p class="text-sm font-bold text-gray-900">4.8/5</p>
+            <p class="text-xs text-gray-500">From happy users</p>
+          </div>
+        </div>
 
-    <!-- Brand -->
-    <div class="md:col-span-1 space-y-3">
-      <a href="/" class="flex items-center gap-1.5">
-        <span class="w-6 h-6 rounded-md bg-[#22c55e] flex items-center justify-center text-black font-black text-sm leading-none">✓</span>
-        <span class="font-['Outfit'] font-black text-white lowercase">{SITE.name}</span>
-      </a>
-      <p class="text-xs text-neutral-500 leading-relaxed max-w-[220px]">
-        A free invoice generator for freelancers, consultants and small businesses.
-      </p>
-    </div>
-
-    <!-- Support -->
-    <div class="space-y-3">
-      <h4 class="text-sm font-bold text-white flex items-center gap-2">
-        <span class="text-[#f97316]"><Fragment set:html={icons["heart"]} /></span>
-        Support {SITE.name}
-      </h4>
-      <p class="text-xs text-neutral-500 leading-relaxed">If you find {SITE.name} helpful,<br/>consider supporting.</p>
-      <a href={`mailto:${SITE.support.email}`}
-        class="inline-flex items-center gap-2 text-sm font-semibold text-white border border-white/20 rounded-full px-4 py-1.5 hover:bg-white/5 transition-all">
-        <Fragment set:html={icons["arrow-right"]} />
-      </a>
-    </div>
-
-    <!-- Request Feature -->
-    <div class="space-y-3">
-      <button id="footer-request-btn" class="flex items-center gap-2 text-sm font-bold text-white">
-        <span class="text-[#22c55e]"><Fragment set:html={icons["zap"]} /></span>
-        Request a Feature
-      </button>
-      <p class="text-xs text-neutral-500">Have a feature idea?<br/>Let us know!</p>
-    </div>
-
-    <!-- Right: Made in India -->
-    <div class="flex flex-col items-start md:items-end justify-between gap-4">
-      <p class="text-xs text-neutral-500 md:text-right">
-        Made with <span class="text-red-400">♥</span> in India
-      </p>
-      <p class="text-xs text-neutral-600 md:text-right">
-        © {new Date().getFullYear()} {SITE.name}. All rights reserved.
-      </p>
-      <div class="flex gap-4">
-        <a href={SITE.support.github} target="_blank" rel="noopener" class="text-xs text-neutral-500 hover:text-white transition-colors">GitHub</a>
-        <a href={`mailto:${SITE.support.email}`} class="text-xs text-neutral-500 hover:text-white transition-colors">Support</a>
+        <!-- 4 -->
+        <div class="flex items-center gap-2 md:pl-6">
+          <span class="text-[#22c55e]"
+            ><Fragment set:html={icons["shield"]} /></span
+          >
+          <div>
+            <p class="text-sm font-bold text-gray-900">Always free.</p>
+            <p class="text-xs text-gray-500">Always will be.</p>
+          </div>
+        </div>
       </div>
     </div>
 
-  </div>
-</footer>
+    <!-- ══════════════════════════════════════════════════════════════════
+     HOW IT WORKS - white bg
+══════════════════════════════════════════════════════════════════ -->
+    <section id="how-it-works" class="bg-white py-14 sm:py-18 px-4 sm:px-6">
+      <div class="max-w-5xl mx-auto">
+        <div class="text-center mb-12">
+          <h2
+            class="text-3xl sm:text-4xl font-black font-['Outfit'] text-gray-900"
+          >
+            How <span class="text-[#22c55e]">{SITE.name}</span> Works
+          </h2>
+        </div>
 
-<!-- ══════════════════════════════════════════════════════════════════
+        <div class="flex flex-col md:flex-row items-start justify-center gap-0">
+          {
+            steps.map((s, i) => (
+              <>
+                <div class="flex flex-col items-center text-center px-6 py-4 flex-1">
+                  <div class="w-[88px] h-[88px] rounded-full bg-[#22c55e]/10 border-2 border-[#22c55e]/20 flex items-center justify-center text-[#22c55e] mb-4">
+                    <Fragment
+                      set:html={
+                        icons[
+                          s.icon === "eye"
+                            ? "eye-lg"
+                            : s.icon === "download"
+                              ? "download-lg"
+                              : s.icon
+                        ]
+                      }
+                    />
+                  </div>
+                  <h3 class="text-sm font-bold text-gray-900 mb-1.5">
+                    {s.step}. {s.title}
+                  </h3>
+                  <p class="text-xs text-gray-500 leading-relaxed max-w-[160px]">
+                    {s.desc}
+                  </p>
+                </div>
+                {i < steps.length - 1 && (
+                  <div class="hidden md:flex items-center justify-center self-start mt-11 shrink-0">
+                    <svg
+                      width="48"
+                      height="16"
+                      viewBox="0 0 48 16"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <line
+                        x1="0"
+                        y1="8"
+                        x2="36"
+                        y2="8"
+                        stroke="#d1d5db"
+                        stroke-width="1.5"
+                        stroke-dasharray="4 3"
+                      />
+                      <polyline
+                        points="34,4 40,8 34,12"
+                        stroke="#d1d5db"
+                        stroke-width="1.5"
+                        fill="none"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      />
+                    </svg>
+                  </div>
+                )}
+              </>
+            ))
+          }
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════════════════════════════════════════
+     FEATURES - white bg
+══════════════════════════════════════════════════════════════════ -->
+    <section
+      id="features"
+      class="bg-white py-14 sm:py-18 px-4 sm:px-6 border-t border-gray-100"
+    >
+      <div class="max-w-6xl mx-auto">
+        <div class="text-center mb-14">
+          <h2
+            class="text-3xl sm:text-4xl font-black font-['Outfit'] text-gray-900"
+          >
+            Powerful Features. <span class="text-[#f97316]"
+              >Zero Complexity.</span
+            >
+          </h2>
+        </div>
+
+        <div class="grid grid-cols-4 sm:grid-cols-4 lg:grid-cols-8 gap-6">
+          {
+            features.map((f) => (
+              <div class="flex flex-col items-center text-center group cursor-default">
+                <div class="w-14 h-14 rounded-2xl bg-[#22c55e]/10 flex items-center justify-center text-[#22c55e] mb-3 group-hover:bg-[#22c55e]/15 group-hover:scale-105 transition-all">
+                  <Fragment set:html={icons[f.icon]} />
+                </div>
+                <h3 class="text-xs font-bold text-gray-800 mb-1 leading-tight">
+                  {f.title}
+                </h3>
+                <p class="text-[10px] text-gray-500 leading-snug">{f.desc}</p>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════════════════════════════════════════
+     FEATURE REQUEST CTA - warm light bg
+══════════════════════════════════════════════════════════════════ -->
+    <section class="bg-[#fff8f3] border-y border-orange-100 py-10 px-4 sm:px-6">
+      <div
+        class="max-w-5xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-6"
+      >
+        <div class="flex items-center gap-4">
+          <span class="text-3xl">💡</span>
+          <div>
+            <h3 class="text-lg font-bold text-gray-900">
+              Have an idea to make {SITE.name} even better?
+            </h3>
+            <p class="text-sm text-gray-500 mt-0.5">
+              We'd love to hear it. Request a feature and we might build it!
+            </p>
+          </div>
+        </div>
+        <button
+          id="cta-request-btn"
+          class="shrink-0 flex items-center gap-2 px-6 py-3 rounded-xl bg-[#f97316] text-white font-bold text-sm
+             hover:bg-orange-500 transition-all shadow-[0_4px_20px_rgba(249,115,22,0.35)] hover:shadow-[0_4px_30px_rgba(249,115,22,0.5)]"
+        >
+          <Fragment set:html={icons["message"]} />
+          Request a Feature
+        </button>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════════════════════════════════════════
+     FAQ - white bg
+══════════════════════════════════════════════════════════════════ -->
+    <section id="faq" class="bg-white py-14 sm:py-18 px-4 sm:px-6">
+      <div class="max-w-4xl mx-auto">
+        <div class="text-center mb-14">
+          <h2
+            class="text-3xl sm:text-4xl font-black font-['Outfit'] text-gray-900"
+          >
+            Frequently Asked <span class="text-[#22c55e]">Questions</span>
+          </h2>
+        </div>
+
+        <div class="grid md:grid-cols-2 gap-3">
+          {
+            faq.map((item, i) => (
+              <div class="faq-item border border-gray-200 rounded-xl overflow-hidden bg-white">
+                <button
+                  class="faq-btn w-full flex items-center justify-between gap-3 px-5 py-4 text-left text-sm font-semibold text-gray-800 hover:bg-gray-50 transition-all"
+                  data-idx={i}
+                >
+                  {item.q}
+                  <svg
+                    class="faq-chevron shrink-0 text-gray-400 transition-transform duration-200"
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="16"
+                    height="16"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2.5"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <polyline points="6 9 12 15 18 9" />
+                  </svg>
+                </button>
+                <div class="faq-answer hidden px-5 pb-4 border-t border-gray-100">
+                  <p class="text-sm text-gray-500 leading-relaxed pt-3">
+                    {item.a}
+                  </p>
+                </div>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════════════════════════════════════════
+     FOOTER - dark bg
+══════════════════════════════════════════════════════════════════ -->
+    <footer class="bg-[#0f0f0f] border-t border-white/8">
+      <div
+        class="max-w-7xl mx-auto px-4 sm:px-6 py-12 grid grid-cols-1 md:grid-cols-4 gap-10"
+      >
+        <!-- Brand -->
+        <div class="md:col-span-1 space-y-3">
+          <a href="/" class="flex items-center gap-1.5">
+            <span
+              class="w-6 h-6 rounded-md bg-[#22c55e] flex items-center justify-center text-black font-black text-sm leading-none"
+              >✓</span
+            >
+            <span class="font-['Outfit'] font-black text-white lowercase"
+              >{SITE.name}</span
+            >
+          </a>
+          <p class="text-xs text-neutral-500 leading-relaxed max-w-[220px]">
+            A free invoice generator for freelancers, consultants and small
+            businesses.
+          </p>
+        </div>
+
+        <!-- Support -->
+        <div class="space-y-3">
+          <h4 class="text-sm font-bold text-white flex items-center gap-2">
+            <span class="text-[#f97316]"
+              ><Fragment set:html={icons["heart"]} /></span
+            >
+            Support {SITE.name}
+          </h4>
+          <p class="text-xs text-neutral-500 leading-relaxed">
+            If you find {SITE.name} helpful,<br />consider supporting.
+          </p>
+          <a
+            href={`mailto:${SITE.support.email}`}
+            class="inline-flex items-center gap-2 text-sm font-semibold text-white border border-white/20 rounded-full px-4 py-1.5 hover:bg-white/5 transition-all"
+          >
+            <Fragment set:html={icons["arrow-right"]} />
+          </a>
+        </div>
+
+        <!-- Request Feature -->
+        <div class="space-y-3">
+          <button
+            id="footer-request-btn"
+            class="flex items-center gap-2 text-sm font-bold text-white"
+          >
+            <span class="text-[#22c55e]"
+              ><Fragment set:html={icons["zap"]} /></span
+            >
+            Request a Feature
+          </button>
+          <p class="text-xs text-neutral-500">
+            Have a feature idea?<br />Let us know!
+          </p>
+        </div>
+
+        <!-- Right: Made in India -->
+        <div
+          class="flex flex-col items-start md:items-end justify-between gap-4"
+        >
+          <p class="text-xs text-neutral-500 md:text-right">
+            Made with <span class="text-red-400">♥</span> in India
+          </p>
+          <p class="text-xs text-neutral-600 md:text-right">
+            © {new Date().getFullYear()}
+            {SITE.name}. All rights reserved.
+          </p>
+          <div class="flex gap-4">
+            <a
+              href={SITE.support.github}
+              target="_blank"
+              rel="noopener"
+              class="text-xs text-neutral-500 hover:text-white transition-colors"
+              >GitHub</a
+            >
+            <a
+              href={`mailto:${SITE.support.email}`}
+              class="text-xs text-neutral-500 hover:text-white transition-colors"
+              >Support</a
+            >
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <!-- ══════════════════════════════════════════════════════════════════
      SCRIPTS
 ══════════════════════════════════════════════════════════════════ -->
-<script>
-  // FAQ accordion
-  document.querySelectorAll('.faq-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-      const item    = btn.closest('.faq-item')!;
-      const answer  = item.querySelector('.faq-answer')!;
-      const chevron = btn.querySelector('.faq-chevron')!;
-      const isOpen  = !answer.classList.contains('hidden');
-      document.querySelectorAll('.faq-answer').forEach(a => a.classList.add('hidden'));
-      document.querySelectorAll('.faq-chevron').forEach(c => c.classList.remove('rotate-180'));
-      if (!isOpen) { answer.classList.remove('hidden'); chevron.classList.add('rotate-180'); }
-    });
-  });
+    <script>
+      // FAQ accordion
+      document.querySelectorAll(".faq-btn").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          const item = btn.closest(".faq-item")!;
+          const answer = item.querySelector(".faq-answer")!;
+          const chevron = btn.querySelector(".faq-chevron")!;
+          const isOpen = !answer.classList.contains("hidden");
+          document
+            .querySelectorAll(".faq-answer")
+            .forEach((a) => a.classList.add("hidden"));
+          document
+            .querySelectorAll(".faq-chevron")
+            .forEach((c) => c.classList.remove("rotate-180"));
+          if (!isOpen) {
+            answer.classList.remove("hidden");
+            chevron.classList.add("rotate-180");
+          }
+        });
+      });
 
-  // Feature request buttons → Tawk.to or mailto
-  function openRequest() {
-    const w = window as any;
-    if (w.Tawk_API?.toggle) w.Tawk_API.toggle();
-    else window.location.href = 'mailto:hello@invoy.in?subject=Feature Request';
-  }
-  ['nav-request-btn','cta-request-btn','footer-request-btn'].forEach(id =>
-    document.getElementById(id)?.addEventListener('click', openRequest)
-  );
-</script>
+      // Feature request buttons → Tawk.to or mailto
+      function openRequest() {
+        const w = window as any;
+        if (w.Tawk_API?.toggle) w.Tawk_API.toggle();
+        else
+          window.location.href =
+            "mailto:hello@invoy.in?subject=Feature Request";
+      }
+      ["nav-request-btn", "cta-request-btn", "footer-request-btn"].forEach(
+        (id) =>
+          document.getElementById(id)?.addEventListener("click", openRequest),
+      );
+    </script>
 
-<!-- Tawk.to -->
-<script define:vars={{ tpId: import.meta.env.PUBLIC_TAWK_PROPERTY_ID, twId: import.meta.env.PUBLIC_TAWK_WIDGET_ID }}>
-  if (tpId && tpId !== 'your_property_id_here') {
-    var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
-    (function(){var s1=document.createElement('script'),s0=document.getElementsByTagName('script')[0];
-    s1.async=true;s1.src='https://embed.tawk.to/'+tpId+'/'+twId;
-    s1.charset='UTF-8';s1.setAttribute('crossorigin','*');s0.parentNode.insertBefore(s1,s0);})();
-  }
-</script>
-
-</body>
+    <!-- Tawk.to -->
+    <script
+      define:vars={{
+        tpId: import.meta.env.PUBLIC_TAWK_PROPERTY_ID,
+        twId: import.meta.env.PUBLIC_TAWK_WIDGET_ID,
+      }}
+    >
+      if (tpId && tpId !== "your_property_id_here") {
+        var Tawk_API = Tawk_API || {},
+          Tawk_LoadStart = new Date();
+        (function () {
+          var s1 = document.createElement("script"),
+            s0 = document.getElementsByTagName("script")[0];
+          s1.async = true;
+          s1.src = "https://embed.tawk.to/" + tpId + "/" + twId;
+          s1.charset = "UTF-8";
+          s1.setAttribute("crossorigin", "*");
+          s0.parentNode.insertBefore(s1, s0);
+        })();
+      }
+    </script>
+  </body>
 </html>

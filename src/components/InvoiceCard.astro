@@ -1,0 +1,103 @@
+---
+const { className, invoice_text_color } = Astro.props;
+---
+
+<div class={`invoice-card ${className}`}>
+    <!-- Header -->
+    <div
+        class="px-5 pt-4 pb-3 border-b border-gray-100 flex justify-between items-start"
+    >
+        <div>
+            <div class="flex items-center gap-1.5 mb-1.5">
+                <img src="/invoy_favicon.png" alt="" class="size-4" />
+
+                <span class="text-[11px] font-bold text-gray-800 lowercase"
+                    >invoy</span
+                >
+            </div>
+            <p class="text-[10px] font-semibold text-gray-700">Acme Studio</p>
+            <p class="text-[7.5px] text-gray-400 leading-tight mt-0.5">
+                123 Business Street<br />Delhi, India 110001<br />
+                GSTIN: 27ABCDE1234F1Z5<br />+91 98765-43210<br
+                />hello@acmestudio.com
+            </p>
+        </div>
+        <div class="text-right">
+            <p
+                class=`text-[17px] font-black ${invoice_text_color} font-['Outfit'] tracking-wide`
+            >
+                INVOICE
+            </p>
+            <p class="text-[7.5px] text-gray-500 mt-1">
+                Invoice No: <strong class="text-gray-700">INV-0001</strong>
+            </p>
+            <p class="text-[7.5px] text-gray-500">
+                Date: <strong class="text-gray-700">17 May 2024</strong>
+            </p>
+            <p class="text-[7.5px] text-gray-500">
+                Due Date: <strong class="text-gray-700">24 May 2024</strong>
+            </p>
+        </div>
+    </div>
+    <!-- Bill To -->
+    <div class="px-5 py-2 border-b border-gray-100">
+        <p
+            class="text-[7px] font-bold text-gray-400 uppercase tracking-widest mb-1"
+        >
+            Bill To
+        </p>
+        <p class="text-[9.5px] font-bold text-gray-800">John Doe</p>
+        <p class="text-[7.5px] text-gray-500 leading-tight">
+            123 Client Street<br />Mumbai, India 400001<br />john@example.com
+        </p>
+    </div>
+    <!-- Table -->
+    <div class="px-5 py-2.5">
+        <table class="w-full text-[7.5px]">
+            <thead>
+                <tr class="border-b border-gray-200 text-gray-500">
+                    <th class="pb-1 text-left font-semibold">#</th>
+                    <th class="pb-1 text-left font-semibold"
+                        >Item &amp; Description</th
+                    >
+                    <th class="pb-1 text-center font-semibold">Qty</th>
+                    <th class="pb-1 text-right font-semibold">Price</th>
+                    <th class="pb-1 text-right font-semibold">GST</th>
+                    <th class="pb-1 text-right font-semibold">Total</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="border-b border-gray-100">
+                    <td class="py-1.5 text-gray-400">1</td>
+                    <td class="py-1.5">
+                        <p class="font-semibold text-gray-800">
+                            Web Design Services
+                        </p>
+                        <p class="text-gray-400 text-[6.5px]">
+                            Website design and development
+                        </p>
+                    </td>
+                    <td class="py-1.5 text-center text-gray-600">1</td>
+                    <td class="py-1.5 text-right text-gray-600">₹5,000</td>
+                    <td class="py-1.5 text-right text-gray-600">₹900</td>
+                    <td class="py-1.5 text-right font-bold text-gray-800"
+                        >₹5,900</td
+                    >
+                </tr>
+            </tbody>
+        </table>
+        <div class="mt-2 space-y-0.5 border-t border-gray-200 pt-1.5">
+            <div class="flex justify-between text-[7.5px] text-gray-500">
+                <span>Subtotal</span><span>₹5,000.00</span>
+            </div>
+            <div class="flex justify-between text-[7.5px] text-gray-500">
+                <span>GST (18%)</span><span>₹900.00</span>
+            </div>
+            <div
+                class="flex justify-between text-[9px] font-black text-gray-900 pt-1 border-t border-gray-200 mt-1"
+            >
+                <span>Total</span><span class={invoice_text_color}>₹5,900.00</span>
+            </div>
+        </div>
+    </div>
+</div>

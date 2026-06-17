@@ -1,0 +1,26 @@
+[
+  {
+    "q": "Is Invoy really free?",
+    "a": "Yes, completely free. No paywalls, no subscriptions, no watermarks on your PDFs — ever."
+  },
+  {
+    "q": "Do I need an account to use Invoy?",
+    "a": "No account needed. Just open the app and start creating invoices instantly."
+  },
+  {
+    "q": "Can I create GST invoices?",
+    "a": "Yes! Invoy auto-calculates CGST, SGST, and IGST based on the supplier and client states."
+  },
+  {
+    "q": "Can freelancers use Invoy?",
+    "a": "Absolutely. Invoy is built specifically for freelancers, consultants, agencies and small businesses."
+  },
+  {
+    "q": "Does Invoy store my data?",
+    "a": "No. Invoy runs 100% in your browser. None of your invoice data ever leaves your device."
+  },
+  {
+    "q": "Can I download invoices as PDF?",
+    "a": "Yes. Every invoice can be downloaded as a professional A4 PDF with one click."
+  }
+]

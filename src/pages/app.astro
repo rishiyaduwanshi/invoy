@@ -38,6 +38,7 @@ import InvoiceApp from "../components/InvoiceApp.jsx";
 		</main>
 
 		{/* Tawk.to Live Chat */}
+<<<<<<< HEAD
 		<script
 			define:vars={{
 				tawkPropertyId: import.meta.env.PUBLIC_TAWK_PROPERTY_ID,
@@ -58,6 +59,17 @@ import InvoiceApp from "../components/InvoiceApp.jsx";
 						tawkWidgetId;
 					s1.charset = "UTF-8";
 					s1.setAttribute("crossorigin", "*");
+=======
+		<script define:vars={{ tawkPropertyId: import.meta.env.PUBLIC_TAWK_PROPERTY_ID, tawkWidgetId: import.meta.env.PUBLIC_TAWK_WIDGET_ID }}>
+			if (tawkPropertyId && tawkPropertyId !== 'your_property_id_here') {
+				var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
+				(function(){
+					var s1 = document.createElement("script"), s0 = document.getElementsByTagName("script")[0];
+					s1.async = true;
+					s1.src = 'https://embed.tawk.to/' + tawkPropertyId + '/' + tawkWidgetId;
+					s1.charset = 'UTF-8';
+					s1.setAttribute('crossorigin', '*');
+>>>>>>> aefd2c64893180c6a20f29dc032e4f948197e33a
 					s0.parentNode.insertBefore(s1, s0);
 				})();
 			}

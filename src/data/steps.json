@@ -1,0 +1,20 @@
+[
+  {
+    "step": "1",
+    "title": "Add Details",
+    "desc": "Add your business, client and item details in seconds.",
+    "icon": "file-plus"
+  },
+  {
+    "step": "2",
+    "title": "Preview Invoice",
+    "desc": "See live preview and verify all the information.",
+    "icon": "eye"
+  },
+  {
+    "step": "3",
+    "title": "Download PDF",
+    "desc": "Download professional invoice as PDF instantly.",
+    "icon": "download"
+  }
+]

@@ -1,8 +1,13 @@
 import React, { useState } from 'react';
 import InvoiceForm from './InvoiceForm';
 import InvoicePreview from './InvoicePreview';
-import { DownloadIcon, ArrowLeftIcon, EditIcon, EyeIcon } from '../constants/icons.tsx';
+import { icons } from '../constants/icons.ts';
 import { DEFAULT_TEMPLATE } from '../templates/index.ts';
+
+// Tiny helper: render SVG string safely in React
+const Icon = ({ name, className = '' }) => (
+  <span className={`inline-flex items-center justify-center ${className}`} dangerouslySetInnerHTML={{ __html: icons[name] ?? '' }} />
+);
 
 export default function InvoiceApp() {
   // ── Template (only changes visual layout) ─────────────
@@ -125,7 +130,7 @@ export default function InvoiceApp() {
         <div className="w-full px-4 h-14 flex items-center justify-between gap-3">
           <div className="flex items-center gap-3">
             <a href="/" className="flex items-center gap-1.5 text-neutral-400 hover:text-white transition-colors text-sm group shrink-0">
-              <ArrowLeftIcon className="group-hover:-translate-x-0.5 transition-transform" />
+              <Icon name="arrow-left" className="group-hover:-translate-x-0.5 transition-transform" />
               <span className="hidden sm:inline text-xs font-medium">Home</span>
             </a>
             <div className="w-px h-4 bg-white/10 hidden sm:block" />
@@ -138,10 +143,10 @@ export default function InvoiceApp() {
           {/* Mobile tab switcher */}
           <div className="flex lg:hidden items-center gap-1 bg-white/5 rounded-xl p-1 border border-white/10">
             <button onClick={() => setMobileTab('form')} className={`flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${mobileTab === 'form' ? 'bg-indigo-600 text-white' : 'text-neutral-400 hover:text-white'}`}>
-              <EditIcon /> Form
+              <Icon name="edit" /> Form
             </button>
             <button onClick={() => setMobileTab('preview')} className={`flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${mobileTab === 'preview' ? 'bg-indigo-600 text-white' : 'text-neutral-400 hover:text-white'}`}>
-              <EyeIcon /> Preview
+              <Icon name="eye" /> Preview
             </button>
           </div>
 
@@ -150,7 +155,7 @@ export default function InvoiceApp() {
             disabled={downloading}
             className="hidden sm:flex items-center gap-1.5 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 px-3 sm:px-5 py-2 sm:py-2.5 text-xs sm:text-sm font-bold text-white shadow-[0_0_15px_rgba(79,70,229,0.3)] hover:shadow-[0_0_25px_rgba(79,70,229,0.5)] hover:scale-[1.03] transition-all active:scale-95 border border-white/10 disabled:opacity-60 disabled:scale-100 shrink-0"
           >
-            <DownloadIcon />
+            <Icon name="download" />
             <span className="hidden sm:inline">{downloading ? 'Generating...' : 'Download PDF'}</span>
             <span className="sm:hidden">{downloading ? '...' : 'PDF'}</span>
           </button>

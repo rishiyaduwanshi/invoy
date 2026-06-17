@@ -1,7 +1,11 @@
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { TEMPLATES } from '../templates/index.ts';
-import { PlusIcon, TrashIcon, UploadIcon } from '../constants/icons.tsx';
+import { icons } from '../constants/icons.ts';
+
+const Icon = ({ name, className = '' }) => (
+  <span className={`inline-flex items-center justify-center ${className}`} dangerouslySetInnerHTML={{ __html: icons[name] ?? '' }} />
+);
 
 // ── Base Components ────────────────────────────────────────────────────
 const Label = ({ children }) => (
@@ -243,7 +247,7 @@ export default function InvoiceForm({
                     <Input type="number" min="0" value={item.rate} onChange={e => updateItem(item.id, 'rate', parseFloat(e.target.value) || 0)} />
                   </div>
                   <button onClick={() => removeItem(item.id)} disabled={items.length === 1} className="shrink-0 text-neutral-600 hover:text-red-400 transition-colors pb-1.5 disabled:opacity-30">
-                    <TrashIcon width={15} height={15} />
+                    <Icon name="trash" />
                   </button>
                 </div>
               </motion.div>
@@ -251,7 +255,7 @@ export default function InvoiceForm({
           </AnimatePresence>
         </div>
         <button onClick={addItem} className="mt-3 flex items-center gap-1.5 text-sm text-indigo-400 hover:text-indigo-300 font-semibold transition-colors">
-          <PlusIcon width={15} height={15} /> Add Item
+          <Icon name="plus" /> Add Item
         </button>
       </SectionCard>
 
@@ -309,7 +313,7 @@ export default function InvoiceForm({
                 </>
               ) : (
                 <label className="flex items-center gap-2 cursor-pointer text-xs text-neutral-400 bg-white/5 border border-white/10 rounded-xl px-3 py-2 hover:bg-white/10 transition-all">
-                  <UploadIcon width={14} height={14} />
+                  <Icon name="upload" />
                   Choose signature image
                   <input type="file" accept="image/*" onChange={handleSignatureUpload} className="hidden" />
                 </label>

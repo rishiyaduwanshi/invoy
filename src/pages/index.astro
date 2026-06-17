@@ -1,533 +1,478 @@
 ---
 import "../global.css";
 import { SITE } from "../constants/site.ts";
+import { icons } from "../constants/icons.ts";
+import nav      from "../data/nav.json";
+import stats    from "../data/stats.json";
+import steps    from "../data/steps.json";
+import features from "../data/features.json";
+import faq      from "../data/faq.json";
 ---
 
 <html lang="en" class="scroll-smooth">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<link rel="preconnect" href="https://fonts.googleapis.com" />
-		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-		<link
-			href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@400;500;700;800;900&display=swap"
-			rel="stylesheet"
-		/>
-		<title>{SITE.name} - {SITE.tagline}</title>
-		<meta name="description" content={SITE.description} />
+<head>
+  <meta charset="utf-8" />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@400;500;700;800;900&family=Caveat:wght@600;700&display=swap" rel="stylesheet" />
+  <title>{SITE.name} — {SITE.tagline}</title>
+  <meta name="description" content={SITE.description} />
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": SITE.name,
+    "operatingSystem": "Web",
+    "applicationCategory": "BusinessApplication",
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "INR" },
+    "description": SITE.description,
+    "url": SITE.url,
+  })} />
+</head>
 
-		{/* JSON-LD for SoftwareApplication and AEO */}
-		<script type="application/ld+json" set:html={JSON.stringify({
-			"@context": "https://schema.org",
-			"@type": "SoftwareApplication",
-			"name": SITE.name,
-			"operatingSystem": "Web",
-			"applicationCategory": "BusinessApplication",
-			"offers": { "@type": "Offer", "price": "0", "priceCurrency": "INR" },
-			"description": SITE.description,
-			"url": SITE.url
-		})} />
-		<script type="application/ld+json">
-			{
-				"@context": "https://schema.org",
-				"@type": "FAQPage",
-				"mainEntity": [
-					{
-						"@type": "Question",
-						"name": "Is Invoy really free?",
-						"acceptedAnswer": {
-							"@type": "Answer",
-							"text": "Yes, Invoy is completely free to use with no hidden fees, subscriptions, or watermarks."
-						}
-					},
-					{
-						"@type": "Question",
-						"name": "Does it save my data on servers?",
-						"acceptedAnswer": {
-							"@type": "Answer",
-							"text": "No, Invoy runs 100% locally in your browser. None of your client data or invoices are saved on our servers, guaranteeing complete privacy."
-						}
-					}
-				]
-			}
-		</script>
+<body class="font-['Inter'] antialiased overflow-x-hidden">
 
-		<!--Start of Tawk.to Script-->
-		<script type="text/javascript">
-			var Tawk_API = Tawk_API || {},
-				Tawk_LoadStart = new Date();
-			(function () {
-				var s1 = document.createElement("script"),
-					s0 = document.getElementsByTagName("script")[0];
-				s1.async = true;
-				s1.src =
-					"https://embed.tawk.to/6a31b7276255441d4f4018c0/1jr936t2q";
-				s1.charset = "UTF-8";
-				s1.setAttribute("crossorigin", "*");
-				s0.parentNode.insertBefore(s1, s0);
-			})();
-		</script>
-		<!--End of Tawk.to Script-->
-	</head>
-	<body
-		class="bg-[#050505] min-h-screen text-white font-sans antialiased relative overflow-x-hidden selection:bg-indigo-500/30 selection:text-indigo-200"
-	>
-		{/* Ambient Background Glows */}
-		<div
-			class="fixed top-[-20%] left-[-10%] w-[50%] h-[50%] rounded-full bg-blue-600/10 blur-[150px] pointer-events-none z-0"
-		>
-		</div>
-		<div
-			class="fixed bottom-[-10%] right-[-10%] w-[40%] h-[40%] rounded-full bg-purple-600/10 blur-[150px] pointer-events-none z-0"
-		>
-		</div>
+<!-- ══════════════════════════════════════════════════════════════════
+     NAVBAR — dark
+══════════════════════════════════════════════════════════════════ -->
+<header class="sticky top-0 z-50 bg-[#0a0a0a]/95 backdrop-blur-xl border-b border-white/8">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 h-14 flex items-center justify-between gap-4">
 
-		{/* Header */}
-		<header
-			class="fixed top-0 w-full z-50 bg-black/50 backdrop-blur-xl border-b border-white/5 transition-all duration-300"
-		>
-			<div
-				class="w-full px-4 sm:px-6 lg:px-10 h-16 flex items-center justify-between"
-			>
-				<div class="flex items-center gap-2">
-					<div
-						class="w-8 h-8 rounded-lg bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center font-bold text-lg shadow-[0_0_15px_rgba(79,70,229,0.5)]"
-					>
-						I
-					</div>
-					<span
-						class="text-xl font-['Outfit'] font-black tracking-widest text-white"
-						>INVOY</span
-					>
-				</div>
-				<nav
-					class="hidden md:flex items-center gap-8 text-sm font-medium text-neutral-300"
-				>
-					<a
-						href="#features"
-						class="hover:text-white transition-colors">Features</a
-					>
-					<a
-						href="#how-it-works"
-						class="hover:text-white transition-colors"
-						>How it Works</a
-					>
-					<a href="#faq" class="hover:text-white transition-colors"
-						>FAQ</a
-					>
-				</nav>
-				<a
-					href="/app"
-					class="bg-white text-black px-4 sm:px-6 py-2 sm:py-2.5 rounded-full font-bold text-sm hover:scale-105 hover:bg-neutral-200 transition-all shadow-[0_0_20px_rgba(255,255,255,0.2)] shrink-0"
-				>
-					Open App
-				</a>
-			</div>
-		</header>
+    <a href="/" class="flex items-center gap-1.5 shrink-0">
+      <span class="w-7 h-7 rounded-lg bg-[#22c55e] flex items-center justify-center text-black font-black text-base leading-none">✓</span>
+      <span class="font-['Outfit'] font-black text-white text-lg tracking-normal lowercase">{SITE.name}</span>
+    </a>
 
-		<main class="relative z-10 pt-32">
-			{/* Hero Section */}
-			<section
-				class="min-h-[90vh] flex flex-col items-center justify-center text-center px-4 sm:px-6 relative pt-8"
-			>
-				<div
-					class="inline-block mb-6 px-4 py-1.5 rounded-full border border-indigo-500/30 bg-indigo-500/10 text-indigo-300 text-sm font-semibold tracking-wide backdrop-blur-md animate-fade-in"
-				>
-					✨ Launching Invoy 1.0
-				</div>
-				<h1
-					class="text-4xl sm:text-5xl md:text-7xl font-black font-['Outfit'] tracking-tight max-w-4xl leading-tight mb-6 sm:mb-8 drop-shadow-2xl opacity-0 animate-fade-in-up"
-					style="animation-delay: 100ms; animation-fill-mode: forwards;"
-				>
-					Create Professional <span
-						class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-indigo-400 to-purple-400"
-						>GST Invoices</span
-					> in Seconds
-				</h1>
-				<p
-					class="text-base sm:text-lg md:text-xl text-neutral-400 max-w-2xl mb-8 sm:mb-12 leading-relaxed opacity-0 animate-fade-in-up"
-					style="animation-delay: 200ms; animation-fill-mode: forwards;"
-				>
-					The fastest, completely free invoice generator tailored for
-					Indian MSMEs and freelancers. No subscriptions, no
-					watermarks, 100% privacy.
-				</p>
-				<div
-					class="flex flex-col sm:flex-row gap-3 sm:gap-4 opacity-0 animate-fade-in-up w-full sm:w-auto px-4 sm:px-0"
-					style="animation-delay: 300ms; animation-fill-mode: forwards;"
-				>
-					<a
-						href="/app"
-						class="px-8 py-4 bg-gradient-to-r from-indigo-600 to-purple-600 rounded-full font-bold text-base sm:text-lg hover:scale-105 hover:shadow-[0_0_30px_rgba(79,70,229,0.5)] transition-all ring-1 ring-white/20 text-center"
-					>
-						Create Free Invoice
-					</a>
-					<a
-						href="#features"
-						class="px-8 py-4 bg-white/5 backdrop-blur-md border border-white/10 rounded-full font-bold text-base sm:text-lg hover:bg-white/10 transition-all text-neutral-300 hover:text-white text-center"
-					>
-						Explore Features
-					</a>
-				</div>
+    <nav class="hidden md:flex items-center gap-8">
+      {nav.links.map(l => (
+        <a href={l.href} class="text-sm text-neutral-300 hover:text-white transition-colors font-medium">{l.label}</a>
+      ))}
+    </nav>
 
-				{/* UI Mockup - hidden on very small screens */}
-				<div
-					class="mt-12 sm:mt-20 relative w-full max-w-5xl mx-auto opacity-0 animate-fade-in-up hidden sm:block"
-					style="animation-delay: 500ms; animation-fill-mode: forwards;"
-				>
-					{/* Fade-out gradient at the bottom */}
-					<div class="absolute bottom-0 left-0 w-full h-32 bg-gradient-to-t from-[#050505] to-transparent z-10 pointer-events-none"></div>
-					{/* Glow behind the mockup */}
-					<div class="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-indigo-600/10 to-transparent blur-2xl pointer-events-none z-0"></div>
-					{/* Browser chrome wrapper */}
-					<div class="relative z-[1] bg-[#111116] border border-white/10 rounded-t-2xl shadow-[0_0_80px_rgba(79,70,229,0.2)] overflow-hidden">
-						{/* Browser top bar */}
-						<div class="flex items-center gap-2 px-4 py-3 border-b border-white/5 bg-black/30">
-							<div class="w-3 h-3 rounded-full bg-red-500/70"></div>
-							<div class="w-3 h-3 rounded-full bg-yellow-500/70"></div>
-							<div class="w-3 h-3 rounded-full bg-green-500/70"></div>
-							<div class="mx-auto flex items-center gap-2 bg-white/5 border border-white/10 rounded-lg px-4 py-1 text-xs text-neutral-500 font-mono">
-								<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-								invoy.in/app
-							</div>
-						</div>
-						{/* Actual screenshot */}
-						<img
-							src="/hero-mockup.png"
-							alt="Invoy App — Invoice generator interface showing form and live preview"
-							class="w-full object-cover object-top"
-							style="max-height: 420px;"
-							loading="eager"
-						/>
-					</div>
-				</div>
-			</section>
+    <div class="flex items-center gap-2">
+      <button id="nav-request-btn"
+        class="hidden sm:flex items-center gap-1.5 px-4 py-1.5 rounded-md text-sm font-semibold border border-[#22c55e]/60 text-[#22c55e] hover:bg-[#22c55e]/8 transition-all">
+        <Fragment set:html={icons["zap"]} />
+        Request a Feature
+      </button>
+      <a href={`mailto:${SITE.support.email}`}
+        class="flex items-center gap-1.5 px-4 py-1.5 rounded-md text-sm font-bold bg-[#f97316] text-white hover:bg-orange-500 transition-all">
+        <Fragment set:html={icons["heart"]} />
+        Support Invoy
+      </a>
+    </div>
+  </div>
+</header>
 
-			{/* Features Section */}
-			<section
-				id="features"
-				class="py-16 sm:py-24 px-4 sm:px-8 lg:px-16 max-w-screen-xl mx-auto border-t border-white/5 mt-0 sm:mt-[-80px] relative z-20"
-			>
-				<div class="text-center mb-16">
-					<h2
-						class="text-3xl md:text-5xl font-black font-['Outfit'] mb-4"
-					>
-						Why choose Invoy?
-					</h2>
-					<p class="text-neutral-400 max-w-2xl mx-auto">
-						Everything you need to bill clients professionally,
-						without the complexity of bloated accounting software.
-					</p>
-				</div>
-				<div
-					class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
-				>
-					{/* Feature 1 */}
-					<div
-						class="p-8 rounded-2xl bg-white/5 border border-white/10 hover:bg-white/10 transition-colors group"
-					>
-						<div
-							class="w-12 h-12 bg-indigo-500/20 text-indigo-400 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform"
-						>
-							<svg
-								xmlns="http://www.w3.org/2000/svg"
-								width="24"
-								height="24"
-								viewBox="0 0 24 24"
-								fill="none"
-								stroke="currentColor"
-								stroke-width="2"
-								stroke-linecap="round"
-								stroke-linejoin="round"
-								><path
-									d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"
-								></path><polyline points="14 2 14 8 20 8"
-								></polyline><line x1="16" y1="13" x2="8" y2="13"
-								></line><line x1="16" y1="17" x2="8" y2="17"
-								></line><polyline points="10 9 9 9 8 9"
-								></polyline></svg
-							>
-						</div>
-						<h3 class="text-xl font-bold mb-3">
-							MSME & GST Compliant
-						</h3>
-						<p class="text-neutral-400 text-sm leading-relaxed">
-							Built specifically for Indian standards. Supports
-							CGST, SGST, IGST calculations and Udyam Registration
-							numbers out of the box.
-						</p>
-					</div>
-					{/* Feature 2 */}
-					<div
-						class="p-8 rounded-2xl bg-white/5 border border-white/10 hover:bg-white/10 transition-colors group"
-					>
-						<div
-							class="w-12 h-12 bg-purple-500/20 text-purple-400 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform"
-						>
-							<svg
-								xmlns="http://www.w3.org/2000/svg"
-								width="24"
-								height="24"
-								viewBox="0 0 24 24"
-								fill="none"
-								stroke="currentColor"
-								stroke-width="2"
-								stroke-linecap="round"
-								stroke-linejoin="round"
-								><rect
-									x="3"
-									y="11"
-									width="18"
-									height="11"
-									rx="2"
-									ry="2"></rect><path
-									d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg
-							>
-						</div>
-						<h3 class="text-xl font-bold mb-3">100% Privacy</h3>
-						<p class="text-neutral-400 text-sm leading-relaxed">
-							Your data never leaves your browser. Invoices are
-							generated locally so your financial details and
-							client data remain completely private.
-						</p>
-					</div>
-					{/* Feature 3 */}
-					<div
-						class="p-8 rounded-2xl bg-white/5 border border-white/10 hover:bg-white/10 transition-colors group"
-					>
-						<div
-							class="w-12 h-12 bg-blue-500/20 text-blue-400 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform"
-						>
-							<svg
-								xmlns="http://www.w3.org/2000/svg"
-								width="24"
-								height="24"
-								viewBox="0 0 24 24"
-								fill="none"
-								stroke="currentColor"
-								stroke-width="2"
-								stroke-linecap="round"
-								stroke-linejoin="round"
-								><polygon points="12 2 2 7 12 12 22 7 12 2"
-								></polygon><polyline points="2 17 12 22 22 17"
-								></polyline><polyline points="2 12 12 17 22 12"
-								></polyline></svg
-							>
-						</div>
-						<h3 class="text-xl font-bold mb-3">
-							Multiple Templates
-						</h3>
-						<p class="text-neutral-400 text-sm leading-relaxed">
-							Choose between a sleek Modern layout or a formal
-							Classic (MSME) template with proper signature and
-							declaration sections.
-						</p>
-					</div>
-				</div>
-			</section>
+<!-- ══════════════════════════════════════════════════════════════════
+     HERO — dark bg
+══════════════════════════════════════════════════════════════════ -->
+<section class="relative bg-[#0c100c] min-h-[92vh] flex items-center overflow-hidden">
+  <!-- green ambient glow -->
+  <div class="absolute top-[-10%] left-[-5%] w-[600px] h-[600px] rounded-full bg-[#22c55e]/10 blur-[130px] pointer-events-none"></div>
+  <div class="absolute bottom-0 right-0 w-[400px] h-[400px] rounded-full bg-[#22c55e]/5 blur-[100px] pointer-events-none"></div>
 
-			{/* How it Works */}
-			<section
-				id="how-it-works"
-				class="py-16 sm:py-24 px-4 sm:px-8 lg:px-16 bg-white/5 border-y border-white/5"
-			>
-				<div class="max-w-4xl mx-auto text-center">
-					<h2
-						class="text-3xl md:text-5xl font-black font-['Outfit'] mb-16"
-					>
-						3 Simple Steps
-					</h2>
-					<div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-						<div>
-							<div
-								class="text-6xl font-black text-indigo-500/20 mb-4 font-['Outfit']"
-							>
-								1
-							</div>
-							<h3 class="text-xl font-bold mb-2">Fill Details</h3>
-							<p class="text-neutral-400 text-sm">
-								Enter your business info and client details.
-								Upload your logo and signature.
-							</p>
-						</div>
-						<div>
-							<div
-								class="text-6xl font-black text-purple-500/20 mb-4 font-['Outfit']"
-							>
-								2
-							</div>
-							<h3 class="text-xl font-bold mb-2">Add Items</h3>
-							<p class="text-neutral-400 text-sm">
-								List your services, rates, and quantities. GST
-								is calculated automatically.
-							</p>
-						</div>
-						<div>
-							<div
-								class="text-6xl font-black text-blue-500/20 mb-4 font-['Outfit']"
-							>
-								3
-							</div>
-							<h3 class="text-xl font-bold mb-2">Export PDF</h3>
-							<p class="text-neutral-400 text-sm">
-								Click download to get a pixel-perfect PDF ready
-								to send to your client.
-							</p>
-						</div>
-					</div>
-				</div>
-			</section>
+  <div class="relative max-w-7xl mx-auto px-4 sm:px-6 py-16 w-full grid lg:grid-cols-[1fr_1.1fr] gap-10 items-center">
 
-			{/* FAQ Section */}
-			<section
-				id="faq"
-				class="py-16 sm:py-24 px-4 sm:px-8 max-w-3xl mx-auto"
-			>
-				<div class="text-center mb-16">
-					<h2
-						class="text-3xl md:text-5xl font-black font-['Outfit'] mb-4"
-					>
-						Frequently Asked Questions
-					</h2>
-				</div>
-				<div class="space-y-6">
-					<div
-						class="p-6 rounded-2xl bg-white/5 border border-white/10"
-					>
-						<h3 class="text-lg font-bold mb-2">
-							Is Invoy really free?
-						</h3>
-						<p class="text-neutral-400 text-sm">
-							Yes, completely free. There are no paywalls,
-							subscriptions, or watermarks on your PDFs.
-						</p>
-					</div>
-					<div
-						class="p-6 rounded-2xl bg-white/5 border border-white/10"
-					>
-						<h3 class="text-lg font-bold mb-2">
-							How is my data stored?
-						</h3>
-						<p class="text-neutral-400 text-sm">
-							Invoy operates entirely in your web browser using
-							local state. We do not have servers that store your
-							invoices or client data.
-						</p>
-					</div>
-					<div
-						class="p-6 rounded-2xl bg-white/5 border border-white/10"
-					>
-						<h3 class="text-lg font-bold mb-2">
-							Can I use it without GST?
-						</h3>
-						<p class="text-neutral-400 text-sm">
-							Absolutely. There is a simple toggle in the form to
-							turn off GST if you are a freelancer below the GST
-							threshold.
-						</p>
-					</div>
-				</div>
-			</section>
-		</main>
+    <!-- Left -->
+    <div class="space-y-7 z-10">
+      <!-- Badge -->
+      <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-[#22c55e]/40 bg-[#22c55e]/10 text-[#22c55e] text-xs font-semibold tracking-wide">
+        <span class="w-1.5 h-1.5 rounded-full bg-[#22c55e] animate-pulse shrink-0"></span>
+        No Sign Up • No Limits • No Watermarks
+      </span>
 
-		{/* Footer */}
-		<footer
-			class="border-t border-white/10 bg-black/40 backdrop-blur-3xl py-12 px-6 text-center"
-		>
-			<div
-				class="w-full px-4 sm:px-6 lg:px-10 flex flex-col md:flex-row items-center justify-between gap-6"
-			>
-				<div class="flex items-center gap-2">
-					<div
-						class="w-6 h-6 rounded bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center font-bold text-xs"
-					>
-						I
-					</div>
-					<span
-						class="font-['Outfit'] font-black tracking-widest text-white"
-						>INVOY</span
-					>
-				</div>
-				<p class="text-neutral-500 text-sm">
-					© {new Date().getFullYear()} {SITE.name}. Built for Indian Businesses.
-				</p>
-				<div class="flex gap-4 items-center">
-					<a href={SITE.support.github} class="text-neutral-500 hover:text-white transition-colors">GitHub</a>
-					<a href={`mailto:${SITE.support.email}`} class="text-neutral-500 hover:text-white transition-colors">Support</a>
-					<button
-						id="request-feature-btn"
-						class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold border border-indigo-500/40 text-indigo-400 hover:bg-indigo-500/10 hover:text-indigo-300 transition-all"
-					>
-						<svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
-						Request a Feature
-					</button>
-				</div>
-			</div>
-		</footer>
+      <!-- Headline -->
+      <div>
+        <h1 class="text-[2.8rem] sm:text-[3.5rem] lg:text-[4rem] font-black font-['Outfit'] leading-[1.08] text-white tracking-tight">
+          Create Professional<br/>Invoices.
+        </h1>
+        <h2 class="text-[2.8rem] sm:text-[3.5rem] lg:text-[4rem] font-black font-['Outfit'] leading-[1.08] tracking-tight mt-1">
+          <span class="text-white">Fast. </span><span class="text-[#22c55e]">Simple. </span>
+          <span class="relative inline-block text-[#f97316] italic pb-3">
+            Free.
+            <!-- Filled brush-stroke underline -->
+            <svg class="absolute left-[-4%] w-[108%]" style="bottom:-6px" viewBox="0 0 200 22" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+              <path d="M2 13 C 18 8, 50 15, 90 11 C 130 7, 165 14, 198 10 L 198 15 C 163 19, 128 13, 90 16 C 52 19, 19 14, 2 17 Z" fill="#f97316" opacity="0.88"/>
+              <path d="M8 12 Q 60 8, 120 11 Q 160 8, 195 12" stroke="#f97316" stroke-width="1" stroke-linecap="round" fill="none" opacity="0.4"/>
+            </svg>
+            <!-- Curved "It's free!" text following an arc path -->
+            <svg class="absolute left-[-10%] w-[120%]" style="bottom:-46px" viewBox="0 0 220 48" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+          </span>
+        </h2>
+      </div>
 
-		{/* Inline styles for basic animations */}
-		<style is:inline>
-			@keyframes fadeInUp {
-				from {
-					opacity: 0;
-					transform: translateY(20px);
-				}
-				to {
-					opacity: 1;
-					transform: translateY(0);
-				}
-			}
-			@keyframes fadeIn {
-				from {
-					opacity: 0;
-				}
-				to {
-					opacity: 1;
-				}
-			}
-			.animate-fade-in-up {
-				opacity: 0;
-				animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-			}
-			.animate-fade-in {
-				opacity: 0;
-				animation: fadeIn 1s ease-out forwards;
-			}
-		</style>
-		{/* Tawk.to Live Chat */}
-		<script
-			define:vars={{
-				tawkPropertyId: import.meta.env.PUBLIC_TAWK_PROPERTY_ID,
-				tawkWidgetId: import.meta.env.PUBLIC_TAWK_WIDGET_ID,
-			}}
-		>
-			if (tawkPropertyId && tawkPropertyId !== "your_property_id_here") {
-				var Tawk_API = Tawk_API || {},
-					Tawk_LoadStart = new Date();
-				(function () {
-					var s1 = document.createElement("script"),
-						s0 = document.getElementsByTagName("script")[0];
-					s1.async = true;
-					s1.src =
-						"https://embed.tawk.to/" +
-						tawkPropertyId +
-						"/" +
-						tawkWidgetId;
-					s1.charset = "UTF-8";
-					s1.setAttribute("crossorigin", "*");
-					s0.parentNode.insertBefore(s1, s0);
-				})();
-			}
-		</script>
-		<script define:vars={{ supportEmail: SITE.support.email }}>
-			document.getElementById('request-feature-btn')?.addEventListener('click', function() {
-				if (typeof window.Tawk_API !== 'undefined' && window.Tawk_API.toggle) {
-					window.Tawk_API.toggle();
-				} else {
-					window.location.href = 'mailto:' + supportEmail + '?subject=Feature Request';
-				}
-			});
-		</script>
-	</body>
+      <p class="text-neutral-400 text-lg leading-relaxed max-w-[420px]">
+        The fastest way for freelancers and small businesses to create GST invoices and download them instantly.
+      </p>
+
+      <!-- CTA -->
+      <div class="flex flex-wrap items-center gap-5 pt-2">
+        <a href="/app"
+          class="inline-flex items-center gap-2.5 px-6 py-3.5 rounded-xl bg-[#22c55e] text-black font-bold text-base
+                 shadow-[0_0_30px_rgba(34,197,94,0.35)] hover:bg-[#16a34a] hover:shadow-[0_0_40px_rgba(34,197,94,0.5)]
+                 hover:scale-[1.02] active:scale-[0.98] transition-all">
+          Create Invoice Now
+          <Fragment set:html={icons["arrow-right"]} />
+        </a>
+        <!-- "↩ It's free!" — cursive, beside button, pointing left with curved arrow -->
+        <div style="transform:rotate(-10deg);transform-origin:left center">
+          <svg width="110" height="40" viewBox="0 0 110 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <!-- Curved arrow pointing left toward button -->
+            <path d="M18 12 C14 16, 10 22, 12 30" stroke="#9ca3af" stroke-width="1.5" stroke-linecap="round" fill="none"/>
+            <path d="M10 27 L12 31 L16 28" stroke="#9ca3af" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+            <!-- "It's free!" in cursive Caveat font -->
+            <text x="22" y="26" font-family="Caveat, cursive" font-size="20" font-weight="700" fill="#9ca3af">It's free!</text>
+          </svg>
+        </div>
+      </div>
+
+      <!-- Trust strip -->
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-x-6 gap-y-3 pt-1">
+        {[
+          { i: "shield",      l: "No Sign Up Required" },
+          { i: "receipt",     l: "GST Ready" },
+          { i: "download",    l: "Instant PDF Download" },
+          { i: "lock",        l: "100% Private & Secure" },
+        ].map(b => (
+          <div class="flex items-center gap-2 text-xs text-neutral-400">
+            <span class="text-[#22c55e] shrink-0"><Fragment set:html={icons[b.i]} /></span>
+            {b.l}
+          </div>
+        ))}
+      </div>
+    </div>
+
+    <!-- Right: Invoice mockup cards -->
+    <div class="relative flex items-center justify-center lg:justify-end z-10">
+      <!-- stacked shadow cards -->
+      <div class="absolute w-[310px] sm:w-[360px] h-[430px] bg-white/6  rounded-2xl rotate-[6deg]  right-2 top-4 shadow-xl border border-white/5"></div>
+      <div class="absolute w-[310px] sm:w-[360px] h-[430px] bg-white/10 rounded-2xl rotate-[3deg]  right-4 top-2 shadow-xl border border-white/8"></div>
+
+      <!-- Main invoice card -->
+      <div class="relative w-[310px] sm:w-[360px] bg-white rounded-2xl shadow-[0_30px_80px_rgba(0,0,0,0.7)] overflow-hidden border border-gray-100">
+        <!-- Card header -->
+        <div class="px-5 pt-5 pb-3 border-b border-gray-100 flex justify-between items-start">
+          <div>
+            <div class="flex items-center gap-1.5 mb-2">
+              <span class="w-5 h-5 rounded bg-[#22c55e] flex items-center justify-center text-white text-[9px] font-black leading-none">✓</span>
+              <span class="text-[11px] font-bold text-gray-800 lowercase">invoy</span>
+            </div>
+            <p class="text-[10px] font-semibold text-gray-700">Acme Studio</p>
+            <p class="text-[8.5px] text-gray-400 leading-tight mt-0.5">123 Business Street<br/>Delhi, India 110001<br/>GSTIN: 27ABCDE1234F1Z5<br/>+91 98765-43210<br/>hello@acmestudio.com</p>
+          </div>
+          <div class="text-right">
+            <p class="text-[20px] font-black text-[#22c55e] font-['Outfit'] tracking-wide">INVOICE</p>
+            <p class="text-[8.5px] text-gray-500 mt-1">Invoice No: <strong class="text-gray-700">INV-0001</strong></p>
+            <p class="text-[8.5px] text-gray-500">Date: <strong class="text-gray-700">17 May 2024</strong></p>
+            <p class="text-[8.5px] text-gray-500">Due Date: <strong class="text-gray-700">24 May 2024</strong></p>
+          </div>
+        </div>
+
+        <!-- Bill To -->
+        <div class="px-5 py-2 border-b border-gray-100">
+          <p class="text-[8px] font-bold text-gray-400 uppercase tracking-widest mb-1">Bill To</p>
+          <p class="text-[10px] font-bold text-gray-800">John Doe</p>
+          <p class="text-[8.5px] text-gray-500 leading-tight">123 Client Street<br/>Mumbai, India 400001<br/>john@example.com</p>
+        </div>
+
+        <!-- Table -->
+        <div class="px-5 py-3">
+          <table class="w-full text-[8.5px]">
+            <thead>
+              <tr class="border-b border-gray-200 text-gray-500">
+                <th class="pb-1 text-left font-semibold w-[40%]">#</th>
+                <th class="pb-1 text-left font-semibold">Item & Description</th>
+                <th class="pb-1 text-center font-semibold">Qty</th>
+                <th class="pb-1 text-right font-semibold">Price</th>
+                <th class="pb-1 text-right font-semibold">GST (%)</th>
+                <th class="pb-1 text-right font-semibold">Total</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="border-b border-gray-100">
+                <td class="py-1.5 text-gray-400">1</td>
+                <td class="py-1.5">
+                  <p class="font-semibold text-gray-800">Web Design Services</p>
+                  <p class="text-gray-400 text-[7.5px]">Website design and development</p>
+                </td>
+                <td class="py-1.5 text-center text-gray-600">1</td>
+                <td class="py-1.5 text-right text-gray-600">₹5,000.00</td>
+                <td class="py-1.5 text-right text-gray-600">₹900.00</td>
+                <td class="py-1.5 text-right font-bold text-gray-800">₹5,900.00</td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="mt-2 space-y-0.5 border-t border-gray-200 pt-2">
+            <div class="flex justify-between text-[8.5px] text-gray-500"><span>Subtotal</span><span>₹5,000.00</span></div>
+            <div class="flex justify-between text-[8.5px] text-gray-500"><span>GST (18%)</span><span>₹900.00</span></div>
+            <div class="flex justify-between text-[10px] font-black text-gray-900 pt-1 border-t border-gray-200 mt-1">
+              <span>Total</span>
+              <span class="text-[#22c55e]">₹5,900.00</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════════════
+     STATS BAR — white bg
+══════════════════════════════════════════════════════════════════ -->
+<div class="bg-white border-y border-gray-200">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 py-5 grid grid-cols-2 md:grid-cols-4 gap-6 md:divide-x divide-gray-200">
+
+    <!-- 1 -->
+    <div class="flex flex-col justify-center">
+      <p class="text-sm font-semibold text-gray-800 leading-snug">Built for freelancers,<br/>agencies and small businesses</p>
+    </div>
+
+    <!-- 2 -->
+    <div class="flex items-center gap-3 md:pl-6">
+      <div class="flex -space-x-2 shrink-0">
+        {['#f97316','#22c55e','#6366f1'].map(c => (
+          <div style={`background:${c}`} class="w-7 h-7 rounded-full border-2 border-white flex items-center justify-center text-white text-[10px] font-bold">
+            {c === '#f97316' ? 'R' : c === '#22c55e' ? 'A' : 'P'}
+          </div>
+        ))}
+      </div>
+      <div>
+        <p class="text-sm font-bold text-gray-900">Loved by 10,000+</p>
+        <p class="text-xs text-gray-500">freelancers</p>
+      </div>
+    </div>
+
+    <!-- 3 -->
+    <div class="flex items-center gap-2 md:pl-6">
+      <span class="text-yellow-400 text-xl">★</span>
+      <div>
+        <p class="text-sm font-bold text-gray-900">4.8/5</p>
+        <p class="text-xs text-gray-500">From happy users</p>
+      </div>
+    </div>
+
+    <!-- 4 -->
+    <div class="flex items-center gap-2 md:pl-6">
+      <span class="text-[#22c55e]"><Fragment set:html={icons["shield"]} /></span>
+      <div>
+        <p class="text-sm font-bold text-gray-900">Always free.</p>
+        <p class="text-xs text-gray-500">Always will be.</p>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════════
+     HOW IT WORKS — white bg
+══════════════════════════════════════════════════════════════════ -->
+<section id="how-it-works" class="bg-white py-14 sm:py-18 px-4 sm:px-6">
+  <div class="max-w-5xl mx-auto">
+
+    <div class="text-center mb-12">
+      <h2 class="text-3xl sm:text-4xl font-black font-['Outfit'] text-gray-900">
+        How <span class="text-[#22c55e]">{SITE.name}</span> Works
+      </h2>
+    </div>
+
+    <div class="flex flex-col md:flex-row items-start justify-center gap-0">
+      {steps.map((s, i) => (
+        <>
+          <div class="flex flex-col items-center text-center px-6 py-4 flex-1">
+            <div class="w-[88px] h-[88px] rounded-full bg-[#22c55e]/10 border-2 border-[#22c55e]/20 flex items-center justify-center text-[#22c55e] mb-4">
+              <Fragment set:html={icons[s.icon === 'eye' ? 'eye-lg' : s.icon === 'download' ? 'download-lg' : s.icon]} />
+            </div>
+            <h3 class="text-sm font-bold text-gray-900 mb-1.5">{s.step}. {s.title}</h3>
+            <p class="text-xs text-gray-500 leading-relaxed max-w-[160px]">{s.desc}</p>
+          </div>
+          {i < steps.length - 1 && (
+            <div class="hidden md:flex items-center justify-center self-start mt-11 shrink-0">
+              <svg width="48" height="16" viewBox="0 0 48 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <line x1="0" y1="8" x2="36" y2="8" stroke="#d1d5db" stroke-width="1.5" stroke-dasharray="4 3"/>
+                <polyline points="34,4 40,8 34,12" stroke="#d1d5db" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+          )}
+        </>
+      ))}
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════════════
+     FEATURES — white bg
+══════════════════════════════════════════════════════════════════ -->
+<section id="features" class="bg-white py-14 sm:py-18 px-4 sm:px-6 border-t border-gray-100">
+  <div class="max-w-6xl mx-auto">
+
+    <div class="text-center mb-14">
+      <h2 class="text-3xl sm:text-4xl font-black font-['Outfit'] text-gray-900">
+        Powerful Features. <span class="text-[#f97316]">Zero Complexity.</span>
+      </h2>
+    </div>
+
+    <div class="grid grid-cols-4 sm:grid-cols-4 lg:grid-cols-8 gap-6">
+      {features.map((f) => (
+        <div class="flex flex-col items-center text-center group cursor-default">
+          <div class="w-14 h-14 rounded-2xl bg-[#22c55e]/10 flex items-center justify-center text-[#22c55e] mb-3 group-hover:bg-[#22c55e]/15 group-hover:scale-105 transition-all">
+            <Fragment set:html={icons[f.icon]} />
+          </div>
+          <h3 class="text-xs font-bold text-gray-800 mb-1 leading-tight">{f.title}</h3>
+          <p class="text-[10px] text-gray-500 leading-snug">{f.desc}</p>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════════════
+     FEATURE REQUEST CTA — warm light bg
+══════════════════════════════════════════════════════════════════ -->
+<section class="bg-[#fff8f3] border-y border-orange-100 py-10 px-4 sm:px-6">
+  <div class="max-w-5xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-6">
+    <div class="flex items-center gap-4">
+      <span class="text-3xl">💡</span>
+      <div>
+        <h3 class="text-lg font-bold text-gray-900">Have an idea to make {SITE.name} even better?</h3>
+        <p class="text-sm text-gray-500 mt-0.5">We'd love to hear it. Request a feature and we might build it!</p>
+      </div>
+    </div>
+    <button id="cta-request-btn"
+      class="shrink-0 flex items-center gap-2 px-6 py-3 rounded-xl bg-[#f97316] text-white font-bold text-sm
+             hover:bg-orange-500 transition-all shadow-[0_4px_20px_rgba(249,115,22,0.35)] hover:shadow-[0_4px_30px_rgba(249,115,22,0.5)]">
+      <Fragment set:html={icons["message"]} />
+      Request a Feature
+    </button>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════════════
+     FAQ — white bg
+══════════════════════════════════════════════════════════════════ -->
+<section id="faq" class="bg-white py-14 sm:py-18 px-4 sm:px-6">
+  <div class="max-w-4xl mx-auto">
+
+    <div class="text-center mb-14">
+      <h2 class="text-3xl sm:text-4xl font-black font-['Outfit'] text-gray-900">
+        Frequently Asked <span class="text-[#22c55e]">Questions</span>
+      </h2>
+    </div>
+
+    <div class="grid md:grid-cols-2 gap-3">
+      {faq.map((item, i) => (
+        <div class="faq-item border border-gray-200 rounded-xl overflow-hidden bg-white">
+          <button
+            class="faq-btn w-full flex items-center justify-between gap-3 px-5 py-4 text-left text-sm font-semibold text-gray-800 hover:bg-gray-50 transition-all"
+            data-idx={i}
+          >
+            {item.q}
+            <svg class="faq-chevron shrink-0 text-gray-400 transition-transform duration-200" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+          </button>
+          <div class="faq-answer hidden px-5 pb-4 border-t border-gray-100">
+            <p class="text-sm text-gray-500 leading-relaxed pt-3">{item.a}</p>
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════════════
+     FOOTER — dark bg
+══════════════════════════════════════════════════════════════════ -->
+<footer class="bg-[#0f0f0f] border-t border-white/8">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 py-12 grid grid-cols-1 md:grid-cols-4 gap-10">
+
+    <!-- Brand -->
+    <div class="md:col-span-1 space-y-3">
+      <a href="/" class="flex items-center gap-1.5">
+        <span class="w-6 h-6 rounded-md bg-[#22c55e] flex items-center justify-center text-black font-black text-sm leading-none">✓</span>
+        <span class="font-['Outfit'] font-black text-white lowercase">{SITE.name}</span>
+      </a>
+      <p class="text-xs text-neutral-500 leading-relaxed max-w-[220px]">
+        A free invoice generator for freelancers, consultants and small businesses.
+      </p>
+    </div>
+
+    <!-- Support -->
+    <div class="space-y-3">
+      <h4 class="text-sm font-bold text-white flex items-center gap-2">
+        <span class="text-[#f97316]"><Fragment set:html={icons["heart"]} /></span>
+        Support {SITE.name}
+      </h4>
+      <p class="text-xs text-neutral-500 leading-relaxed">If you find {SITE.name} helpful,<br/>consider supporting.</p>
+      <a href={`mailto:${SITE.support.email}`}
+        class="inline-flex items-center gap-2 text-sm font-semibold text-white border border-white/20 rounded-full px-4 py-1.5 hover:bg-white/5 transition-all">
+        <Fragment set:html={icons["arrow-right"]} />
+      </a>
+    </div>
+
+    <!-- Request Feature -->
+    <div class="space-y-3">
+      <button id="footer-request-btn" class="flex items-center gap-2 text-sm font-bold text-white">
+        <span class="text-[#22c55e]"><Fragment set:html={icons["zap"]} /></span>
+        Request a Feature
+      </button>
+      <p class="text-xs text-neutral-500">Have a feature idea?<br/>Let us know!</p>
+    </div>
+
+    <!-- Right: Made in India -->
+    <div class="flex flex-col items-start md:items-end justify-between gap-4">
+      <p class="text-xs text-neutral-500 md:text-right">
+        Made with <span class="text-red-400">♥</span> in India
+      </p>
+      <p class="text-xs text-neutral-600 md:text-right">
+        © {new Date().getFullYear()} {SITE.name}. All rights reserved.
+      </p>
+      <div class="flex gap-4">
+        <a href={SITE.support.github} target="_blank" rel="noopener" class="text-xs text-neutral-500 hover:text-white transition-colors">GitHub</a>
+        <a href={`mailto:${SITE.support.email}`} class="text-xs text-neutral-500 hover:text-white transition-colors">Support</a>
+      </div>
+    </div>
+
+  </div>
+</footer>
+
+<!-- ══════════════════════════════════════════════════════════════════
+     SCRIPTS
+══════════════════════════════════════════════════════════════════ -->
+<script>
+  // FAQ accordion
+  document.querySelectorAll('.faq-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const item    = btn.closest('.faq-item')!;
+      const answer  = item.querySelector('.faq-answer')!;
+      const chevron = btn.querySelector('.faq-chevron')!;
+      const isOpen  = !answer.classList.contains('hidden');
+      document.querySelectorAll('.faq-answer').forEach(a => a.classList.add('hidden'));
+      document.querySelectorAll('.faq-chevron').forEach(c => c.classList.remove('rotate-180'));
+      if (!isOpen) { answer.classList.remove('hidden'); chevron.classList.add('rotate-180'); }
+    });
+  });
+
+  // Feature request buttons → Tawk.to or mailto
+  function openRequest() {
+    const w = window as any;
+    if (w.Tawk_API?.toggle) w.Tawk_API.toggle();
+    else window.location.href = 'mailto:hello@invoy.in?subject=Feature Request';
+  }
+  ['nav-request-btn','cta-request-btn','footer-request-btn'].forEach(id =>
+    document.getElementById(id)?.addEventListener('click', openRequest)
+  );
+</script>
+
+<!-- Tawk.to -->
+<script define:vars={{ tpId: import.meta.env.PUBLIC_TAWK_PROPERTY_ID, twId: import.meta.env.PUBLIC_TAWK_WIDGET_ID }}>
+  if (tpId && tpId !== 'your_property_id_here') {
+    var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
+    (function(){var s1=document.createElement('script'),s0=document.getElementsByTagName('script')[0];
+    s1.async=true;s1.src='https://embed.tawk.to/'+tpId+'/'+twId;
+    s1.charset='UTF-8';s1.setAttribute('crossorigin','*');s0.parentNode.insertBefore(s1,s0);})();
+  }
+</script>
+
+</body>
 </html>

@@ -18,21 +18,16 @@ import { SITE } from "../constants/site.ts";
 		<meta name="description" content={SITE.description} />
 
 		{/* JSON-LD for SoftwareApplication and AEO */}
-		<script type="application/ld+json">
-			{
-				"@context": "https://schema.org",
-				"@type": "SoftwareApplication",
-				"name": "Invoy",
-				"operatingSystem": "Web",
-				"applicationCategory": "BusinessApplication",
-				"offers": {
-					"@type": "Offer",
-					"price": "0",
-					"priceCurrency": "INR"
-				},
-				"description": "A completely free, 100% client-side GST invoice generator tailored for Indian businesses and freelancers."
-			}
-		</script>
+		<script type="application/ld+json" set:html={JSON.stringify({
+			"@context": "https://schema.org",
+			"@type": "SoftwareApplication",
+			"name": SITE.name,
+			"operatingSystem": "Web",
+			"applicationCategory": "BusinessApplication",
+			"offers": { "@type": "Offer", "price": "0", "priceCurrency": "INR" },
+			"description": SITE.description,
+			"url": SITE.url
+		})} />
 		<script type="application/ld+json">
 			{
 				"@context": "https://schema.org",
@@ -455,19 +450,18 @@ import { SITE } from "../constants/site.ts";
 					>
 				</div>
 				<p class="text-neutral-500 text-sm">
-					© {new Date().getFullYear()} Invoy. Built for Indian Businesses.
+					© {new Date().getFullYear()} {SITE.name}. Built for Indian Businesses.
 				</p>
-				<div class="flex gap-4">
-					<a
-						href="https://github.com/rishiyaduwanshi/invoy"
-						class="text-neutral-500 hover:text-white transition-colors"
-						>GitHub</a
+				<div class="flex gap-4 items-center">
+					<a href={SITE.support.github} class="text-neutral-500 hover:text-white transition-colors">GitHub</a>
+					<a href={`mailto:${SITE.support.email}`} class="text-neutral-500 hover:text-white transition-colors">Support</a>
+					<button
+						id="request-feature-btn"
+						class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold border border-indigo-500/40 text-indigo-400 hover:bg-indigo-500/10 hover:text-indigo-300 transition-all"
 					>
-					<a
-						href="mailto:hello@invoy.in"
-						class="text-neutral-500 hover:text-white transition-colors"
-						>Support</a
-					>
+						<svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+						Request a Feature
+					</button>
 				</div>
 			</div>
 		</footer>
@@ -525,6 +519,15 @@ import { SITE } from "../constants/site.ts";
 					s0.parentNode.insertBefore(s1, s0);
 				})();
 			}
+		</script>
+		<script define:vars={{ supportEmail: SITE.support.email }}>
+			document.getElementById('request-feature-btn')?.addEventListener('click', function() {
+				if (typeof window.Tawk_API !== 'undefined' && window.Tawk_API.toggle) {
+					window.Tawk_API.toggle();
+				} else {
+					window.location.href = 'mailto:' + supportEmail + '?subject=Feature Request';
+				}
+			});
 		</script>
 	</body>
 </html>

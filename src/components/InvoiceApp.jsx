@@ -148,7 +148,7 @@ export default function InvoiceApp() {
           <button
             onClick={handleDownloadPDF}
             disabled={downloading}
-            className="flex items-center gap-1.5 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 px-3 sm:px-5 py-2 sm:py-2.5 text-xs sm:text-sm font-bold text-white shadow-[0_0_15px_rgba(79,70,229,0.3)] hover:shadow-[0_0_25px_rgba(79,70,229,0.5)] hover:scale-[1.03] transition-all active:scale-95 border border-white/10 disabled:opacity-60 disabled:scale-100 shrink-0"
+            className="hidden sm:flex items-center gap-1.5 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 px-3 sm:px-5 py-2 sm:py-2.5 text-xs sm:text-sm font-bold text-white shadow-[0_0_15px_rgba(79,70,229,0.3)] hover:shadow-[0_0_25px_rgba(79,70,229,0.5)] hover:scale-[1.03] transition-all active:scale-95 border border-white/10 disabled:opacity-60 disabled:scale-100 shrink-0"
           >
             <DownloadIcon />
             <span className="hidden sm:inline">{downloading ? 'Generating...' : 'Download PDF'}</span>

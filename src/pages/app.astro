@@ -6,30 +6,29 @@ import InvoiceApp from "../components/InvoiceApp.jsx";
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<link rel="icon" type="image/svg+xml" href="/invoy_favicon.png" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<link rel="preconnect" href="https://fonts.googleapis.com" />
 		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 		<link
-			href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@400;500;700;800;900&display=swap"
+			href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@400;500;700;800;900&family=Caveat:wght@600;700&display=swap"
 			rel="stylesheet"
 		/>
-		<title>Invoice Generator - Invoy</title>
+		<title>Invoice Generator – invoy</title>
 		<meta
 			name="description"
-			content="Create professional, GST-compliant invoices instantly. Invoy is free, private, and works 100% in your browser."
+			content="Create professional, GST-compliant invoices instantly. invoy is free, private, and works 100% in your browser."
 		/>
 	</head>
-	<body
-		class="bg-[#050505] min-h-screen text-white font-sans antialiased overflow-x-hidden"
-	>
-		{/* Ambient Background Glows */}
+	<body class="bg-[#0c100c] min-h-screen text-white font-['Inter'] antialiased overflow-x-hidden">
+
+		{/* Ambient Background Glows — green tinted like homepage */}
 		<div
-			class="fixed top-[-10%] left-[-10%] w-[40%] h-[40%] rounded-full bg-blue-600/10 blur-[120px] pointer-events-none z-0"
+			class="fixed top-[-10%] left-[-10%] w-[40%] h-[40%] rounded-full bg-green-600/8 blur-[120px] pointer-events-none z-0"
 		>
 		</div>
 		<div
-			class="fixed bottom-[-10%] right-[-10%] w-[40%] h-[40%] rounded-full bg-purple-600/10 blur-[120px] pointer-events-none z-0"
+			class="fixed bottom-[-10%] right-[-10%] w-[40%] h-[40%] rounded-full bg-green-900/10 blur-[120px] pointer-events-none z-0"
 		>
 		</div>
 
@@ -38,41 +37,19 @@ import InvoiceApp from "../components/InvoiceApp.jsx";
 		</main>
 
 		{/* Tawk.to Live Chat */}
-<<<<<<< HEAD
-		<script
-			define:vars={{
-				tawkPropertyId: import.meta.env.PUBLIC_TAWK_PROPERTY_ID,
-				tawkWidgetId: import.meta.env.PUBLIC_TAWK_WIDGET_ID,
-			}}
-		>
-			if (tawkPropertyId && tawkPropertyId !== "your_property_id_here") {
-				var Tawk_API = Tawk_API || {},
-					Tawk_LoadStart = new Date();
-				(function () {
-					var s1 = document.createElement("script"),
-						s0 = document.getElementsByTagName("script")[0];
-					s1.async = true;
-					s1.src =
-						"https://embed.tawk.to/" +
-						tawkPropertyId +
-						"/" +
-						tawkWidgetId;
-					s1.charset = "UTF-8";
-					s1.setAttribute("crossorigin", "*");
-=======
-		<script define:vars={{ tawkPropertyId: import.meta.env.PUBLIC_TAWK_PROPERTY_ID, tawkWidgetId: import.meta.env.PUBLIC_TAWK_WIDGET_ID }}>
-			if (tawkPropertyId && tawkPropertyId !== 'your_property_id_here') {
-				var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
-				(function(){
-					var s1 = document.createElement("script"), s0 = document.getElementsByTagName("script")[0];
-					s1.async = true;
-					s1.src = 'https://embed.tawk.to/' + tawkPropertyId + '/' + tawkWidgetId;
-					s1.charset = 'UTF-8';
-					s1.setAttribute('crossorigin', '*');
->>>>>>> aefd2c64893180c6a20f29dc032e4f948197e33a
-					s0.parentNode.insertBefore(s1, s0);
-				})();
-			}
+		<script type="text/javascript">
+			var Tawk_API = Tawk_API || {},
+				Tawk_LoadStart = new Date();
+			(function () {
+				var s1 = document.createElement("script"),
+					s0 = document.getElementsByTagName("script")[0];
+				s1.async = true;
+				s1.src = "https://embed.tawk.to/6a31b7276255441d4f4018c0/1jr936t2q";
+				s1.charset = "UTF-8";
+				s1.setAttribute("crossorigin", "*");
+				s0.parentNode.insertBefore(s1, s0);
+			})();
 		</script>
 	</body>
 </html>
+

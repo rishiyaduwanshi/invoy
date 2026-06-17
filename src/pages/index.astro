@@ -186,7 +186,7 @@ import InvoiceCard from "../components/InvoiceCard.astro";
                 src="/arrow_it_free.svg"
                 alt=""
                 style="width:44px;height:44px;"
-                class="shrink-0"
+                class="shrink-0 pl-1"
               />
               <span
                 class="font-['Caveat'] font-bold text-neutral-400 text-[1.35rem] leading-none tracking-wide"
@@ -487,10 +487,8 @@ import InvoiceCard from "../components/InvoiceCard.astro";
         <!-- Brand -->
         <div class="md:col-span-1 space-y-3">
           <a href="/" class="flex items-center gap-1.5">
-            <span
-              class="w-6 h-6 rounded-md bg-[#22c55e] flex items-center justify-center text-black font-black text-sm leading-none"
-              >✓</span
-            >
+            <img src="/invoy_favicon.png" alt="" class="size-6" />
+
             <span class="font-['Outfit'] font-black text-white lowercase"
               >{SITE.name}</span
             >
@@ -589,40 +587,18 @@ import InvoiceCard from "../components/InvoiceCard.astro";
         });
       });
 
-      // Feature request buttons → Tawk.to or mailto
+      // Feature request buttons → Tawk.to
       function openRequest() {
         const w = window as any;
         if (w.Tawk_API?.toggle) w.Tawk_API.toggle();
         else
           window.location.href =
-            "mailto:hello@invoy.in?subject=Feature Request";
+            "mailto:hello@hello@iamabhinav.dev?subject=Feature Request";
       }
       ["nav-request-btn", "cta-request-btn", "footer-request-btn"].forEach(
         (id) =>
           document.getElementById(id)?.addEventListener("click", openRequest),
       );
-    </script>
-
-    <!-- Tawk.to -->
-    <script
-      define:vars={{
-        tpId: import.meta.env.PUBLIC_TAWK_PROPERTY_ID,
-        twId: import.meta.env.PUBLIC_TAWK_WIDGET_ID,
-      }}
-    >
-      if (tpId && tpId !== "your_property_id_here") {
-        var Tawk_API = Tawk_API || {},
-          Tawk_LoadStart = new Date();
-        (function () {
-          var s1 = document.createElement("script"),
-            s0 = document.getElementsByTagName("script")[0];
-          s1.async = true;
-          s1.src = "https://embed.tawk.to/" + tpId + "/" + twId;
-          s1.charset = "UTF-8";
-          s1.setAttribute("crossorigin", "*");
-          s0.parentNode.insertBefore(s1, s0);
-        })();
-      }
     </script>
   </body>
 </html>

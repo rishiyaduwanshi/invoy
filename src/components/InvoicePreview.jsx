@@ -1,5 +1,5 @@
-import React from 'react';
 import { SITE } from '../constants/site.ts';
+import { useInvoiceContext } from '../context/InvoiceContext';
 
 const fmt = (n) => new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' }).format(n);
 
@@ -326,7 +326,8 @@ function ModernTemplate({ senderDetails, clientDetails, invoiceMeta, items, taxS
 // ══════════════════════════════════════════════════════════════════════════
 // EXPORT
 // ══════════════════════════════════════════════════════════════════════════
-export default function InvoicePreview(props) {
-  if (props.selectedTemplate === 'classic') return <ClassicTemplate {...props} />;
-  return <ModernTemplate {...props} />;
+export default function InvoicePreview() {
+  const { data } = useInvoiceContext();
+  if (data.template === 'classic') return <ClassicTemplate {...data} />;
+  return <ModernTemplate {...data} />;
 }

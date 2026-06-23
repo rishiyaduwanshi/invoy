@@ -1,0 +1,46 @@
+---
+import "../global.css";
+import SavedInvoices from "../components/SavedInvoices.tsx";
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" type="image/svg+xml" href="/invoy_favicon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@400;500;700;800;900&family=Caveat:wght@600;700&display=swap"
+      rel="stylesheet"
+    />
+    <title>My Invoices – invoy</title>
+  </head>
+  <body class="bg-[#0c100c] min-h-screen text-white font-['Inter'] antialiased overflow-x-hidden">
+    
+    {/* Ambient Background Glows */}
+    <div class="fixed top-[-10%] left-[-10%] w-[40%] h-[40%] rounded-full bg-green-600/8 blur-[120px] pointer-events-none z-0"></div>
+    <div class="fixed bottom-[-10%] right-[-10%] w-[40%] h-[40%] rounded-full bg-green-900/10 blur-[120px] pointer-events-none z-0"></div>
+
+    <nav class="sticky top-0 z-50 border-b border-white/8 bg-[#0a0a0a]/95 backdrop-blur-xl">
+      <div class="w-full px-4 sm:px-6 h-14 flex items-center justify-between gap-3 max-w-5xl mx-auto">
+        <div class="flex items-center gap-3">
+          <a href="/" class="flex items-center gap-1.5 text-neutral-400 hover:text-white transition-colors text-sm group shrink-0">
+            <svg class="group-hover:-translate-x-0.5 transition-transform" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg>
+            <span class="hidden sm:inline text-xs font-medium">Home</span>
+          </a>
+          <div class="w-px h-4 bg-white/10 hidden sm:block" />
+          <a href="/" class="flex items-center gap-1.5 shrink-0">
+            <img src="/invoy_favicon.png" alt="invoy" class="w-7 h-7" />
+            <span class="font-['Outfit'] font-black text-white text-lg tracking-normal lowercase">invoy</span>
+          </a>
+        </div>
+      </div>
+    </nav>
+
+    <main class="relative z-10">
+      <SavedInvoices client:only="react" />
+    </main>
+
+  </body>
+</html>

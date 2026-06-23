@@ -1,83 +1,22 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import InvoiceForm from './InvoiceForm';
 import InvoicePreview from './InvoicePreview';
-import { icons } from '../constants/icons.ts';
-import { DEFAULT_TEMPLATE } from '../templates/index.ts';
+import { icons } from '../constants/icons';
+import { InvoiceProvider, useInvoiceContext } from '../context/InvoiceContext';
+import { storage } from '../utils/storage';
 
 // Tiny helper: render SVG string safely in React
 const Icon = ({ name, className = '' }) => (
   <span className={`inline-flex items-center justify-center ${className}`} dangerouslySetInnerHTML={{ __html: icons[name] ?? '' }} />
 );
 
-export default function InvoiceApp() {
-  // ── Template (only changes visual layout) ─────────────
-  const [selectedTemplate, setSelectedTemplate] = useState(DEFAULT_TEMPLATE);
+function InvoiceAppContent() {
+  const { data, loadInvoice } = useInvoiceContext();
 
   // ── UI States ──────────────────────────────────────────
   const [downloading, setDownloading] = useState(false);
   const [mobileTab, setMobileTab] = useState('form');
   const [toast, setToast] = useState(null); // { type: 'success'|'error', msg: string }
-
-  // ── Sender Details ─────────────────────────────────────
-  const [senderDetails, setSenderDetails] = useState({
-    businessName: '',
-    name: '',
-    email: '',
-    phone: '',
-    address: '',
-    gstin: '',
-    udyamNo: '',
-    logo: null,
-    signature: null,
-  });
-
-  // ── Client Details ─────────────────────────────────────
-  const [clientDetails, setClientDetails] = useState({
-    name: '',
-    email: '',
-    address: '',
-    state: 'Delhi',
-  });
-
-  // ── Invoice Meta ───────────────────────────────────────
-  const [invoiceMeta, setInvoiceMeta] = useState({
-    invoiceNumber: 'INV-001',
-    date: new Date().toISOString().split('T')[0],
-    dueDate: '',
-  });
-
-  // ── Line Items ─────────────────────────────────────────
-  const [items, setItems] = useState([
-    { id: 1, description: '', quantity: 1, rate: 0 },
-  ]);
-
-  // ── Tax Settings ───────────────────────────────────────
-  const [taxSettings, setTaxSettings] = useState({
-    applyGst: true,
-    gstRate: 18,
-    senderState: 'Delhi',
-  });
-
-  // ── Content Toggles (independent of template) ──────────
-  const [contentOptions, setContentOptions] = useState({
-    showSignature: true,
-    showPaymentDetails: false,
-    showDeclaration: false,
-    showDueDate: true,
-    showUdyamNo: false,
-  });
-
-  // ── Payment Details ────────────────────────────────────
-  const [paymentDetails, setPaymentDetails] = useState({
-    mode: 'Bank Transfer',
-    status: 'Paid',
-    transactionId: '',
-  });
-
-  // ── Declaration ────────────────────────────────────────
-  const [declaration, setDeclaration] = useState(
-    "This invoice is issued for software development and IT services.\nThe service provider is not responsible for how the software is used by the client.\nThis is a service-based engagement under MSME registration."
-  );
 
   // ── PDF Download ───────────────────────────────────────
   const showToast = (type, msg) => {
@@ -90,7 +29,7 @@ export default function InvoiceApp() {
     try {
       const element = document.getElementById('invoice-preview-container');
       if (!element) throw new Error('Preview not found');
-      const filename = `Invoy_${invoiceMeta.invoiceNumber}.pdf`;
+      const filename = `Invoy_${data.invoiceMeta.invoiceNumber}.pdf`;
       const opt = {
         margin: 0,
         filename,
@@ -110,17 +49,49 @@ export default function InvoiceApp() {
     }
   };
 
-  const sharedProps = {
-    selectedTemplate, setSelectedTemplate,
-    senderDetails, setSenderDetails,
-    clientDetails, setClientDetails,
-    invoiceMeta, setInvoiceMeta,
-    items, setItems,
-    taxSettings, setTaxSettings,
-    contentOptions, setContentOptions,
-    paymentDetails, setPaymentDetails,
-    declaration, setDeclaration,
+  const handleSaveInvoice = () => {
+    try {
+      // Find existing ID from URL if we are editing
+      const params = new URLSearchParams(window.location.search);
+      const existingId = params.get('loadId') || undefined;
+      
+      storage.save(data, existingId);
+      showToast('success', 'Invoice saved successfully!');
+    } catch (e) {
+      showToast('error', 'Failed to save invoice.');
+    }
   };
+
+  const handleSaveDefaultProfile = () => {
+    try {
+      storage.saveProfile(data);
+      showToast('success', 'Business profile set as default!');
+    } catch (e) {
+      showToast('error', 'Failed to save default profile.');
+    }
+  };
+
+  useEffect(() => {
+    // Only run on client
+    if (typeof window !== 'undefined') {
+      const params = new URLSearchParams(window.location.search);
+      const id = params.get('loadId');
+      if (id) {
+        // Load the specific saved invoice
+        const saved = storage.getById(id);
+        if (saved) {
+          loadInvoice(saved.data);
+        }
+      } else {
+        // If creating a new invoice, load the default business profile (if any)
+        const defaultProfile = storage.getProfile();
+        if (defaultProfile) {
+          // Merge default profile into current empty state
+          loadInvoice({ ...data, ...defaultProfile });
+        }
+      }
+    }
+  }, []);
 
   return (
     <div className="min-h-screen text-white font-['Inter'] overflow-x-hidden">
@@ -139,6 +110,10 @@ export default function InvoiceApp() {
               <img src="/invoy_favicon.png" alt="invoy" className="w-7 h-7" />
               <span className="font-['Outfit'] font-black text-white text-lg tracking-normal lowercase">invoy</span>
             </a>
+            <div className="w-px h-4 bg-white/10 hidden sm:block" />
+            <a href="/invoices" className="hidden sm:flex items-center gap-1.5 text-neutral-400 hover:text-white transition-colors text-sm font-medium shrink-0">
+              <Icon name="file" /> My Invoices
+            </a>
           </div>
 
           {/* Center (mobile): tab switcher */}
@@ -152,15 +127,17 @@ export default function InvoiceApp() {
           </div>
 
           {/* Right: download button */}
-          <button
-            onClick={handleDownloadPDF}
-            disabled={downloading}
-            className="hidden sm:flex items-center gap-1.5 rounded-md bg-brand px-3 sm:px-5 py-2 sm:py-2.5 text-xs sm:text-sm font-bold text-black hover:bg-[#16a34a] hover:scale-[1.03] transition-all active:scale-95 disabled:opacity-60 disabled:scale-100 shrink-0"
-          >
-            <Icon name="download" />
-            <span className="hidden sm:inline">{downloading ? 'Generating...' : 'Download PDF'}</span>
-            <span className="sm:hidden">{downloading ? '...' : 'PDF'}</span>
-          </button>
+          <div className="flex items-center gap-2">
+            <button
+              onClick={handleDownloadPDF}
+              disabled={downloading}
+              className="hidden sm:flex items-center gap-1.5 rounded-md bg-brand px-3 sm:px-5 py-2 sm:py-2.5 text-xs sm:text-sm font-bold text-black hover:bg-[#16a34a] hover:scale-[1.03] transition-all active:scale-95 disabled:opacity-60 disabled:scale-100 shrink-0"
+            >
+              <Icon name="download" />
+              <span className="hidden sm:inline">{downloading ? 'Generating...' : 'Download PDF'}</span>
+              <span className="sm:hidden">{downloading ? '...' : 'PDF'}</span>
+            </button>
+          </div>
         </div>
       </nav>
 
@@ -171,7 +148,7 @@ export default function InvoiceApp() {
         <div className="hidden lg:grid grid-cols-12 gap-5">
           <div className="col-span-5 xl:col-span-4">
             <div className="sticky top-[4.5rem] max-h-[calc(100vh-5.5rem)] overflow-y-auto pr-1 scrollbar-thin">
-              <InvoiceForm {...sharedProps} />
+              <InvoiceForm />
             </div>
           </div>
           <div className="col-span-7 xl:col-span-8">
@@ -186,14 +163,14 @@ export default function InvoiceApp() {
                       <div className="w-2.5 h-2.5 rounded-full bg-green-500/60" />
                     </div>
                     <span className="text-xs text-neutral-500 ml-1 font-medium">Live Preview</span>
-                    <span className={`ml-2 text-xs px-2 py-0.5 rounded-full font-bold border ${selectedTemplate === 'classic' ? 'bg-yellow-500/10 border-yellow-500/30 text-yellow-300' : 'bg-green-500/10 border-green-500/30 text-green-300'}`}>
-                      {selectedTemplate === 'classic' ? '⭐ Classic' : '✨ Modern'}
+                    <span className={`ml-2 text-xs px-2 py-0.5 rounded-full font-bold border ${data.template === 'classic' ? 'bg-yellow-500/10 border-yellow-500/30 text-yellow-300' : 'bg-green-500/10 border-green-500/30 text-green-300'}`}>
+                      {data.template === 'classic' ? '⭐ Classic' : '✨ Modern'}
                     </span>
                   </div>
-                  <span className="text-xs text-neutral-600 font-mono">{invoiceMeta.invoiceNumber}</span>
+                  <span className="text-xs text-neutral-600 font-mono">{data.invoiceMeta.invoiceNumber}</span>
                 </div>
                 <div className="relative z-10 shadow-[0_0_60px_rgba(0,0,0,0.6)] rounded-lg overflow-hidden">
-                  <InvoicePreview {...sharedProps} />
+                  <InvoicePreview />
                 </div>
               </div>
             </div>
@@ -204,7 +181,7 @@ export default function InvoiceApp() {
         <div className="lg:hidden">
           {mobileTab === 'form' ? (
             <div>
-              <InvoiceForm {...sharedProps} />
+              <InvoiceForm />
               <button onClick={() => setMobileTab('preview')} className="mt-4 w-full py-3.5 rounded-2xl bg-brand text-black font-bold text-sm flex items-center justify-center gap-2 hover:bg-[#16a34a] transition-colors">
                 <Icon name="eye" /> Preview Invoice
               </button>
@@ -213,7 +190,7 @@ export default function InvoiceApp() {
             <div>
               <div className="bg-white/5 rounded-2xl border border-white/10 p-2 shadow-xl overflow-hidden">
                 <div style={{ transform: 'scale(0.85)', transformOrigin: 'top left', width: '117.6%', pointerEvents: 'none' }}>
-                  <InvoicePreview {...sharedProps} />
+                  <InvoicePreview />
                 </div>
               </div>
               <button onClick={handleDownloadPDF} disabled={downloading} className="mt-4 w-full py-3.5 rounded-2xl bg-brand text-black font-bold text-sm flex items-center justify-center gap-2 disabled:opacity-60">
@@ -244,5 +221,13 @@ export default function InvoiceApp() {
         </div>
       )}
     </div>
+  );
+}
+
+export default function InvoiceApp() {
+  return (
+    <InvoiceProvider>
+      <InvoiceAppContent />
+    </InvoiceProvider>
   );
 }

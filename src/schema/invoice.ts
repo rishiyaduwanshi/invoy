@@ -1,11 +1,18 @@
 import { z } from 'zod';
 
+export const TaxItemSchema = z.object({
+  id: z.string(),
+  name: z.string(),
+  type: z.enum(['percentage', 'flat']),
+  value: z.union([z.number(), z.string()]),
+});
+
 // Zod Schema Definition for Invoice
 export const InvoiceItemSchema = z.object({
   id: z.union([z.string(), z.number()]),
   description: z.string(),
-  quantity: z.number(),
-  rate: z.number(),
+  quantity: z.union([z.number(), z.string()]),
+  rate: z.union([z.number(), z.string()]),
 });
 
 export const InvoiceSchema = z.object({
@@ -25,18 +32,21 @@ export const InvoiceSchema = z.object({
     name: z.string(),
     email: z.string(),
     address: z.string(),
-    state: z.string(),
+    state: z.string(), // Kept for legacy compatibility if needed, but not used for tax anymore
   }),
   invoiceMeta: z.object({
     invoiceNumber: z.string(),
     date: z.string(),
     dueDate: z.string(),
+    currency: z.string(),
+    quantityLabel: z.string(),
+    rateLabel: z.string(),
   }),
   items: z.array(InvoiceItemSchema),
-  taxSettings: z.object({
-    applyGst: z.boolean(),
-    gstRate: z.number(),
-    senderState: z.string(),
+  taxes: z.array(TaxItemSchema),
+  adjustments: z.object({
+    discountType: z.enum(['percentage', 'flat']),
+    discountValue: z.union([z.number(), z.string()]),
   }),
   contentOptions: z.object({
     showSignature: z.boolean(),
@@ -75,20 +85,25 @@ export const DEFAULT_INVOICE_DATA: InvoiceType = {
     name: '',
     email: '',
     address: '',
-    state: 'Delhi',
+    state: 'Bihar',
   },
   invoiceMeta: {
     invoiceNumber: 'INV-001',
     date: new Date().toISOString().split('T')[0],
     dueDate: '',
+    currency: '₹',
+    quantityLabel: 'Qty',
+    rateLabel: 'Rate',
   },
   items: [
     { id: 1, description: '', quantity: 1, rate: 0 },
   ],
-  taxSettings: {
-    applyGst: true,
-    gstRate: 18,
-    senderState: 'Delhi',
+  taxes: [
+    { id: '1', name: 'Tax', type: 'percentage', value: 18 }
+  ],
+  adjustments: {
+    discountType: 'percentage',
+    discountValue: 0,
   },
   contentOptions: {
     showSignature: true,

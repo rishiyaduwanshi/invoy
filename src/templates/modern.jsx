@@ -1,9 +1,10 @@
 import React from 'react';
-import { fmt, calcTax, InvoiceBottom, InvoyFooter } from './shared';
+import { fmt, calcTotals, InvoiceBottom, InvoyFooter } from './shared';
 
 export default function ModernTemplate({ data }) {
-  const { senderDetails, clientDetails, invoiceMeta, items, taxSettings, contentOptions, paymentDetails, declaration } = data;
-  const { subtotal, cgst, sgst, igst, isInter, grand } = calcTax({ items, taxSettings, senderDetails, clientDetails });
+  const { senderDetails, clientDetails, invoiceMeta, items, contentOptions, paymentDetails, declaration } = data;
+  const { subtotal, discountAmount, taxableAmount, calculatedTaxes, grandTotal } = calcTotals(data);
+  const formatMoney = (val) => fmt(val, invoiceMeta.currency || '₹');
 
   return (
     <div id="invoice-preview-container" style={{ backgroundColor: '#fff', color: '#000', padding: 40, minHeight: 1056, width: '100%', fontFamily: 'Arial, sans-serif', position: 'relative' }}>
@@ -62,8 +63,8 @@ export default function ModernTemplate({ data }) {
           <thead>
             <tr style={{ borderBottom: '2px solid #e5e7eb' }}>
               <th style={{ padding: '12px 0', fontSize: 12, color: '#9ca3af', fontWeight: 600, textTransform: 'uppercase' }}>Description</th>
-              <th style={{ padding: '12px 0', fontSize: 12, color: '#9ca3af', fontWeight: 600, textTransform: 'uppercase', textAlign: 'center', width: 60 }}>Qty</th>
-              <th style={{ padding: '12px 0', fontSize: 12, color: '#9ca3af', fontWeight: 600, textTransform: 'uppercase', textAlign: 'right' }}>Rate</th>
+              <th style={{ padding: '12px 0', fontSize: 12, color: '#9ca3af', fontWeight: 600, textTransform: 'uppercase', textAlign: 'center', width: 60 }}>{invoiceMeta.quantityLabel || 'Qty'}</th>
+              <th style={{ padding: '12px 0', fontSize: 12, color: '#9ca3af', fontWeight: 600, textTransform: 'uppercase', textAlign: 'right' }}>{invoiceMeta.rateLabel || 'Rate'}</th>
               <th style={{ padding: '12px 0', fontSize: 12, color: '#9ca3af', fontWeight: 600, textTransform: 'uppercase', textAlign: 'right' }}>Amount</th>
             </tr>
           </thead>
@@ -72,8 +73,8 @@ export default function ModernTemplate({ data }) {
               <tr key={item.id} style={{ borderBottom: '1px solid #f3f4f6' }}>
                 <td style={{ padding: '16px 0', fontSize: 14, color: '#111827', fontWeight: 500 }}>{item.description || '-'}</td>
                 <td style={{ padding: '16px 0', fontSize: 14, color: '#4b5563', textAlign: 'center' }}>{item.quantity}</td>
-                <td style={{ padding: '16px 0', fontSize: 14, color: '#4b5563', textAlign: 'right' }}>{fmt(item.rate)}</td>
-                <td style={{ padding: '16px 0', fontSize: 14, color: '#111827', textAlign: 'right', fontWeight: 600 }}>{fmt(item.quantity * item.rate)}</td>
+                <td style={{ padding: '16px 0', fontSize: 14, color: '#4b5563', textAlign: 'right' }}>{formatMoney(item.rate)}</td>
+                <td style={{ padding: '16px 0', fontSize: 14, color: '#111827', textAlign: 'right', fontWeight: 600 }}>{formatMoney(item.quantity * item.rate)}</td>
               </tr>
             ))}
           </tbody>
@@ -85,27 +86,23 @@ export default function ModernTemplate({ data }) {
         <div style={{ width: 320 }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', padding: '8px 0', fontSize: 14, color: '#4b5563' }}>
             <span>Subtotal</span>
-            <span style={{ fontWeight: 500, color: '#111827' }}>{fmt(subtotal)}</span>
+            <span style={{ fontWeight: 500, color: '#111827' }}>{formatMoney(subtotal)}</span>
           </div>
-          {taxSettings.applyGst && isInter && (
-            <div style={{ display: 'flex', justifyContent: 'space-between', padding: '8px 0', fontSize: 14, color: '#4b5563' }}>
-              <span>IGST ({taxSettings.gstRate}%)</span>
-              <span style={{ fontWeight: 500, color: '#111827' }}>{fmt(igst)}</span>
+          {discountAmount > 0 && (
+            <div style={{ display: 'flex', justifyContent: 'space-between', padding: '8px 0', fontSize: 14, color: '#16a34a' }}>
+              <span>Discount</span>
+              <span style={{ fontWeight: 500 }}>-{formatMoney(discountAmount)}</span>
             </div>
           )}
-          {taxSettings.applyGst && !isInter && (<>
-            <div style={{ display: 'flex', justifyContent: 'space-between', padding: '8px 0', fontSize: 14, color: '#4b5563' }}>
-              <span>CGST ({taxSettings.gstRate / 2}%)</span>
-              <span style={{ fontWeight: 500, color: '#111827' }}>{fmt(cgst)}</span>
+          {calculatedTaxes.map((tax) => (
+            <div key={tax.id} style={{ display: 'flex', justifyContent: 'space-between', padding: '8px 0', fontSize: 14, color: '#4b5563' }}>
+              <span>{tax.name} {tax.type === 'percentage' ? `(${tax.value}%)` : ''}</span>
+              <span style={{ fontWeight: 500, color: '#111827' }}>{formatMoney(tax.amount)}</span>
             </div>
-            <div style={{ display: 'flex', justifyContent: 'space-between', padding: '8px 0', fontSize: 14, color: '#4b5563' }}>
-              <span>SGST ({taxSettings.gstRate / 2}%)</span>
-              <span style={{ fontWeight: 500, color: '#111827' }}>{fmt(sgst)}</span>
-            </div>
-          </>)}
+          ))}
           <div style={{ display: 'flex', justifyContent: 'space-between', padding: '16px 0', marginTop: 8, borderTop: '2px solid #111827', fontSize: 18, fontWeight: 800, color: '#111827' }}>
             <span>Total</span>
-            <span>{fmt(grand)}</span>
+            <span>{formatMoney(grandTotal)}</span>
           </div>
         </div>
       </div>

@@ -8,8 +8,8 @@
     "a": "No account needed. Just open the app and start creating invoices instantly."
   },
   {
-    "q": "Can I create GST invoices?",
-    "a": "Yes! Invoy auto-calculates CGST, SGST, and IGST based on the supplier and client states."
+    "q": "Can I calculate Taxes and Discounts?",
+    "a": "Yes! Invoy supports custom Tax percentage, flat/percentage discounts, and shipping charges. You can even customize the tax name (e.g. GST, VAT)."
   },
   {
     "q": "Can freelancers use Invoy?",
@@ -20,7 +20,7 @@
     "a": "No. Invoy runs 100% in your browser. None of your invoice data ever leaves your device."
   },
   {
-    "q": "Can I download invoices as PDF?",
-    "a": "Yes. Every invoice can be downloaded as a professional A4 PDF with one click."
+    "q": "Can I download my invoices?",
+    "a": "Yes! Every invoice can be downloaded as a professional A4 PDF or as a raw JSON file for your own records."
   }
 ]

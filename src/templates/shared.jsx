@@ -1,19 +1,65 @@
 import React from 'react';
 
-export const fmt = (n) => new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' }).format(n);
+export const fmt = (n, c = '₹') => c + Number(n).toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
-export function calcTax({ items, taxSettings, senderDetails, clientDetails }) {
-  const subtotal = items.reduce((s, i) => s + i.rate * i.quantity, 0);
-  const isInter = (taxSettings?.senderState || '').toLowerCase() !== (clientDetails?.state || '').toLowerCase();
-  let cgst = 0, sgst = 0, igst = 0;
-  if (taxSettings?.applyGst && taxSettings?.gstRate) {
-    if (isInter && clientDetails?.state) igst = subtotal * (taxSettings.gstRate / 100);
-    else {
-      cgst = subtotal * ((taxSettings.gstRate / 2) / 100);
-      sgst = subtotal * ((taxSettings.gstRate / 2) / 100);
+export function calcTotals({ items = [], adjustments = {}, taxes, taxSettings }) {
+  const subtotal = items.reduce((s, i) => s + (Number(i.rate) || 0) * (Number(i.quantity) || 0), 0);
+  
+  let discountAmount = 0;
+  if (adjustments?.discountType === 'percentage') {
+    discountAmount = subtotal * ((Number(adjustments?.discountValue) || 0) / 100);
+  } else {
+    discountAmount = Number(adjustments?.discountValue) || 0;
+  }
+
+  const taxableAmount = Math.max(0, subtotal - discountAmount);
+
+  let calculatedTaxes = [];
+  let totalTaxesAndCharges = 0;
+
+  if (taxes) {
+    calculatedTaxes = taxes.map(tax => {
+      let amount = 0;
+      if (tax.type === 'percentage') {
+        amount = taxableAmount * ((Number(tax.value) || 0) / 100);
+      } else {
+        amount = Number(tax.value) || 0;
+      }
+      totalTaxesAndCharges += amount;
+      return {
+        ...tax,
+        amount
+      };
+    });
+  } else {
+    // Fallback for legacy invoices loaded from storage
+    if (taxSettings?.applyTax && taxSettings?.taxRate) {
+      const taxAmt = taxableAmount * ((Number(taxSettings.taxRate) || 0) / 100);
+      calculatedTaxes.push({
+        id: 'legacy-tax',
+        name: taxSettings.taxLabel || 'Tax',
+        type: 'percentage',
+        value: taxSettings.taxRate,
+        amount: taxAmt
+      });
+      totalTaxesAndCharges += taxAmt;
+    }
+    if (adjustments?.shippingCharge) {
+      const shipAmt = Number(adjustments.shippingCharge) || 0;
+      calculatedTaxes.push({
+        id: 'legacy-shipping',
+        name: 'Shipping / Extra',
+        type: 'flat',
+        value: adjustments.shippingCharge,
+        amount: shipAmt
+      });
+      totalTaxesAndCharges += shipAmt;
     }
   }
-  return { subtotal, cgst, sgst, igst, isInter, grand: subtotal + cgst + sgst + igst };
+
+  const grandTotal = taxableAmount + totalTaxesAndCharges;
+
+  return { subtotal, discountAmount, taxableAmount, calculatedTaxes, totalTaxesAndCharges, grandTotal };
 }
 
 // Status badge with inline hex colors (safe for PDF)

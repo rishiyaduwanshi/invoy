@@ -1,3 +1,4 @@
+import { calcTotals, fmt } from '../templates/shared';
 import React, { useState, useEffect } from 'react';
 import { storage, type SavedInvoice } from '../utils/storage';
 import { icons } from '../constants/icons';
@@ -36,12 +37,11 @@ export default function SavedInvoices() {
     navigate('/app');
   };
 
-  if (!mounted) return null; // Prevent hydration mismatch
+  if (!mounted) return null;
 
   return (
     <div className="min-h-screen text-white font-['Inter'] px-4 py-10 sm:py-16 max-w-5xl mx-auto relative z-10">
       
-      {/* Decorative Blur Elements */}
       <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] rounded-full bg-brand/10 blur-[120px] pointer-events-none z-0"></div>
       
       <div className="relative z-10 flex flex-col sm:flex-row sm:items-end justify-between gap-6 mb-12">
@@ -82,18 +82,18 @@ export default function SavedInvoices() {
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
           {invoices.map((inv) => {
-            const total = inv.data.items.reduce((s, i) => s + i.rate * i.quantity, 0);
+            const { grandTotal } = calcTotals(inv.data);
+            const currency = inv.data.invoiceMeta?.currency || '₹';
             return (
               <div 
                 key={inv.id} 
                 className="group bg-white/5 border border-white/10 rounded-2xl p-6 hover:bg-white/10 hover:border-white/20 transition-all duration-300 flex flex-col backdrop-blur-sm relative overflow-hidden"
               >
-                {/* Subtle Hover Gradient */}
                 <div className="absolute inset-0 bg-gradient-to-br from-brand/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"></div>
                 
                 <div className="flex justify-between items-start mb-5 relative z-10">
                   <div className="bg-brand/10 text-brand border border-brand/20 px-3 py-1.5 rounded-lg text-xs font-bold uppercase tracking-wider shadow-[0_0_10px_rgba(34,197,94,0.1)]">
-                    {inv.data.invoiceMeta.invoiceNumber || 'No Number'}
+                    {inv.data.invoiceMeta?.invoiceNumber || 'No Number'}
                   </div>
                   <div className="text-[11px] text-neutral-500 font-semibold bg-black/30 px-2 py-1 rounded-md">
                     {new Date(inv.updatedAt).toLocaleDateString(undefined, { day: 'numeric', month: 'short', year: 'numeric' })}
@@ -111,7 +111,7 @@ export default function SavedInvoices() {
                   </div>
                   <div className="w-1 h-1 rounded-full bg-neutral-600"></div>
                   <div className="text-neutral-300">
-                    ₹{total.toLocaleString('en-IN')}
+                    {fmt(grandTotal, currency)}
                   </div>
                 </div>
 

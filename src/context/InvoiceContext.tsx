@@ -40,8 +40,45 @@ export function InvoiceProvider({ children }: { children: React.ReactNode }) {
     });
   };
 
-  const loadInvoice = (invoice: InvoiceType) => {
-    setData(invoice);
+  const loadInvoice = (invoice: any) => {
+    let migratedTaxes = invoice.taxes;
+    if (!migratedTaxes) {
+      migratedTaxes = [];
+      if (invoice.taxSettings?.applyTax) {
+        migratedTaxes.push({
+          id: 'legacy-tax',
+          name: invoice.taxSettings.taxLabel || 'Tax',
+          type: 'percentage',
+          value: invoice.taxSettings.taxRate ?? 0
+        });
+      }
+      if (invoice.adjustments?.shippingCharge) {
+        migratedTaxes.push({
+          id: 'legacy-shipping',
+          name: 'Shipping / Extra',
+          type: 'flat',
+          value: invoice.adjustments.shippingCharge
+        });
+      }
+      // If it has no legacy fields and taxes was undefined/null, fallback to default taxes
+      if (migratedTaxes.length === 0 && !invoice.taxSettings) {
+        migratedTaxes = DEFAULT_INVOICE_DATA.taxes;
+      }
+    }
+
+    setData({
+      ...DEFAULT_INVOICE_DATA,
+      ...invoice,
+      invoiceMeta: {
+        ...DEFAULT_INVOICE_DATA.invoiceMeta,
+        ...(invoice.invoiceMeta || {}),
+      },
+      taxes: migratedTaxes,
+      adjustments: {
+        discountType: invoice.adjustments?.discountType ?? 'percentage',
+        discountValue: invoice.adjustments?.discountValue ?? 0,
+      }
+    });
   };
 
   const resetToDefault = () => {

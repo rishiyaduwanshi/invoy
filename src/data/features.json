@@ -1,10 +1,10 @@
 [
-  { "title": "GST Calculation",   "desc": "Automatic CGST, SGST & IGST based on state",   "icon": "calculator" },
-  { "title": "CGST / SGST / IGST","desc": "Smart inter-state tax detection",              "icon": "percent" },
-  { "title": "Tax Breakdown",     "desc": "Clear itemised tax and amount breakdown",       "icon": "receipt" },
+  { "title": "Global Support",   "desc": "Customizable Currency, Taxes, and Discounts",   "icon": "globe" },
+  { "title": "Flexible Units",   "desc": "Charge by Qty, Hours, Days or custom units",   "icon": "clock" },
+  { "title": "No Login Required", "desc": "Start generating instantly. No signup BS.",    "icon": "zap" },
   { "title": "Invoice Number",    "desc": "Auto-generated invoice numbering",              "icon": "hash" },
   { "title": "Business Details",  "desc": "GSTIN, Udyam, logo & signature support",       "icon": "building" },
   { "title": "Client Details",    "desc": "Add client billing info and state",             "icon": "user" },
-  { "title": "PDF Export",        "desc": "Download clean A4 invoices as PDF",            "icon": "file-down" },
+  { "title": "Data Export",       "desc": "Download clean A4 invoices as PDF or JSON",    "icon": "file-down" },
   { "title": "Custom Notes",      "desc": "Add declaration, payment terms & notes",       "icon": "pencil" }
 ]

@@ -4,6 +4,7 @@ import InvoicePreview from './InvoicePreview';
 import { icons } from '../constants/icons';
 import { InvoiceProvider, useInvoiceContext } from '../context/InvoiceContext';
 import { storage } from '../utils/storage';
+import Select from './ui/Select';
 
 // Tiny helper: render SVG string safely in React
 const Icon = ({ name, className = '' }) => (
@@ -29,6 +30,22 @@ function InvoiceAppContent() {
     try {
       const element = document.getElementById('invoice-preview-container');
       if (!element) throw new Error('Preview not found');
+      
+      let html2pdf = window.html2pdf;
+      if (!html2pdf) {
+        // Load html2pdf dynamically from CDN to bypass all Vite caching and packaging bugs
+        await new Promise((resolve, reject) => {
+          const script = document.createElement('script');
+          script.src = 'https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js';
+          script.onload = () => resolve();
+          script.onerror = () => reject(new Error('Failed to load PDF engine from CDN.'));
+          document.head.appendChild(script);
+        });
+        html2pdf = window.html2pdf;
+      }
+
+      if (!html2pdf) throw new Error('PDF generator not available');
+
       const filename = `Invoy_${data.invoiceMeta.invoiceNumber}.pdf`;
       const opt = {
         margin: 0,
@@ -37,9 +54,7 @@ function InvoiceAppContent() {
         html2canvas: { scale: 2, useCORS: true, allowTaint: true },
         jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' },
       };
-      // Use the pre-bundled minified version to bypass Vite's deps pre-bundling cache issues
-      const html2pdfModule = await import('html2pdf.js/dist/html2pdf.bundle.min.js');
-      const html2pdf = html2pdfModule.default || html2pdfModule;
+      
       await html2pdf().from(element).set(opt).save();
       showToast('success', `${filename} → Downloads folder ✓`);
       setMobileTab('form'); // reset nav back to form view
@@ -48,6 +63,25 @@ function InvoiceAppContent() {
       showToast('error', 'PDF generation failed. Please try again.');
     } finally {
       setDownloading(false);
+    }
+  };
+
+  const handleDownloadJSON = () => {
+    try {
+      const filename = `Invoy_${data.invoiceMeta.invoiceNumber}.json`;
+      const jsonStr = JSON.stringify(data, null, 2);
+      const blob = new Blob([jsonStr], { type: "application/json" });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = filename;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+      showToast('success', `${filename} → Downloads folder ✓`);
+    } catch (err) {
+      showToast('error', 'JSON export failed.');
     }
   };
 
@@ -128,17 +162,22 @@ function InvoiceAppContent() {
             </button>
           </div>
 
-          {/* Right: download button */}
-          <div className="flex items-center gap-2">
-            <button
-              onClick={handleDownloadPDF}
-              disabled={downloading}
-              className="hidden sm:flex items-center gap-1.5 rounded-md bg-brand px-3 sm:px-5 py-2 sm:py-2.5 text-xs sm:text-sm font-bold text-black hover:bg-[#16a34a] hover:scale-[1.03] transition-all active:scale-95 disabled:opacity-60 disabled:scale-100 shrink-0"
-            >
-              <Icon name="download" />
-              <span className="hidden sm:inline">{downloading ? 'Generating...' : 'Download PDF'}</span>
-              <span className="sm:hidden">{downloading ? '...' : 'PDF'}</span>
-            </button>
+          {/* Right: download dropdown */}
+          <div className="hidden sm:block w-40">
+            <Select
+              value=""
+              onChange={val => {
+                if (val === 'pdf') handleDownloadPDF();
+                if (val === 'json') handleDownloadJSON();
+              }}
+              options={[
+                { label: 'PDF Document (.pdf)', value: 'pdf', icon: 'file-pdf' },
+                { label: 'JSON Schema (.json)', value: 'json', icon: 'file-code' }
+              ]}
+              placeholder={downloading ? 'PDF...' : 'Download'}
+              variant="primary"
+              leftIcon={<Icon name="download" className="w-4 h-4 shrink-0" />}
+            />
           </div>
         </div>
       </nav>
@@ -195,9 +234,24 @@ function InvoiceAppContent() {
                   <InvoicePreview template={data.template} data={data} />
                 </div>
               </div>
-              <button onClick={handleDownloadPDF} disabled={downloading} className="mt-4 w-full py-3.5 rounded-2xl bg-brand text-black font-bold text-sm flex items-center justify-center gap-2 disabled:opacity-60">
-                <Icon name="download" /> {downloading ? 'Generating...' : 'Download PDF'}
-              </button>
+              <div className="mt-4">
+                <Select
+                  value=""
+                  onChange={val => {
+                    if (val === 'pdf') handleDownloadPDF();
+                    if (val === 'json') handleDownloadJSON();
+                  }}
+                  options={[
+                    { label: 'PDF Document (.pdf)', value: 'pdf', icon: 'file-pdf' },
+                    { label: 'JSON Schema (.json)', value: 'json', icon: 'file-code' }
+                  ]}
+                  placeholder={downloading ? 'Generating PDF...' : 'Download'}
+                  variant="primary"
+                  direction="up"
+                  leftIcon={<Icon name="download" className="w-4 h-4 shrink-0" />}
+                  className="w-full"
+                />
+              </div>
               <button onClick={() => setMobileTab('form')} className="mt-3 w-full py-3 rounded-2xl bg-white/5 border border-white/10 text-neutral-400 font-semibold text-sm flex items-center justify-center gap-2 hover:bg-white/10">
                 <Icon name="edit" /> Back to Form
               </button>

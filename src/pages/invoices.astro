@@ -3,7 +3,7 @@ import Layout from "../layouts/Layout.astro";
 import SavedInvoices from "../components/SavedInvoices.tsx";
 ---
 
-<Layout title="My Invoices – invoy" headerContainerClass="max-w-5xl mx-auto" footerContainerClass="max-w-5xl mx-auto px-4 sm:px-6" headerShowRequestFeature={false}>
+<Layout title="My Invoices – invoy" headerContainerClass="max-w-5xl mx-auto" footerContainerClass="max-w-5xl mx-auto px-4 sm:px-6" headerShowRequestFeature={false} noindex={true}>
 
     <main class="relative z-10 pb-16">
       <SavedInvoices client:only="react" />

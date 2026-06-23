@@ -7,6 +7,11 @@ import Footer from "../components/Footer.astro";
 export interface Props {
   title?: string;
   description?: string;
+  keywords?: string;
+  image?: string;
+  canonicalURL?: string;
+  type?: string;
+  noindex?: boolean;
   showHeader?: boolean;
   showFooter?: boolean;
   showAmbientGlow?: boolean;
@@ -20,6 +25,11 @@ export interface Props {
 const {
   title = `${SITE.name} - ${SITE.tagline}`,
   description = SITE.description,
+  keywords = "invoice generator, free invoice maker, GST invoice software, private billing, browser based invoice",
+  image = "/invoy_favicon.png",
+  canonicalURL = new URL(Astro.url.pathname, SITE.url).href,
+  type = "website",
+  noindex = false,
   showHeader = true,
   showFooter = true,
   showAmbientGlow = true,
@@ -42,8 +52,31 @@ const {
       href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@400;500;700;800;900&family=Caveat:wght@600;700&display=swap"
       rel="stylesheet"
     />
+    
+    <!-- Base SEO -->
     <title>{title}</title>
     <meta name="description" content={description} />
+    <meta name="keywords" content={keywords} />
+    <meta name="author" content="Abhinav" />
+    <meta name="theme-color" content="#0a0a0a" />
+    <link rel="canonical" href={canonicalURL} />
+    {noindex && <meta name="robots" content="noindex, nofollow" />}
+    {!noindex && <meta name="robots" content="index, follow" />}
+
+    <!-- Open Graph (Facebook/WhatsApp/LinkedIn) -->
+    <meta property="og:type" content={type} />
+    <meta property="og:url" content={canonicalURL} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={new URL(image, SITE.url).href} />
+    <meta property="og:site_name" content={SITE.name} />
+
+    <!-- Twitter Cards -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:url" content={canonicalURL} />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={new URL(image, SITE.url).href} />
     
     <slot name="head" />
 

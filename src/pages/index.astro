@@ -12,16 +12,43 @@ import Layout from "../layouts/Layout.astro";
   <Fragment slot="head">
     <script
       type="application/ld+json"
-      set:html={JSON.stringify({
-        "@context": "https://schema.org",
-        "@type": "SoftwareApplication",
-        name: SITE.name,
-        operatingSystem: "Web",
-        applicationCategory: "BusinessApplication",
-        offers: { "@type": "Offer", price: "0", priceCurrency: "INR" },
-        description: SITE.description,
-        url: SITE.url,
-      })}
+      set:html={JSON.stringify([
+        {
+          "@context": "https://schema.org",
+          "@type": "SoftwareApplication",
+          name: SITE.name,
+          operatingSystem: "Web",
+          applicationCategory: "BusinessApplication",
+          offers: { "@type": "Offer", price: "0", priceCurrency: "INR" },
+          description: SITE.description,
+          url: SITE.url,
+        },
+        {
+          "@context": "https://schema.org",
+          "@type": "Organization",
+          name: SITE.name,
+          url: SITE.url,
+          logo: new URL("/invoy_favicon.png", SITE.url).href,
+        },
+        {
+          "@context": "https://schema.org",
+          "@type": "WebSite",
+          name: SITE.name,
+          url: SITE.url,
+        },
+        {
+          "@context": "https://schema.org",
+          "@type": "FAQPage",
+          mainEntity: faq.map(item => ({
+            "@type": "Question",
+            name: item.q,
+            acceptedAnswer: {
+              "@type": "Answer",
+              text: item.a
+            }
+          }))
+        }
+      ])}
     />
   </Fragment>
 

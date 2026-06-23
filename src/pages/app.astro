@@ -3,7 +3,7 @@ import Layout from "../layouts/Layout.astro";
 import InvoiceApp from "../components/InvoiceApp.jsx";
 ---
 
-<Layout title="Invoice Generator – invoy" description="Create professional, GST-compliant invoices instantly. invoy is free, private, and works 100% in your browser." showHeader={false} showFooter={false}>
+<Layout title="Invoice Generator – invoy" description="Create professional, GST-compliant invoices instantly. invoy is free, private, and works 100% in your browser." showHeader={false} showFooter={false} noindex={true}>
 
     <main class="relative z-10">
       <InvoiceApp client:only="react" />

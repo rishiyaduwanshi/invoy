@@ -15,84 +15,136 @@ export interface Props {
   navLinks?: NavLink[];
 }
 
-const { 
+const {
   transparentBg = false,
   showRequestFeature = true,
   containerClass = "max-w-7xl mx-auto",
-  navLinks = defaultNav.links
+  navLinks = defaultNav.links,
 } = Astro.props;
 
-const bgClass = transparentBg ? "bg-transparent border-transparent" : "bg-[#0a0a0a]/95 border-b border-white/8 backdrop-blur-xl";
+const bgClass = transparentBg
+  ? "bg-transparent border-transparent"
+  : "bg-[#0a0a0a]/95 border-b border-white/8 backdrop-blur-xl";
 ---
 
 <header class={`sticky top-0 z-50 ${bgClass} transition-colors duration-300`}>
-  <div class={`${containerClass} px-4 sm:px-6 h-14 flex items-center justify-between gap-4`}>
+  <div
+    class={`${containerClass} px-4 sm:px-6 h-14 flex items-center justify-between gap-4`}
+  >
     <!-- Logo -->
-    <a href="/" class="flex items-center gap-1.5 shrink-0 relative z-[60]">
+    <a href="/" class="flex items-center gap-1.5 shrink-0 relative">
       <img src="/invoy_favicon.png" alt="" class="size-8" />
-      <span class="font-['Outfit'] font-black text-white text-xl tracking-normal lowercase">{SITE.name}</span>
+      <span
+        class="font-['Outfit'] font-black text-white text-xl tracking-normal lowercase"
+        >{SITE.name}</span
+      >
     </a>
 
     <!-- Desktop Nav -->
     <nav class="hidden md:flex items-center gap-8">
-      {navLinks.map((l) => (
-        <a href={l.href} class="text-sm text-neutral-300 hover:text-white transition-colors font-medium">
-          {l.label}
-        </a>
-      ))}
+      {
+        navLinks.map((l) => (
+          <a
+            href={l.href}
+            class="text-sm text-neutral-300 hover:text-white transition-colors font-medium"
+          >
+            {l.label}
+          </a>
+        ))
+      }
     </nav>
 
     <!-- Desktop Actions & Mobile Menu Toggle -->
-    <div class="flex items-center gap-2 relative z-[60]">
-      {showRequestFeature && (
-        <button id="nav-request-btn" class="hidden sm:flex items-center gap-1.5 px-4 py-1.5 rounded-md text-sm font-semibold border border-brand/60 text-brand hover:bg-brand/8 transition-all">
-          <Fragment set:html={icons["zap"]} />
-          Request a Feature
-        </button>
-      )}
-      <a target="_blank" rel="noopener noreferrer" href={SITE.support.link} class="hidden sm:flex items-center gap-1.5 px-4 py-1.5 rounded-md text-sm font-bold bg-secondary text-white hover:bg-orange-500 transition-all">
+    <div class="flex items-center gap-2 relative z-60">
+      {
+        showRequestFeature && (
+          <button
+            id="nav-request-btn"
+            class="hidden sm:flex items-center gap-1.5 px-4 py-1.5 rounded-md text-sm font-semibold border border-brand/60 text-brand hover:bg-brand/8 transition-all"
+          >
+            <Fragment set:html={icons["zap"]} />
+            Request a Feature
+          </button>
+        )
+      }
+      <a
+        target="_blank"
+        rel="noopener noreferrer"
+        href={SITE.support.link}
+        class="hidden sm:flex items-center gap-1.5 px-4 py-1.5 rounded-md text-sm font-bold bg-secondary text-white hover:bg-orange-500 transition-all"
+      >
         <Fragment set:html={icons["heart"]} />
         Support
       </a>
-      
+
       <!-- Hamburger Button (Mobile Only) -->
-      <button id="mobile-menu-btn" class="md:hidden flex items-center justify-center p-2 text-neutral-300 hover:text-white transition-colors" aria-label="Toggle Menu">
+      <button
+        id="mobile-menu-btn"
+        class="md:hidden flex items-center justify-center p-2 text-neutral-300 hover:text-white transition-colors"
+        aria-label="Toggle Menu"
+      >
         <Fragment set:html={icons["menu"]} />
       </button>
     </div>
   </div>
+</header>
 
-  <!-- Mobile Sliding Drawer -->
-  <div id="mobile-menu-drawer" class="fixed inset-y-0 right-0 w-64 bg-[#0a0a0a] border-l border-white/10 shadow-2xl z-50 transform translate-x-full transition-transform duration-300 ease-in-out md:hidden flex flex-col pt-20 px-6 pb-6">
-    <nav class="flex flex-col gap-6 mb-8">
-      {navLinks.map((l) => (
-        <a href={l.href} class="text-lg text-neutral-300 hover:text-white transition-colors font-medium border-b border-white/5 pb-2">
+<!-- Mobile Menu Overlay -->
+<div
+  id="mobile-menu-overlay"
+  class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 hidden md:hidden opacity-0 transition-opacity duration-300"
+>
+</div>
+
+<!-- Mobile Sliding Drawer -->
+<div
+  id="mobile-menu-drawer"
+  class="fixed inset-y-0 right-0 w-64 bg-[#0a0a0a] border-l border-white/10 shadow-2xl z-[60] transform translate-x-full transition-transform duration-300 ease-in-out md:hidden flex flex-col pt-20 px-6 pb-6"
+>
+  <nav class="flex flex-col gap-6 mb-8">
+    {
+      navLinks.map((l) => (
+        <a
+          href={l.href}
+          class="text-lg text-neutral-300 hover:text-white transition-colors font-medium border-b border-white/5 pb-2"
+        >
           {l.label}
         </a>
-      ))}
-    </nav>
-    <div class="flex flex-col gap-4 mt-auto">
-      {showRequestFeature && (
-        <button id="mobile-nav-request-btn" class="flex items-center justify-center gap-2 px-4 py-3 rounded-md text-sm font-semibold border border-brand/60 text-brand hover:bg-brand/8 transition-all w-full">
+      ))
+    }
+  </nav>
+  <div class="flex flex-col gap-4 mt-auto">
+    {
+      showRequestFeature && (
+        <button
+          id="mobile-nav-request-btn"
+          class="flex items-center justify-center gap-2 px-4 py-3 rounded-md text-sm font-semibold border border-brand/60 text-brand hover:bg-brand/8 transition-all w-full"
+        >
           <Fragment set:html={icons["zap"]} />
           Feature Request
         </button>
-      )}
-      <a target="_blank" rel="noopener noreferrer" href={SITE.support.link} class="flex items-center justify-center gap-2 px-4 py-3 rounded-md text-sm font-bold bg-secondary text-white hover:bg-orange-500 transition-all w-full">
-        <Fragment set:html={icons["heart"]} />
-        Support Invoy
-      </a>
-    </div>
+      )
+    }
+    <a
+      target="_blank"
+      rel="noopener noreferrer"
+      href={SITE.support.link}
+      class="flex items-center justify-center gap-2 px-4 py-3 rounded-md text-sm font-bold bg-secondary text-white hover:bg-orange-500 transition-all w-full"
+    >
+      <Fragment set:html={icons["heart"]} />
+      Support Invoy
+    </a>
   </div>
-  <!-- Mobile Menu Overlay -->
-  <div id="mobile-menu-overlay" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-40 hidden md:hidden opacity-0 transition-opacity duration-300"></div>
-</header>
+</div>
 
 <script>
   // Mobile Menu Logic
-  const menuBtn = document.getElementById('mobile-menu-btn');
-  const drawer = document.getElementById('mobile-menu-drawer');
-  const overlay = document.getElementById('mobile-menu-overlay');
+
+  document.addEventListener("astro:page-load", () => {
+
+  const menuBtn = document.getElementById("mobile-menu-btn");
+  const drawer = document.getElementById("mobile-menu-drawer");
+  const overlay = document.getElementById("mobile-menu-overlay");
 
   if (menuBtn && drawer && overlay) {
     let isOpen = false;
@@ -100,24 +152,28 @@ const bgClass = transparentBg ? "bg-transparent border-transparent" : "bg-[#0a0a
     const toggleMenu = () => {
       isOpen = !isOpen;
       if (isOpen) {
-        drawer.classList.remove('translate-x-full');
-        overlay.classList.remove('hidden');
+        drawer.classList.remove("translate-x-full");
+        overlay.classList.remove("hidden");
         // Small delay to allow display:block to apply before animating opacity
-        requestAnimationFrame(() => requestAnimationFrame(() => overlay.classList.remove('opacity-0')));
-        document.body.style.overflow = 'hidden'; // Prevent scrolling
+        requestAnimationFrame(() =>
+          requestAnimationFrame(() => overlay.classList.remove("opacity-0")),
+        );
+        document.body.style.overflow = "hidden"; // Prevent scrolling
       } else {
-        drawer.classList.add('translate-x-full');
-        overlay.classList.add('opacity-0');
-        setTimeout(() => overlay.classList.add('hidden'), 300); // Wait for transition
-        document.body.style.overflow = ''; // Restore scrolling
+        drawer.classList.add("translate-x-full");
+        overlay.classList.add("opacity-0");
+        setTimeout(() => overlay.classList.add("hidden"), 300); // Wait for transition
+        document.body.style.overflow = ""; // Restore scrolling
       }
     };
 
-    menuBtn.addEventListener('click', toggleMenu);
-    overlay.addEventListener('click', toggleMenu);
-    
+    menuBtn.addEventListener("click", toggleMenu);
+    overlay.addEventListener("click", toggleMenu);
+
     // Close menu when clicking a link
-    const drawerLinks = drawer.querySelectorAll('a');
-    drawerLinks.forEach(link => link.addEventListener('click', toggleMenu));
+    const drawerLinks = drawer.querySelectorAll("a");
+    drawerLinks.forEach((link) => link.addEventListener("click", toggleMenu));
   }
+
+  });
 </script>

@@ -457,10 +457,10 @@ import InvoiceCard from "../components/InvoiceCard.astro";
           </h2>
         </div>
 
-        <div class="grid md:grid-cols-2 gap-3">
+        <div class="columns-1 md:columns-2 gap-3">
           {
             faq.map((item, i) => (
-              <div class="faq-item border border-gray-200 rounded-xl overflow-hidden bg-white">
+              <div class="faq-item break-inside-avoid mb-3 border border-gray-200 rounded-xl overflow-hidden bg-white">
                 <button
                   class="faq-btn w-full flex items-center justify-between gap-3 px-5 py-4 text-left text-sm font-semibold text-gray-800 hover:bg-gray-50 transition-all"
                   data-idx={i}

@@ -19,6 +19,7 @@ const Icon = ({ name, className = '' }) => (
 // ── Main Form ──────────────────────────────────────────────────────────
 export default function InvoiceForm() {
   const { data, updateField, updateData, loadInvoice, resetToDefault } = useInvoiceContext();
+  const fileInputRef = useRef(null);
 
   const S = (field) => (val) => updateField('senderDetails', field, val);
   const C = (field) => (val) => updateField('clientDetails', field, val);
@@ -82,6 +83,31 @@ export default function InvoiceForm() {
     reader.readAsDataURL(file);
   };
 
+  const handleImportJSON = (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      try {
+        const parsed = JSON.parse(event.target.result);
+        if (parsed && typeof parsed === 'object') {
+          if (parsed.items || parsed.invoiceMeta || parsed.senderDetails) {
+            loadInvoice(parsed);
+            alert('Invoice JSON imported successfully!');
+          } else {
+            alert('Invalid Invoice file: missing core structure.');
+          }
+        } else {
+          alert('Failed to parse JSON file.');
+        }
+      } catch (err) {
+        alert('Failed to read JSON file.');
+      }
+    };
+    reader.readAsText(file);
+    e.target.value = ''; // Reset input to allow re-upload of same file
+  };
+
   const addItem = () => updateData('items', p => [...p, { id: Date.now(), description: '', quantity: 1, rate: 0 }]);
   const removeItem = (id) => updateData('items', p => p.filter(i => i.id !== id));
   const updateItem = (id, field, value) => updateData('items', p => p.map(i => i.id === id ? { ...i, [field]: value } : i));
@@ -90,43 +116,73 @@ export default function InvoiceForm() {
     <div className="space-y-4 pb-20 w-full overflow-x-hidden">
 
       {/* ── Quick Actions ──────────────────────────────────── */}
-      <SectionCard className="border-brand/30 bg-brand/5">
+      <SectionCard className="border-brand/20 bg-[#121212]/30 backdrop-blur-md">
         <SectionTitle color="emerald" className="mb-1">Quick Actions</SectionTitle>
-        <p className="text-xs text-neutral-400 mb-4 -mt-2">Choose a saved profile to automatically pre-fill the form.</p>
+        <p className="text-xs text-neutral-400 mb-4 -mt-2">Pre-fill details, import data, or save to your local dashboard.</p>
         
-        <div className="space-y-3">
-          <Select
-            className="w-full"
-            value=""
-            onChange={handleSelectProfile}
-            placeholder={savedProfiles.length > 0 ? "Select a saved profile" : "No saved profiles available"}
-            options={savedProfiles.map(inv => ({ label: inv.profileName, value: inv.id }))}
-          />
-          <div className="flex flex-col sm:flex-row flex-wrap gap-2">
-            <button
-              type="button"
-              onClick={handleSaveInvoiceFinal}
-              className="flex-1 sm:flex-none flex items-center justify-center gap-1.5 rounded-xl bg-brand text-black hover:bg-[#16a34a] hover:scale-[1.02] active:scale-95 px-4 py-2 text-sm font-bold transition-all shadow-[0_0_15px_rgba(34,197,94,0.2)]"
-              title="Save this finalized invoice to history"
-            >
-              <Icon name="save" className="w-4 h-4 shrink-0" />
-              <span className="whitespace-nowrap">Save Invoice</span>
-            </button>
-            <button
-              type="button"
-              onClick={handleSaveProfile}
-              className="flex-1 sm:flex-none flex items-center justify-center gap-1.5 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 px-4 py-2 text-sm font-semibold text-neutral-300 hover:text-white transition-all"
-              title="Save current form as a reusable profile"
-            >
-              <Icon name="heart" className="w-4 h-4 shrink-0" />
-              <span className="whitespace-nowrap">Save Profile</span>
-            </button>
+        <div className="space-y-4">
+          {/* Profile Pre-fills */}
+          <div className="space-y-1.5">
+            <span className="block text-[9px] font-bold text-neutral-500 uppercase tracking-widest">Business Profiles</span>
+            <div className="flex gap-2">
+              <div className="flex-1">
+                <Select
+                  className="w-full"
+                  value=""
+                  onChange={handleSelectProfile}
+                  placeholder={savedProfiles.length > 0 ? "Select a saved profile" : "No saved profiles available"}
+                  options={savedProfiles.map(inv => ({ label: inv.profileName, value: inv.id }))}
+                />
+              </div>
+              <button
+                type="button"
+                onClick={handleSaveProfile}
+                className="shrink-0 flex items-center justify-center gap-1.5 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 px-3.5 text-sm font-semibold text-neutral-300 hover:text-white transition-all hover:scale-[1.02] active:scale-95"
+                title="Save current form as a reusable profile"
+              >
+                <Icon name="heart" className="w-4 h-4 shrink-0" />
+              </button>
+            </div>
+          </div>
+
+          {/* Invoice Management */}
+          <div className="pt-3 border-t border-white/5 space-y-2">
+            <span className="block text-[9px] font-bold text-neutral-500 uppercase tracking-widest mb-1">File & Dashboard Actions</span>
+            <div className="grid grid-cols-2 gap-2">
+              <button
+                type="button"
+                onClick={handleSaveInvoiceFinal}
+                className="flex items-center justify-center gap-1.5 rounded-xl bg-brand text-black hover:bg-[#16a34a] hover:scale-[1.02] active:scale-95 py-2 text-sm font-bold transition-all shadow-[0_0_15px_rgba(34,197,94,0.15)]"
+                title="Save this finalized invoice to history"
+              >
+                <Icon name="save" className="w-4 h-4 shrink-0" />
+                <span className="whitespace-nowrap">Save Invoice</span>
+              </button>
+              
+              <button
+                type="button"
+                onClick={() => fileInputRef.current?.click()}
+                className="flex items-center justify-center gap-1.5 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 py-2 text-sm font-semibold text-neutral-300 hover:text-white transition-all hover:scale-[1.02] active:scale-95"
+                title="Import invoice from a JSON file"
+              >
+                <Icon name="upload" className="w-4 h-4 shrink-0" />
+                <span className="whitespace-nowrap">Import JSON</span>
+              </button>
+            </div>
+            
+            <input
+              type="file"
+              ref={fileInputRef}
+              accept=".json"
+              onChange={handleImportJSON}
+              className="hidden"
+            />
+            
             <button
               type="button"
               onClick={() => {
                 if (confirm('Start a fresh invoice? This will clear all current details.')) {
                   resetToDefault();
-                  // Also clear the URL parameter if it exists so it doesn't look like we're still editing
                   const url = new URL(window.location.href);
                   if (url.searchParams.has('loadId')) {
                     url.searchParams.delete('loadId');
@@ -134,11 +190,11 @@ export default function InvoiceForm() {
                   }
                 }
               }}
-              className="flex-1 sm:flex-none flex items-center justify-center gap-1.5 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 px-4 py-2 text-sm font-semibold text-neutral-300 hover:text-white transition-all"
+              className="w-full flex items-center justify-center gap-1.5 rounded-xl bg-red-950/20 hover:bg-red-950/45 border border-red-500/20 hover:border-red-500/40 py-2 text-sm font-semibold text-red-400 transition-all hover:scale-[1.01] active:scale-98"
               title="Clear form and start a new invoice"
             >
               <Icon name="plus" className="w-4 h-4 shrink-0" />
-              <span className="whitespace-nowrap">New</span>
+              <span className="whitespace-nowrap">Start Fresh Invoice</span>
             </button>
           </div>
         </div>

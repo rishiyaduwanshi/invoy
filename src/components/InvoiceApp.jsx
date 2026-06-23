@@ -162,7 +162,7 @@ function InvoiceAppContent() {
             </button>
           </div>
 
-          {/* Right: download dropdown */}
+          {/* Right: export dropdown */}
           <div className="hidden sm:block w-40">
             <Select
               value=""
@@ -174,7 +174,7 @@ function InvoiceAppContent() {
                 { label: 'PDF Document (.pdf)', value: 'pdf', icon: 'file-pdf' },
                 { label: 'JSON Schema (.json)', value: 'json', icon: 'file-code' }
               ]}
-              placeholder={downloading ? 'PDF...' : 'Download'}
+              placeholder={downloading ? 'PDF...' : 'Export'}
               variant="primary"
               leftIcon={<Icon name="download" className="w-4 h-4 shrink-0" />}
             />
@@ -245,7 +245,7 @@ function InvoiceAppContent() {
                     { label: 'PDF Document (.pdf)', value: 'pdf', icon: 'file-pdf' },
                     { label: 'JSON Schema (.json)', value: 'json', icon: 'file-code' }
                   ]}
-                  placeholder={downloading ? 'Generating PDF...' : 'Download'}
+                  placeholder={downloading ? 'Generating PDF...' : 'Export'}
                   variant="primary"
                   direction="up"
                   leftIcon={<Icon name="download" className="w-4 h-4 shrink-0" />}

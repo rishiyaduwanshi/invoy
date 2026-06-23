@@ -13,6 +13,13 @@ body {
   max-width: 100vw;
 }
 
+/* Tailwind theme customisation */
+@theme{
+  --color-brand : #22c55e;
+  --color-secondary : #f97316;
+}
+
+
 /* Prevent images/tables from blowing out layout */
 img,
 table,
@@ -44,7 +51,7 @@ iframe {
 .invoice-card {
   position: absolute;
   width: 400px;
-  height: 550px;
+  height: 520px;
   inset: 0;
   border-radius: 20px;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);

@@ -87,14 +87,14 @@ import InvoiceCard from "../components/InvoiceCard.astro";
         <div class="flex items-center gap-2">
           <button
             id="nav-request-btn"
-            class="hidden sm:flex items-center gap-1.5 px-4 py-1.5 rounded-md text-sm font-semibold border border-[#22c55e]/60 text-[#22c55e] hover:bg-[#22c55e]/8 transition-all"
+            class="hidden sm:flex items-center gap-1.5 px-4 py-1.5 rounded-md text-sm font-semibold border border-brand/60 text-brand hover:bg-brand/8 transition-all"
           >
             <Fragment set:html={icons["zap"]} />
             Request a Feature
           </button>
           <a
             href={`mailto:${SITE.support.email}`}
-            class="flex items-center gap-1.5 px-4 py-1.5 rounded-md text-sm font-bold bg-[#f97316] text-white hover:bg-orange-500 transition-all"
+            class="flex items-center gap-1.5 px-4 py-1.5 rounded-md text-sm font-bold bg-secondary text-white hover:bg-orange-500 transition-all"
           >
             <Fragment set:html={icons["heart"]} />
             Support Invoy
@@ -111,23 +111,23 @@ import InvoiceCard from "../components/InvoiceCard.astro";
     >
       <!-- green ambient glow -->
       <div
-        class="absolute top-[-10%] left-[-5%] w-[600px] h-[600px] rounded-full bg-[#22c55e]/10 blur-[130px] pointer-events-none"
+        class="absolute top-[-10%] left-[-5%] w-150 h-150 rounded-full bg-brand/10 blur-[130px] pointer-events-none"
       >
       </div>
       <div
-        class="absolute bottom-0 right-0 w-[400px] h-[400px] rounded-full bg-[#22c55e]/5 blur-[100px] pointer-events-none"
+        class="absolute bottom-0 right-0 w-100 h-100 rounded-full bg-brand/5 blur-[100px] pointer-events-none"
       >
       </div>
 
-      <div class="mx-auto px-4 sm:px-6 py-16 grid grid-cols-2 gap-8 lg:gap-4">
+      <div class="mx-auto px-4 py-16 grid grid-cols-2 gap-8 lg:gap-4">
         <!-- Left -->
-        <div class="space-y-7 z-10">
+        <div class="space-y-4 z-10">
           <!-- Badge -->
           <span
-            class="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-[#22c55e]/40 bg-[#22c55e]/10 text-[#22c55e] text-xs font-semibold tracking-wide"
+            class="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-brand/40 bg-brand/10 text-brand text-xs font-semibold"
           >
             <span
-              class="w-1.5 h-1.5 rounded-full bg-[#22c55e] animate-pulse shrink-0"
+              class="w-1.5 h-1.5 rounded-full bg-brand animate-pulse shrink-0"
             ></span>
             No Sign Up • No Limits • No Watermarks
           </span>
@@ -142,11 +142,11 @@ import InvoiceCard from "../components/InvoiceCard.astro";
             <h2
               class="text-[2.6rem] sm:text-[3.2rem] lg:text-[3.6rem] font-black font-['Outfit'] leading-[1.15] tracking-tight mt-1"
             >
-              <span class="text-white">Fast. </span><span class="text-[#22c55e]"
+              <span class="text-white">Fast. </span><span class="text-brand"
                 >Simple.
               </span>
               <span
-                class="relative inline-block text-[#f97316] italic"
+                class="relative inline-block text-secondary italic"
                 style="padding-bottom: .5rem;"
               >
                 Free.
@@ -170,7 +170,7 @@ import InvoiceCard from "../components/InvoiceCard.astro";
           <div class="flex flex-wrap items-center gap-3 pt-2">
             <a
               href="/app"
-              class="inline-flex items-center gap-2.5 px-6 py-3.5 rounded-xl bg-[#22c55e] text-black font-bold text-base
+              class="inline-flex items-center gap-2.5 px-6 py-3.5 rounded-xl bg-brand text-black font-bold text-base
                  shadow-[0_0_30px_rgba(34,197,94,0.35)] hover:bg-[#16a34a] hover:shadow-[0_0_40px_rgba(34,197,94,0.5)]
                  hover:scale-[1.02] active:scale-[0.98] transition-all"
             >
@@ -205,7 +205,7 @@ import InvoiceCard from "../components/InvoiceCard.astro";
                 { i: "lock", l: "100% Private & Secure" },
               ].map((b) => (
                 <div class="flex items-center gap-2 text-xs text-neutral-400">
-                  <span class="text-[#22c55e] shrink-0">
+                  <span class="text-brand shrink-0">
                     <Fragment set:html={icons[b.i]} />
                   </span>
                   {b.l}
@@ -278,8 +278,7 @@ import InvoiceCard from "../components/InvoiceCard.astro";
 
         <!-- 4 -->
         <div class="flex items-center gap-2 md:pl-6">
-          <span class="text-[#22c55e]"
-            ><Fragment set:html={icons["shield"]} /></span
+          <span class="text-brand"><Fragment set:html={icons["shield"]} /></span
           >
           <div>
             <p class="text-sm font-bold text-gray-900">Always free.</p>
@@ -298,7 +297,7 @@ import InvoiceCard from "../components/InvoiceCard.astro";
           <h2
             class="text-3xl sm:text-4xl font-black font-['Outfit'] text-gray-900"
           >
-            How <span class="text-[#22c55e]">{SITE.name}</span> Works
+            How <span class="text-brand">{SITE.name}</span> Works
           </h2>
         </div>
 
@@ -307,7 +306,7 @@ import InvoiceCard from "../components/InvoiceCard.astro";
             steps.map((s, i) => (
               <>
                 <div class="flex flex-col items-center text-center px-6 py-4 flex-1">
-                  <div class="w-[88px] h-[88px] rounded-full bg-[#22c55e]/10 border-2 border-[#22c55e]/20 flex items-center justify-center text-[#22c55e] mb-4">
+                  <div class="w-[88px] h-[88px] rounded-full bg-brand/10 border-2 border-brand/20 flex items-center justify-center text-brand mb-4">
                     <Fragment
                       set:html={
                         icons[
@@ -375,7 +374,7 @@ import InvoiceCard from "../components/InvoiceCard.astro";
           <h2
             class="text-3xl sm:text-4xl font-black font-['Outfit'] text-gray-900"
           >
-            Powerful Features. <span class="text-[#f97316]"
+            Powerful Features. <span class="text-secondary"
               >Zero Complexity.</span
             >
           </h2>
@@ -385,7 +384,7 @@ import InvoiceCard from "../components/InvoiceCard.astro";
           {
             features.map((f) => (
               <div class="flex flex-col items-center text-center group cursor-default">
-                <div class="w-14 h-14 rounded-2xl bg-[#22c55e]/10 flex items-center justify-center text-[#22c55e] mb-3 group-hover:bg-[#22c55e]/15 group-hover:scale-105 transition-all">
+                <div class="w-14 h-14 rounded-2xl bg-brand/10 flex items-center justify-center text-brand mb-3 group-hover:bg-brand/15 group-hover:scale-105 transition-all">
                   <Fragment set:html={icons[f.icon]} />
                 </div>
                 <h3 class="text-xs font-bold text-gray-800 mb-1 leading-tight">
@@ -419,7 +418,7 @@ import InvoiceCard from "../components/InvoiceCard.astro";
         </div>
         <button
           id="cta-request-btn"
-          class="shrink-0 flex items-center gap-2 px-6 py-3 rounded-xl bg-[#f97316] text-white font-bold text-sm
+          class="shrink-0 flex items-center gap-2 px-6 py-3 rounded-xl bg-secondary text-white font-bold text-sm
              hover:bg-orange-500 transition-all shadow-[0_4px_20px_rgba(249,115,22,0.35)] hover:shadow-[0_4px_30px_rgba(249,115,22,0.5)]"
         >
           <Fragment set:html={icons["message"]} />
@@ -437,7 +436,7 @@ import InvoiceCard from "../components/InvoiceCard.astro";
           <h2
             class="text-3xl sm:text-4xl font-black font-['Outfit'] text-gray-900"
           >
-            Frequently Asked <span class="text-[#22c55e]">Questions</span>
+            Frequently Asked <span class="text-brand">Questions</span>
           </h2>
         </div>
 
@@ -502,7 +501,7 @@ import InvoiceCard from "../components/InvoiceCard.astro";
         <!-- Support -->
         <div class="space-y-3">
           <h4 class="text-sm font-bold text-white flex items-center gap-2">
-            <span class="text-[#f97316]"
+            <span class="text-secondary"
               ><Fragment set:html={icons["heart"]} /></span
             >
             Support {SITE.name}
@@ -524,9 +523,7 @@ import InvoiceCard from "../components/InvoiceCard.astro";
             id="footer-request-btn"
             class="flex items-center gap-2 text-sm font-bold text-white"
           >
-            <span class="text-[#22c55e]"
-              ><Fragment set:html={icons["zap"]} /></span
-            >
+            <span class="text-brand"><Fragment set:html={icons["zap"]} /></span>
             Request a Feature
           </button>
           <p class="text-xs text-neutral-500">

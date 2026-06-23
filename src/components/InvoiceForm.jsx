@@ -15,7 +15,7 @@ const Label = ({ children }) => (
 const Input = ({ className = '', ...props }) => (
   <input
     {...props}
-    className={`w-full bg-white/5 border border-white/10 rounded-xl px-3.5 py-2.5 text-sm text-white placeholder-neutral-600 focus:outline-none focus:ring-2 focus:ring-[#22c55e]/40 focus:border-[#22c55e]/60 focus:bg-white/8 transition-all duration-200 ${className}`}
+    className={`w-full bg-white/5 border border-white/10 rounded-xl px-3.5 py-2.5 text-sm text-white placeholder-neutral-600 focus:outline-none focus:ring-2 focus:ring-brand/40 focus:border-brand/60 focus:bg-white/8 transition-all duration-200 ${className}`}
   />
 );
 
@@ -27,7 +27,7 @@ const Toggle = ({ checked, onChange, label, description }) => (
     </div>
     <label className="relative inline-flex items-center cursor-pointer shrink-0">
       <input type="checkbox" checked={checked} onChange={onChange} className="sr-only peer" />
-      <div className="w-10 h-5 bg-neutral-700 rounded-full peer peer-checked:after:translate-x-5 after:content-[''] after:absolute after:top-0.5 after:left-0.5 after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-[#22c55e]" />
+      <div className="w-10 h-5 bg-neutral-700 rounded-full peer peer-checked:after:translate-x-5 after:content-[''] after:absolute after:top-0.5 after:left-0.5 after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-brand" />
     </label>
   </div>
 );
@@ -103,7 +103,7 @@ export default function InvoiceForm({
               onClick={() => setSelectedTemplate(t.id)}
               className={`py-2.5 px-3 rounded-xl text-sm font-semibold border transition-all ${
                 selectedTemplate === t.id
-                  ? 'bg-[#22c55e] border-[#22c55e] text-black shadow-[0_0_15px_rgba(34,197,94,0.3)]'
+                  ? 'bg-brand border-brand text-black shadow-[0_0_15px_rgba(34,197,94,0.3)]'
                   : 'bg-white/5 border-white/10 text-neutral-400 hover:text-white hover:bg-white/8'
               }`}
             >
@@ -254,7 +254,7 @@ export default function InvoiceForm({
             ))}
           </AnimatePresence>
         </div>
-        <button onClick={addItem} className="mt-3 flex items-center gap-1.5 text-sm text-[#22c55e] hover:text-green-400 font-semibold transition-colors">
+        <button onClick={addItem} className="mt-3 flex items-center gap-1.5 text-sm text-brand hover:text-green-400 font-semibold transition-colors">
           <Icon name="plus" /> Add Item
         </button>
       </SectionCard>
@@ -279,7 +279,7 @@ export default function InvoiceForm({
                     onClick={() => T('gstRate')(rate)}
                     className={`flex-1 py-2 rounded-xl text-sm font-bold border transition-all ${
                       taxSettings.gstRate === rate
-                        ? 'bg-[#22c55e] border-[#22c55e] text-black'
+                        ? 'bg-brand border-brand text-black'
                         : 'bg-white/5 border-white/10 text-neutral-400 hover:text-white'
                     }`}
                   >

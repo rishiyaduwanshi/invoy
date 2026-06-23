@@ -12,7 +12,7 @@ const Icon = ({ name, className = '' }) => (
 export default function InvoiceApp() {
   // ── Template (only changes visual layout) ─────────────
   const [selectedTemplate, setSelectedTemplate] = useState(DEFAULT_TEMPLATE);
-  
+
   // ── UI States ──────────────────────────────────────────
   const [downloading, setDownloading] = useState(false);
   const [mobileTab, setMobileTab] = useState('form');
@@ -143,10 +143,10 @@ export default function InvoiceApp() {
 
           {/* Center (mobile): tab switcher */}
           <div className="flex lg:hidden items-center gap-1 bg-white/5 rounded-xl p-1 border border-white/10">
-            <button onClick={() => setMobileTab('form')} className={`flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${mobileTab === 'form' ? 'bg-[#22c55e] text-black' : 'text-neutral-400 hover:text-white'}`}>
+            <button onClick={() => setMobileTab('form')} className={`flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${mobileTab === 'form' ? 'bg-brand text-black' : 'text-neutral-400 hover:text-white'}`}>
               <Icon name="edit" /> Form
             </button>
-            <button onClick={() => setMobileTab('preview')} className={`flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${mobileTab === 'preview' ? 'bg-[#22c55e] text-black' : 'text-neutral-400 hover:text-white'}`}>
+            <button onClick={() => setMobileTab('preview')} className={`flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${mobileTab === 'preview' ? 'bg-brand text-black' : 'text-neutral-400 hover:text-white'}`}>
               <Icon name="eye" /> Preview
             </button>
           </div>
@@ -155,7 +155,7 @@ export default function InvoiceApp() {
           <button
             onClick={handleDownloadPDF}
             disabled={downloading}
-            className="hidden sm:flex items-center gap-1.5 rounded-md bg-[#22c55e] px-3 sm:px-5 py-2 sm:py-2.5 text-xs sm:text-sm font-bold text-black hover:bg-[#16a34a] hover:scale-[1.03] transition-all active:scale-95 disabled:opacity-60 disabled:scale-100 shrink-0"
+            className="hidden sm:flex items-center gap-1.5 rounded-md bg-brand px-3 sm:px-5 py-2 sm:py-2.5 text-xs sm:text-sm font-bold text-black hover:bg-[#16a34a] hover:scale-[1.03] transition-all active:scale-95 disabled:opacity-60 disabled:scale-100 shrink-0"
           >
             <Icon name="download" />
             <span className="hidden sm:inline">{downloading ? 'Generating...' : 'Download PDF'}</span>
@@ -205,7 +205,7 @@ export default function InvoiceApp() {
           {mobileTab === 'form' ? (
             <div>
               <InvoiceForm {...sharedProps} />
-              <button onClick={() => setMobileTab('preview')} className="mt-4 w-full py-3.5 rounded-2xl bg-[#22c55e] text-black font-bold text-sm flex items-center justify-center gap-2 hover:bg-[#16a34a] transition-colors">
+              <button onClick={() => setMobileTab('preview')} className="mt-4 w-full py-3.5 rounded-2xl bg-brand text-black font-bold text-sm flex items-center justify-center gap-2 hover:bg-[#16a34a] transition-colors">
                 <Icon name="eye" /> Preview Invoice
               </button>
             </div>
@@ -216,7 +216,7 @@ export default function InvoiceApp() {
                   <InvoicePreview {...sharedProps} />
                 </div>
               </div>
-              <button onClick={handleDownloadPDF} disabled={downloading} className="mt-4 w-full py-3.5 rounded-2xl bg-[#22c55e] text-black font-bold text-sm flex items-center justify-center gap-2 disabled:opacity-60">
+              <button onClick={handleDownloadPDF} disabled={downloading} className="mt-4 w-full py-3.5 rounded-2xl bg-brand text-black font-bold text-sm flex items-center justify-center gap-2 disabled:opacity-60">
                 <Icon name="download" /> {downloading ? 'Generating...' : 'Download PDF'}
               </button>
               <button onClick={() => setMobileTab('form')} className="mt-3 w-full py-3 rounded-2xl bg-white/5 border border-white/10 text-neutral-400 font-semibold text-sm flex items-center justify-center gap-2 hover:bg-white/10">
@@ -235,11 +235,10 @@ export default function InvoiceApp() {
 
       {/* ── Toast Notification ───────────────────────────── */}
       {toast && (
-        <div className={`fixed bottom-6 left-1/2 -translate-x-1/2 z-[9999] flex items-center gap-3 px-5 py-3.5 rounded-2xl shadow-2xl border text-sm font-semibold transition-all animate-fade-in ${
-          toast.type === 'success'
+        <div className={`fixed bottom-6 left-1/2 -translate-x-1/2 z-[9999] flex items-center gap-3 px-5 py-3.5 rounded-2xl shadow-2xl border text-sm font-semibold transition-all animate-fade-in ${toast.type === 'success'
             ? 'bg-emerald-950/90 border-emerald-500/40 text-emerald-300 shadow-emerald-900/40'
             : 'bg-red-950/90 border-red-500/40 text-red-300'
-        }`}>
+          }`}>
           <span className="text-base">{toast.type === 'success' ? '✓' : '✕'}</span>
           {toast.msg}
         </div>

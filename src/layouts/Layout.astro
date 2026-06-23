@@ -1,0 +1,90 @@
+---
+import "../global.css";
+import { SITE } from "../constants/site.ts";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+
+export interface Props {
+  title?: string;
+  description?: string;
+  showHeader?: boolean;
+  showFooter?: boolean;
+  showAmbientGlow?: boolean;
+  headerTransparent?: boolean;
+  headerShowRequestFeature?: boolean;
+  headerContainerClass?: string;
+  footerContainerClass?: string;
+  bodyClass?: string;
+}
+
+const {
+  title = `${SITE.name} - ${SITE.tagline}`,
+  description = SITE.description,
+  showHeader = true,
+  showFooter = true,
+  showAmbientGlow = true,
+  headerTransparent = false,
+  headerShowRequestFeature = true,
+  headerContainerClass,
+  footerContainerClass,
+  bodyClass = "bg-[#0c100c] text-white" // Default to dark for app/invoices, index.astro overrides this
+} = Astro.props;
+---
+
+<html lang="en" class="scroll-smooth">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" type="image/svg+xml" href="/invoy_favicon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@400;500;700;800;900&family=Caveat:wght@600;700&display=swap"
+      rel="stylesheet"
+    />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    
+    <slot name="head" />
+
+    <!-- Tawk.to Script -->
+    <script type="text/javascript">
+      var Tawk_API = Tawk_API || {},
+        Tawk_LoadStart = new Date();
+      (function () {
+        var s1 = document.createElement("script"),
+          s0 = document.getElementsByTagName("script")[0];
+        s1.async = true;
+        s1.src = "https://embed.tawk.to/6a31b7276255441d4f4018c0/1jr936t2q";
+        s1.charset = "UTF-8";
+        s1.setAttribute("crossorigin", "*");
+        s0.parentNode.insertBefore(s1, s0);
+      })();
+    </script>
+  </head>
+
+  <body class={`${bodyClass} min-h-screen font-['Inter'] antialiased overflow-x-hidden`}>
+    
+    {showAmbientGlow && (
+      <>
+        <div class="fixed top-[-10%] left-[-10%] w-[40%] h-[40%] rounded-full bg-green-600/8 blur-[120px] pointer-events-none z-0"></div>
+        <div class="fixed bottom-[-10%] right-[-10%] w-[40%] h-[40%] rounded-full bg-green-900/10 blur-[120px] pointer-events-none z-0"></div>
+      </>
+    )}
+
+    {showHeader && (
+      <Header 
+        transparentBg={headerTransparent} 
+        showRequestFeature={headerShowRequestFeature} 
+        containerClass={headerContainerClass} 
+        na
+      />
+    )}
+
+    <slot />
+
+    {showFooter && (
+      <Footer containerClass={footerContainerClass} />
+    )}
+  </body>
+</html>

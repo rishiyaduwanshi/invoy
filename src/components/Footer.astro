@@ -1,0 +1,90 @@
+---
+import { SITE } from "../constants/site.ts";
+import { icons } from "../constants/icons.ts";
+
+export interface Props {
+  containerClass?: string;
+}
+
+const { containerClass = "max-w-7xl mx-auto px-4 sm:px-6" } = Astro.props;
+---
+
+<footer class="bg-[#0a0a0a] border-t border-white/[0.06]">
+  <!-- Top section -->
+  <div class={`${containerClass} pt-14 pb-10`}>
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-10">
+      <!-- Brand col -->
+      <div class="sm:col-span-2 lg:col-span-1 space-y-4">
+        <a href="/" class="flex items-center gap-2">
+          <img src="/invoy_favicon.png" alt="Invoy logo" class="size-8" />
+          <span class="font-['Outfit'] font-black text-white text-xl lowercase tracking-tight">{SITE.name}</span>
+        </a>
+        <p class="text-sm text-neutral-500 leading-relaxed max-w-[260px]">
+          Create professional GST invoices in seconds - free, private, and entirely in your browser.
+        </p>
+        <!-- Social chips -->
+        <div class="flex items-center gap-3 pt-1">
+          <a href={SITE.support.github} target="_blank" rel="noopener" class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-white/10 text-neutral-400 hover:text-white hover:border-white/25 hover:bg-white/5 transition-all text-xs font-medium">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.44 9.8 8.21 11.39.6.11.82-.26.82-.58v-2.03c-3.34.73-4.04-1.61-4.04-1.61-.55-1.39-1.34-1.76-1.34-1.76-1.09-.75.08-.73.08-.73 1.2.08 1.84 1.24 1.84 1.24 1.07 1.83 2.81 1.3 3.49.99.11-.78.42-1.3.76-1.6-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.12-.3-.54-1.52.12-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 0 1 3-.4c1.02.005 2.04.14 3 .4 2.28-1.55 3.29-1.23 3.29-1.23.66 1.66.24 2.88.12 3.18.77.84 1.24 1.91 1.24 3.22 0 4.61-2.81 5.63-5.48 5.92.43.37.81 1.1.81 2.22v3.29c0 .32.22.7.83.58C20.57 21.8 24 17.3 24 12c0-6.63-5.37-12-12-12z"></path>
+            </svg>
+            GitHub
+          </a>
+          <a href={`mailto:${SITE.support.email}`} target="_blank" rel="noopener noreferrer" class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-white/10 text-neutral-400 hover:text-white hover:border-white/25 hover:bg-white/5 transition-all text-xs font-medium">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect width="20" height="16" x="2" y="4" rx="2"></rect>
+              <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path>
+            </svg>
+            Contact
+          </a>
+        </div>
+      </div>
+
+      <!-- Product links -->
+      <div class="space-y-4">
+        <h4 class="text-xs font-bold text-neutral-400 uppercase tracking-widest">Product</h4>
+        <ul class="space-y-2.5">
+          <li><a href="/app" class="text-sm text-neutral-400 hover:text-white transition-colors">Create Invoice</a></li>
+          <li><a href="/#how-it-works" class="text-sm text-neutral-400 hover:text-white transition-colors">How It Works</a></li>
+          <li><a href="/#features" class="text-sm text-neutral-400 hover:text-white transition-colors">Features</a></li>
+          <li><a href="/#faq" class="text-sm text-neutral-400 hover:text-white transition-colors">FAQ</a></li>
+        </ul>
+      </div>
+
+      <!-- Support col -->
+      <div class="space-y-4">
+        <h4 class="text-xs font-bold text-neutral-400 uppercase tracking-widest">Support</h4>
+        <ul class="space-y-2.5">
+          <li><a href={`mailto:${SITE.support.email}`} class="text-sm text-neutral-400 hover:text-white transition-colors">{SITE.support.email}</a></li>
+          <li><button id="footer-request-btn" class="text-sm text-neutral-400 hover:text-white transition-colors text-left">Request a Feature</button></li>
+          <li><a href={SITE.support.github} target="_blank" rel="noopener" class="text-sm text-neutral-400 hover:text-white transition-colors">Report a Bug</a></li>
+        </ul>
+      </div>
+
+      <!-- Support CTA col -->
+      <div class="space-y-4">
+        <h4 class="text-xs font-bold text-neutral-400 uppercase tracking-widest">Love Invoy?</h4>
+        <p class="text-sm text-neutral-500 leading-relaxed">If Invoy saves you time, consider supporting the project. ❤️</p>
+        <a href={SITE.support.link} target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-secondary/10 border border-secondary/30 text-secondary text-sm font-semibold hover:bg-secondary/20 transition-all">
+          <Fragment set:html={icons["heart"]} />
+          Support {SITE.name}
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Divider -->
+  <div class={containerClass}>
+    <div class="h-px bg-gradient-to-r from-transparent via-white/10 to-transparent"></div>
+  </div>
+
+  <!-- Bottom bar -->
+  <div class={`${containerClass} py-5 flex flex-col sm:flex-row items-center justify-between gap-2 text-center sm:text-left`}>
+    <p class="text-xs text-neutral-600">
+      © {new Date().getFullYear()} {SITE.name}. All rights reserved.
+    </p>
+    <p class="text-xs text-neutral-700">
+      Made with <span class="text-red-400">♥</span> in India
+    </p>
+  </div>
+</footer>

@@ -18,7 +18,7 @@ export const SITE = {
     twitter: 'https://twitter.com/invoy_in',
   },
   seo: {
-    ogImage: '/og-image.png',
+    ogImage: '/invoy_logo.png',
     twitterCard: 'summary_large_image',
     keywords: [
       'invoice generator india',

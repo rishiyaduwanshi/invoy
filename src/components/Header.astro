@@ -1,18 +1,25 @@
 ---
 import { SITE } from "../constants/site.ts";
 import { icons } from "../constants/icons.ts";
-import nav from "../data/nav.json";
+import defaultNav from "../data/nav.json";
+
+export interface NavLink {
+  label: string;
+  href: string;
+}
 
 export interface Props {
   transparentBg?: boolean;
   showRequestFeature?: boolean;
   containerClass?: string;
+  navLinks?: NavLink[];
 }
 
 const { 
   transparentBg = false,
   showRequestFeature = true,
-  containerClass = "max-w-7xl mx-auto"
+  containerClass = "max-w-7xl mx-auto",
+  navLinks = defaultNav.links
 } = Astro.props;
 
 const bgClass = transparentBg ? "bg-transparent border-transparent" : "bg-[#0a0a0a]/95 border-b border-white/8 backdrop-blur-xl";
@@ -28,7 +35,7 @@ const bgClass = transparentBg ? "bg-transparent border-transparent" : "bg-[#0a0a
 
     <!-- Desktop Nav -->
     <nav class="hidden md:flex items-center gap-8">
-      {nav.links.map((l) => (
+      {navLinks.map((l) => (
         <a href={l.href} class="text-sm text-neutral-300 hover:text-white transition-colors font-medium">
           {l.label}
         </a>
@@ -58,7 +65,7 @@ const bgClass = transparentBg ? "bg-transparent border-transparent" : "bg-[#0a0a
   <!-- Mobile Sliding Drawer -->
   <div id="mobile-menu-drawer" class="fixed inset-y-0 right-0 w-64 bg-[#0a0a0a] border-l border-white/10 shadow-2xl z-50 transform translate-x-full transition-transform duration-300 ease-in-out md:hidden flex flex-col pt-20 px-6 pb-6">
     <nav class="flex flex-col gap-6 mb-8">
-      {nav.links.map((l) => (
+      {navLinks.map((l) => (
         <a href={l.href} class="text-lg text-neutral-300 hover:text-white transition-colors font-medium border-b border-white/5 pb-2">
           {l.label}
         </a>

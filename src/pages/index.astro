@@ -449,37 +449,39 @@ import Layout from "../layouts/Layout.astro";
      SCRIPTS
 ══════════════════════════════════════════════════════════════════ -->
     <script>
-      // FAQ accordion
-      document.querySelectorAll(".faq-btn").forEach((btn) => {
-        btn.addEventListener("click", () => {
-          const item = btn.closest(".faq-item")!;
-          const answer = item.querySelector(".faq-answer")!;
-          const chevron = btn.querySelector(".faq-chevron")!;
-          const isOpen = !answer.classList.contains("hidden");
-          document
-            .querySelectorAll(".faq-answer")
-            .forEach((a) => a.classList.add("hidden"));
-          document
-            .querySelectorAll(".faq-chevron")
-            .forEach((c) => c.classList.remove("rotate-180"));
-          if (!isOpen) {
-            answer.classList.remove("hidden");
-            chevron.classList.add("rotate-180");
-          }
+      document.addEventListener("astro:page-load", () => {
+        // FAQ accordion
+        document.querySelectorAll(".faq-btn").forEach((btn) => {
+          btn.addEventListener("click", () => {
+            const item = btn.closest(".faq-item")!;
+            const answer = item.querySelector(".faq-answer")!;
+            const chevron = btn.querySelector(".faq-chevron")!;
+            const isOpen = !answer.classList.contains("hidden");
+            document
+              .querySelectorAll(".faq-answer")
+              .forEach((a) => a.classList.add("hidden"));
+            document
+              .querySelectorAll(".faq-chevron")
+              .forEach((c) => c.classList.remove("rotate-180"));
+            if (!isOpen) {
+              answer.classList.remove("hidden");
+              chevron.classList.add("rotate-180");
+            }
+          });
         });
-      });
 
-      // Feature request buttons → Tawk.to
-      function openRequest() {
-        const w = window as any;
-        if (w.Tawk_API?.toggle) w.Tawk_API.toggle();
-        else
-          window.location.href =
-            "mailto:hello@hello@iamabhinav.dev?subject=Feature Request";
-      }
-      ["nav-request-btn", "cta-request-btn", "footer-request-btn"].forEach(
-        (id) =>
-          document.getElementById(id)?.addEventListener("click", openRequest),
-      );
+        // Feature request buttons → Tawk.to
+        function openRequest() {
+          const w = window as any;
+          if (w.Tawk_API?.toggle) w.Tawk_API.toggle();
+          else
+            window.location.href =
+              "mailto:hello@iamabhinav.dev?subject=Feature Request";
+        }
+        ["nav-request-btn", "cta-request-btn", "footer-request-btn", "mobile-nav-request-btn"].forEach(
+          (id) =>
+            document.getElementById(id)?.addEventListener("click", openRequest),
+        );
+      });
     </script>
 </Layout>

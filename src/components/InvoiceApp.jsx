@@ -37,7 +37,9 @@ function InvoiceAppContent() {
         html2canvas: { scale: 2, useCORS: true, allowTaint: true },
         jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' },
       };
-      const html2pdf = (await import('html2pdf.js')).default;
+      // Use the pre-bundled minified version to bypass Vite's deps pre-bundling cache issues
+      const html2pdfModule = await import('html2pdf.js/dist/html2pdf.bundle.min.js');
+      const html2pdf = html2pdfModule.default || html2pdfModule;
       await html2pdf().from(element).set(opt).save();
       showToast('success', `${filename} → Downloads folder ✓`);
       setMobileTab('form'); // reset nav back to form view
@@ -170,7 +172,7 @@ function InvoiceAppContent() {
                   <span className="text-xs text-neutral-600 font-mono">{data.invoiceMeta.invoiceNumber}</span>
                 </div>
                 <div className="relative z-10 shadow-[0_0_60px_rgba(0,0,0,0.6)] rounded-lg overflow-hidden">
-                  <InvoicePreview />
+                  <InvoicePreview template={data.template} data={data} />
                 </div>
               </div>
             </div>
@@ -190,7 +192,7 @@ function InvoiceAppContent() {
             <div>
               <div className="bg-white/5 rounded-2xl border border-white/10 p-2 shadow-xl overflow-hidden">
                 <div style={{ transform: 'scale(0.85)', transformOrigin: 'top left', width: '117.6%', pointerEvents: 'none' }}>
-                  <InvoicePreview />
+                  <InvoicePreview template={data.template} data={data} />
                 </div>
               </div>
               <button onClick={handleDownloadPDF} disabled={downloading} className="mt-4 w-full py-3.5 rounded-2xl bg-brand text-black font-bold text-sm flex items-center justify-center gap-2 disabled:opacity-60">

@@ -1,0 +1,104 @@
+import React from 'react';
+
+export const fmt = (n) => new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' }).format(n);
+
+export function calcTax({ items, taxSettings, senderDetails, clientDetails }) {
+  const subtotal = items.reduce((s, i) => s + i.rate * i.quantity, 0);
+  const isInter = (taxSettings?.senderState || '').toLowerCase() !== (clientDetails?.state || '').toLowerCase();
+  let cgst = 0, sgst = 0, igst = 0;
+  if (taxSettings?.applyGst && taxSettings?.gstRate) {
+    if (isInter && clientDetails?.state) igst = subtotal * (taxSettings.gstRate / 100);
+    else {
+      cgst = subtotal * ((taxSettings.gstRate / 2) / 100);
+      sgst = subtotal * ((taxSettings.gstRate / 2) / 100);
+    }
+  }
+  return { subtotal, cgst, sgst, igst, isInter, grand: subtotal + cgst + sgst + igst };
+}
+
+// Status badge with inline hex colors (safe for PDF)
+export const StatusBadge = ({ status }) => {
+  const colors = {
+    Paid: { bg: '#16a34a', text: '#fff' },
+    Unpaid: { bg: '#dc2626', text: '#fff' },
+    Partial: { bg: '#d97706', text: '#fff' },
+  };
+  const c = colors[status] || colors.Unpaid;
+  return (
+    <span style={{
+      backgroundColor: c.bg,
+      color: c.text,
+      padding: '1px 7px',
+      borderRadius: 3,
+      fontSize: 11,
+      fontWeight: 700,
+      display: 'inline-block',
+      verticalAlign: 'middle',
+      lineHeight: '18px',
+    }}>
+      {status}
+    </span>
+  );
+};
+
+// ── Shared bottom: Payment + Declaration + Signature + Invoy footer ────
+export function InvoiceBottom({ senderDetails, contentOptions, paymentDetails, declaration }) {
+  return (
+    <>
+      {(contentOptions?.showPaymentDetails || contentOptions?.showDeclaration || contentOptions?.showSignature) && (
+        <div style={{ borderTop: '1px solid #e5e7eb', marginTop: 24, paddingTop: 16 }} />
+      )}
+
+      {contentOptions?.showPaymentDetails && (
+        <div style={{ marginBottom: 16 }}>
+          <p style={{ fontWeight: 700, fontSize: 13, color: '#1f2937', marginBottom: 6 }}>Payment Details</p>
+          <p style={{ fontSize: 13, color: '#374151', margin: 0, lineHeight: 2 }}>
+            {paymentDetails?.mode && <><span style={{ color: '#6b7280' }}>Mode:</span> {paymentDetails.mode}&nbsp;&nbsp;&nbsp;</>}
+            <span style={{ color: '#6b7280' }}>Status:</span> <StatusBadge status={paymentDetails?.status} />
+            {paymentDetails?.transactionId && <>&nbsp;&nbsp;&nbsp;<span style={{ color: '#6b7280' }}>Transaction ID:</span> <strong>{paymentDetails.transactionId}</strong></>}
+          </p>
+        </div>
+      )}
+
+      {(contentOptions?.showDeclaration || contentOptions?.showSignature) && (
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', gap: 24, marginTop: 16 }}>
+          {contentOptions?.showDeclaration && (
+            <div style={{ flex: 1 }}>
+              <p style={{ fontWeight: 700, fontSize: 12, color: '#1f2937', marginBottom: 6 }}>Declaration</p>
+              <ul style={{ paddingLeft: 16, margin: 0 }}>
+                {(declaration || '').split('\n').filter(Boolean).map((line, i) => (
+                  <li key={i} style={{ fontSize: 11, color: '#4b5563', marginBottom: 3 }}>{line.replace(/^\d+\.\s*/, '')}</li>
+                ))}
+              </ul>
+            </div>
+          )}
+
+          {contentOptions?.showSignature && (
+            <div style={{ minWidth: 160, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+              <p style={{ fontSize: 11, fontWeight: 700, color: '#1f2937', alignSelf: 'flex-start', marginBottom: 12 }}>Authorised Signature</p>
+              {senderDetails?.signature
+                ? <img src={senderDetails.signature} alt="Signature" style={{ height: 56, objectFit: 'contain', marginBottom: 8 }} />
+                : <div style={{ height: 56, width: '100%', border: '1px dashed #d1d5db', borderRadius: 4, display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 8 }}>
+                  <span style={{ fontSize: 10, color: '#9ca3af', fontStyle: 'italic' }}>Signature</span>
+                </div>
+              }
+              <div style={{ width: '100%', borderTop: '1px solid #9ca3af', paddingTop: 4, textAlign: 'center', fontSize: 11, fontWeight: 600, color: '#1f2937' }}>
+                {senderDetails?.businessName || senderDetails?.name || 'Authorised Signatory'}
+              </div>
+            </div>
+          )}
+        </div>
+      )}
+    </>
+  );
+}
+
+// ── Invoy branded footer ───────────────────────────────────────────────
+export const InvoyFooter = () => (
+  <div style={{ borderTop: '1px solid #e5e7eb', marginTop: 32, paddingTop: 12, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+    <span style={{ fontSize: 11, color: '#9ca3af' }}>Thank you for your business!</span>
+    <span style={{ fontSize: 11, color: '#9ca3af', fontWeight: 500 }}>
+      Generated by https://invoy.in
+    </span>
+  </div>
+);

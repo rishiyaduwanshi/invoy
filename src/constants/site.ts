@@ -10,7 +10,8 @@ export const SITE = {
   url: 'https://invoy.in',
   appUrl: 'https://invoy.in/app',
   support: {
-    email: 'hello@invoy.in',
+    email: 'hello@iamabhinav.dev',
+    link: 'https://razorpay.me/@invoy',
     github: 'https://github.com/rishiyaduwanshi/invoy',
   },
   social: {

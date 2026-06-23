@@ -92,8 +92,8 @@ import InvoiceCard from "../components/InvoiceCard.astro";
             <Fragment set:html={icons["zap"]} />
             Request a Feature
           </button>
-          <a
-            href={`mailto:${SITE.support.email}`}
+          <a target="_blank" rel="noopener noreferrer"
+            href={SITE.support.link}
             class="flex items-center gap-1.5 px-4 py-1.5 rounded-md text-sm font-bold bg-secondary text-white hover:bg-orange-500 transition-all"
           >
             <Fragment set:html={icons["heart"]} />
@@ -119,9 +119,13 @@ import InvoiceCard from "../components/InvoiceCard.astro";
       >
       </div>
 
-      <div class="mx-auto px-4 py-16 grid grid-cols-2 gap-8 lg:gap-4">
+      <div
+        class="mx-auto px-4 py-16 grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-4"
+      >
         <!-- Left -->
-        <div class="space-y-4 z-10">
+        <div
+          class="space-y-4 z-10 text-center md:text-left flex flex-col items-center md:items-start"
+        >
           <!-- Badge -->
           <span
             class="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-brand/40 bg-brand/10 text-brand text-xs font-semibold"
@@ -129,7 +133,7 @@ import InvoiceCard from "../components/InvoiceCard.astro";
             <span
               class="w-1.5 h-1.5 rounded-full bg-brand animate-pulse shrink-0"
             ></span>
-            No Sign Up • No Limits • No Watermarks
+            No Signup • No limits • Instant PDF
           </span>
 
           <!-- Headline -->
@@ -150,7 +154,7 @@ import InvoiceCard from "../components/InvoiceCard.astro";
                 style="padding-bottom: .5rem;"
               >
                 Free.
-                <!-- dual_underline.svg — flipped horizontally so stroke goes left→right -->
+                <!-- dual_underline.svg - flipped horizontally so stroke goes left→right -->
                 <img
                   src="/dual_underline.svg"
                   alt=""
@@ -167,7 +171,9 @@ import InvoiceCard from "../components/InvoiceCard.astro";
           </p>
 
           <!-- CTA -->
-          <div class="flex flex-wrap items-center gap-3 pt-2">
+          <div
+            class="flex flex-wrap items-center justify-center md:justify-start gap-3 pt-2"
+          >
             <a
               href="/app"
               class="inline-flex items-center gap-2.5 px-6 py-3.5 rounded-xl bg-brand text-black font-bold text-base
@@ -177,7 +183,7 @@ import InvoiceCard from "../components/InvoiceCard.astro";
               Create Invoice Now
               <Fragment set:html={icons["arrow-right"]} />
             </a>
-            <!-- "It's free!" beside button — clean arrow SVG + cursive text -->
+            <!-- "It's free!" beside button - clean arrow SVG + cursive text -->
             <div
               class="flex items-center gap-1 -ml-4"
               style="transform:rotate(-8deg);transform-origin:left center;margin-top:2px"
@@ -196,7 +202,7 @@ import InvoiceCard from "../components/InvoiceCard.astro";
           </div>
 
           <!-- Trust strip -->
-          <div class="grid grid-cols-2 sm:grid-cols-4 gap-x-6 gap-y-3 pt-1">
+          <div class="flex flex-wrap justify-center md:justify-start gap-x-5 gap-y-2.5 pt-1">
             {
               [
                 { i: "shield", l: "No Sign Up Required" },
@@ -204,7 +210,7 @@ import InvoiceCard from "../components/InvoiceCard.astro";
                 { i: "download", l: "Instant PDF Download" },
                 { i: "lock", l: "100% Private & Secure" },
               ].map((b) => (
-                <div class="flex items-center gap-2 text-xs text-neutral-400">
+                <div class="flex items-center gap-1.5 text-xs text-neutral-400 whitespace-nowrap">
                   <span class="text-brand shrink-0">
                     <Fragment set:html={icons[b.i]} />
                   </span>
@@ -216,7 +222,7 @@ import InvoiceCard from "../components/InvoiceCard.astro";
         </div><!-- /left col -->
 
         <!-- Right -->
-        <div class="invoice-stack lg:ml-8">
+        <div class="invoice-stack lg:ml-8 hidden md:block">
           <InvoiceCard
             className="bg-white invoice-card-3"
             invoice_text_color="text-green-500"
@@ -238,17 +244,23 @@ import InvoiceCard from "../components/InvoiceCard.astro";
 ══════════════════════════════════════════════════════════════════ -->
     <div class="bg-white border-y border-gray-200">
       <div
-        class="max-w-7xl mx-auto px-4 sm:px-6 py-5 grid grid-cols-2 md:grid-cols-4 gap-6 md:divide-x divide-gray-200"
+        class="max-w-7xl mx-auto px-4 sm:px-6 py-5 grid grid-cols-2 md:grid-cols-4"
       >
         <!-- 1 -->
-        <div class="flex flex-col justify-center">
-          <p class="text-sm font-semibold text-gray-800 leading-snug">
-            Built for freelancers,<br />agencies and small businesses
+        <div
+          class="flex items-center justify-center px-4 py-2 border-r border-gray-200"
+        >
+          <p
+            class="text-sm font-semibold text-gray-800 leading-snug text-center"
+          >
+            Built for freelancers,<br />agencies & small businesses
           </p>
         </div>
 
         <!-- 2 -->
-        <div class="flex items-center gap-3 md:pl-6">
+        <div
+          class="flex items-center justify-center gap-3 px-4 py-2 md:border-r border-gray-200"
+        >
           <div class="flex -space-x-2 shrink-0">
             {
               ["#f97316", "#22c55e", "#6366f1"].map((c) => (
@@ -268,8 +280,10 @@ import InvoiceCard from "../components/InvoiceCard.astro";
         </div>
 
         <!-- 3 -->
-        <div class="flex items-center gap-2 md:pl-6">
-          <span class="text-yellow-400 text-xl">★</span>
+        <div
+          class="flex items-center justify-center gap-2 px-4 py-2 border-t md:border-t-0 border-r border-gray-200"
+        >
+          <span class="text-yellow-400 text-xl shrink-0">★</span>
           <div>
             <p class="text-sm font-bold text-gray-900">4.8/5</p>
             <p class="text-xs text-gray-500">From happy users</p>
@@ -277,12 +291,15 @@ import InvoiceCard from "../components/InvoiceCard.astro";
         </div>
 
         <!-- 4 -->
-        <div class="flex items-center gap-2 md:pl-6">
-          <span class="text-brand"><Fragment set:html={icons["shield"]} /></span
+        <div
+          class="flex items-center justify-center gap-2 px-4 py-2 border-t md:border-t-0 border-gray-200"
+        >
+          <span class="text-brand shrink-0"
+            ><Fragment set:html={icons["shield"]} /></span
           >
           <div>
-            <p class="text-sm font-bold text-gray-900">Always free.</p>
-            <p class="text-xs text-gray-500">Always will be.</p>
+            <p class="text-sm font-bold text-gray-900">No Sign Up.</p>
+            <p class="text-xs text-gray-500">Start instantly.</p>
           </div>
         </div>
       </div>
@@ -291,7 +308,7 @@ import InvoiceCard from "../components/InvoiceCard.astro";
     <!-- ══════════════════════════════════════════════════════════════════
      HOW IT WORKS - white bg
 ══════════════════════════════════════════════════════════════════ -->
-    <section id="how-it-works" class="bg-white py-14 sm:py-18 px-4 sm:px-6">
+    <section id="how-it-works" class="py-14 sm:py-18 px-4 sm:px-6">
       <div class="max-w-5xl mx-auto">
         <div class="text-center mb-12">
           <h2
@@ -301,12 +318,12 @@ import InvoiceCard from "../components/InvoiceCard.astro";
           </h2>
         </div>
 
-        <div class="flex flex-col md:flex-row items-start justify-center gap-0">
+        <div class="flex flex-col md:flex-row">
           {
             steps.map((s, i) => (
               <>
                 <div class="flex flex-col items-center text-center px-6 py-4 flex-1">
-                  <div class="w-[88px] h-[88px] rounded-full bg-brand/10 border-2 border-brand/20 flex items-center justify-center text-brand mb-4">
+                  <div class="w-22 h-22 rounded-full bg-brand/10 border-2 border-brand/20 flex items-center justify-center text-brand mb-4">
                     <Fragment
                       set:html={
                         icons[
@@ -322,7 +339,7 @@ import InvoiceCard from "../components/InvoiceCard.astro";
                   <h3 class="text-sm font-bold text-gray-900 mb-1.5">
                     {s.step}. {s.title}
                   </h3>
-                  <p class="text-xs text-gray-500 leading-relaxed max-w-[160px]">
+                  <p class="text-xs text-gray-500 leading-relaxed max-w-40">
                     {s.desc}
                   </p>
                 </div>
@@ -477,86 +494,185 @@ import InvoiceCard from "../components/InvoiceCard.astro";
     </section>
 
     <!-- ══════════════════════════════════════════════════════════════════
-     FOOTER - dark bg
+     FOOTER - dark bg, fully redesigned
 ══════════════════════════════════════════════════════════════════ -->
-    <footer class="bg-[#0f0f0f] border-t border-white/8">
-      <div
-        class="max-w-7xl mx-auto px-4 sm:px-6 py-12 grid grid-cols-1 md:grid-cols-4 gap-10"
-      >
-        <!-- Brand -->
-        <div class="md:col-span-1 space-y-3">
-          <a href="/" class="flex items-center gap-1.5">
-            <img src="/invoy_favicon.png" alt="" class="size-6" />
-
-            <span class="font-['Outfit'] font-black text-white lowercase"
-              >{SITE.name}</span
-            >
-          </a>
-          <p class="text-xs text-neutral-500 leading-relaxed max-w-[220px]">
-            A free invoice generator for freelancers, consultants and small
-            businesses.
-          </p>
-        </div>
-
-        <!-- Support -->
-        <div class="space-y-3">
-          <h4 class="text-sm font-bold text-white flex items-center gap-2">
-            <span class="text-secondary"
-              ><Fragment set:html={icons["heart"]} /></span
-            >
-            Support {SITE.name}
-          </h4>
-          <p class="text-xs text-neutral-500 leading-relaxed">
-            If you find {SITE.name} helpful,<br />consider supporting.
-          </p>
-          <a
-            href={`mailto:${SITE.support.email}`}
-            class="inline-flex items-center gap-2 text-sm font-semibold text-white border border-white/20 rounded-full px-4 py-1.5 hover:bg-white/5 transition-all"
-          >
-            <Fragment set:html={icons["arrow-right"]} />
-          </a>
-        </div>
-
-        <!-- Request Feature -->
-        <div class="space-y-3">
-          <button
-            id="footer-request-btn"
-            class="flex items-center gap-2 text-sm font-bold text-white"
-          >
-            <span class="text-brand"><Fragment set:html={icons["zap"]} /></span>
-            Request a Feature
-          </button>
-          <p class="text-xs text-neutral-500">
-            Have a feature idea?<br />Let us know!
-          </p>
-        </div>
-
-        <!-- Right: Made in India -->
+    <footer class="bg-[#0a0a0a] border-t border-white/[0.06]">
+      <!-- Top section -->
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 pt-14 pb-10">
         <div
-          class="flex flex-col items-start md:items-end justify-between gap-4"
+          class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-10"
         >
-          <p class="text-xs text-neutral-500 md:text-right">
-            Made with <span class="text-red-400">♥</span> in India
-          </p>
-          <p class="text-xs text-neutral-600 md:text-right">
-            © {new Date().getFullYear()}
-            {SITE.name}. All rights reserved.
-          </p>
-          <div class="flex gap-4">
-            <a
-              href={SITE.support.github}
-              target="_blank"
-              rel="noopener"
-              class="text-xs text-neutral-500 hover:text-white transition-colors"
-              >GitHub</a
+          <!-- Brand col -->
+          <div class="sm:col-span-2 lg:col-span-1 space-y-4">
+            <a href="/" class="flex items-center gap-2">
+              <img src="/invoy_favicon.png" alt="Invoy logo" class="size-8" />
+              <span
+                class="font-['Outfit'] font-black text-white text-xl lowercase tracking-tight"
+                >{SITE.name}</span
+              >
+            </a>
+            <p class="text-sm text-neutral-500 leading-relaxed max-w-[260px]">
+              Create professional GST invoices in seconds - free, private, and
+              entirely in your browser.
+            </p>
+            <!-- Social chips -->
+            <div class="flex items-center gap-3 pt-1">
+              <a
+                href={SITE.support.github}
+                target="_blank"
+                rel="noopener"
+                class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-white/10 text-neutral-400 hover:text-white hover:border-white/25 hover:bg-white/5 transition-all text-xs font-medium"
+              >
+                <!-- github icon -->
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="14"
+                  height="14"
+                  viewBox="0 0 24 24"
+                  fill="currentColor"
+                  ><path
+                    d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.44 9.8 8.21 11.39.6.11.82-.26.82-.58v-2.03c-3.34.73-4.04-1.61-4.04-1.61-.55-1.39-1.34-1.76-1.34-1.76-1.09-.75.08-.73.08-.73 1.2.08 1.84 1.24 1.84 1.24 1.07 1.83 2.81 1.3 3.49.99.11-.78.42-1.3.76-1.6-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.12-.3-.54-1.52.12-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 0 1 3-.4c1.02.005 2.04.14 3 .4 2.28-1.55 3.29-1.23 3.29-1.23.66 1.66.24 2.88.12 3.18.77.84 1.24 1.91 1.24 3.22 0 4.61-2.81 5.63-5.48 5.92.43.37.81 1.1.81 2.22v3.29c0 .32.22.7.83.58C20.57 21.8 24 17.3 24 12c0-6.63-5.37-12-12-12z"
+                  ></path></svg
+                >
+                GitHub
+              </a>
+              <a
+                href={`mailto:${SITE.support.email}`}
+                target="_blank" rel="noopener noreferrer"
+                class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-white/10 text-neutral-400 hover:text-white hover:border-white/25 hover:bg-white/5 transition-all text-xs font-medium"
+              >
+                <!-- mail icon -->
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="14"
+                  height="14"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  ><rect width="20" height="16" x="2" y="4" rx="2"></rect><path
+                    d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path></svg
+                >
+                Contact
+              </a>
+            </div>
+          </div>
+
+          <!-- Product links -->
+          <div class="space-y-4">
+            <h4
+              class="text-xs font-bold text-neutral-400 uppercase tracking-widest"
             >
-            <a
-              href={`mailto:${SITE.support.email}`}
-              class="text-xs text-neutral-500 hover:text-white transition-colors"
-              >Support</a
+              Product
+            </h4>
+            <ul class="space-y-2.5">
+              <li>
+                <a
+                  href="/app"
+                  class="text-sm text-neutral-400 hover:text-white transition-colors"
+                  >Create Invoice</a>
+              </li>
+              <li>
+                <a
+                  href="#how-it-works"
+                  class="text-sm text-neutral-400 hover:text-white transition-colors"
+                  >How It Works</a>
+              </li>
+              <li>
+                <a
+                  href="#features"
+                  class="text-sm text-neutral-400 hover:text-white transition-colors"
+                  >Features</a>
+              </li>
+              <li>
+                <a
+                  href="#faq"
+                  class="text-sm text-neutral-400 hover:text-white transition-colors"
+                  >FAQ</a>
+              </li>
+            </ul>
+          </div>
+
+          <!-- Support col -->
+          <div class="space-y-4">
+            <h4
+              class="text-xs font-bold text-neutral-400 uppercase tracking-widest"
             >
+              Support
+            </h4>
+            <ul class="space-y-2.5">
+              <li>
+                <a
+                  href={`mailto:${SITE.support.email}`}
+                  class="text-sm text-neutral-400 hover:text-white transition-colors"
+                >
+                  hello@iamabhinav.dev
+                </a>
+              </li>
+              <li>
+                <button
+                  id="footer-request-btn"
+                  class="text-sm text-neutral-400 hover:text-white transition-colors text-left"
+                >
+                  Request a Feature
+                </button>
+              </li>
+              <li>
+                <a
+                  href={SITE.support.github}
+                  target="_blank"
+                  rel="noopener"
+                  class="text-sm text-neutral-400 hover:text-white transition-colors"
+                >
+                  Report a Bug
+                </a>
+              </li>
+            </ul>
+          </div>
+
+          <!-- Support CTA col -->
+          <div class="space-y-4">
+            <h4
+              class="text-xs font-bold text-neutral-400 uppercase tracking-widest"
+            >
+              Love Invoy?
+            </h4>
+            <p class="text-sm text-neutral-500 leading-relaxed">
+              If Invoy saves you time, consider supporting the project. ❤️
+            </p>
+            <a
+              href={SITE.support.link}
+              target="_blank" rel="noopener noreferrer"
+              class="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-secondary/10 border border-secondary/30 text-secondary text-sm font-semibold hover:bg-secondary/20 transition-all"
+            >
+              <Fragment set:html={icons["heart"]} />
+              Support {SITE.name}
+            </a>
           </div>
         </div>
+      </div>
+
+      <!-- Divider -->
+      <div class="max-w-7xl mx-auto px-4 sm:px-6">
+        <div
+          class="h-px bg-gradient-to-r from-transparent via-white/10 to-transparent"
+        >
+        </div>
+      </div>
+
+      <!-- Bottom bar -->
+      <div
+        class="max-w-7xl mx-auto px-4 sm:px-6 py-5 flex flex-col sm:flex-row items-center justify-between gap-2 text-center sm:text-left"
+      >
+        <p class="text-xs text-neutral-600">
+          © {new Date().getFullYear()}
+          {SITE.name}. All rights reserved.
+        </p>
+        <p class="text-xs text-neutral-700">
+          Made with <span class="text-red-400">♥</span> in India
+        </p>
       </div>
     </footer>
 

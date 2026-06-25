@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import InvoiceForm from './InvoiceForm';
 import InvoicePreview from './InvoicePreview';
 import { icons } from '../constants/icons';
@@ -31,6 +31,10 @@ function InvoiceAppContent() {
   const handleDownloadPDF = async () => {
     setDownloading(true);
     try {
+      window.posthog.capture('invoice_downloaded', {
+        invoiceNumber: data.invoiceMeta.invoiceNumber,
+        template: data.template,
+      })
       const element = document.getElementById('invoice-preview-container');
       await exportPDF(element, data.invoiceMeta.invoiceNumber);
       showToast('success', `PDF exported successfully ✓`);
@@ -83,7 +87,7 @@ function InvoiceAppContent() {
       // Find existing ID from URL if we are editing
       const params = new URLSearchParams(window.location.search);
       const existingId = params.get('loadId') || undefined;
-      
+
       storage.save(data, existingId);
       showToast('success', 'Invoice saved successfully!');
     } catch (e) {
@@ -312,8 +316,8 @@ function InvoiceAppContent() {
       {/* ── Toast Notification ───────────────────────────── */}
       {toast && (
         <div className={`fixed bottom-6 left-1/2 -translate-x-1/2 z-[9999] flex items-center gap-3 px-5 py-3.5 rounded-2xl shadow-2xl border text-sm font-semibold transition-all animate-fade-in ${toast.type === 'success'
-            ? 'bg-emerald-950/90 border-emerald-500/40 text-emerald-300 shadow-emerald-900/40'
-            : 'bg-red-950/90 border-red-500/40 text-red-300'
+          ? 'bg-emerald-950/90 border-emerald-500/40 text-emerald-300 shadow-emerald-900/40'
+          : 'bg-red-950/90 border-red-500/40 text-red-300'
           }`}>
           <span className="text-base">{toast.type === 'success' ? '✓' : '✕'}</span>
           {toast.msg}

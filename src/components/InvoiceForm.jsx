@@ -4,6 +4,7 @@ import { TEMPLATES } from '../templates/index';
 import { icons } from '../constants/icons';
 import { useInvoiceContext } from '../context/InvoiceContext';
 import { storage } from '../utils/storage';
+import { importFile, exportExcelTemplate } from '../utils/fileTransfer';
 
 import Label from './ui/Label';
 import Input from './ui/Input';
@@ -15,6 +16,8 @@ import SectionTitle from './ui/SectionTitle';
 const Icon = ({ name, className = '' }) => (
   <span className={`inline-flex items-center justify-center ${className}`} dangerouslySetInnerHTML={{ __html: icons[name] ?? '' }} />
 );
+
+
 
 // ── Main Form ──────────────────────────────────────────────────────────
 export default function InvoiceForm() {
@@ -83,29 +86,28 @@ export default function InvoiceForm() {
     reader.readAsDataURL(file);
   };
 
-  const handleImportJSON = (e) => {
+  const handleImportFile = async (e) => {
     const file = e.target.files[0];
     if (!file) return;
-    const reader = new FileReader();
-    reader.onload = (event) => {
-      try {
-        const parsed = JSON.parse(event.target.result);
-        if (parsed && typeof parsed === 'object') {
-          if (parsed.items || parsed.invoiceMeta || parsed.senderDetails) {
-            loadInvoice(parsed);
-            alert('Invoice JSON imported successfully!');
-          } else {
-            alert('Invalid Invoice file: missing core structure.');
-          }
-        } else {
-          alert('Failed to parse JSON file.');
-        }
-      } catch (err) {
-        alert('Failed to read JSON file.');
-      }
-    };
-    reader.readAsText(file);
-    e.target.value = ''; // Reset input to allow re-upload of same file
+    
+    try {
+      const parsedInvoice = await importFile(file);
+      loadInvoice(parsedInvoice);
+      alert('Invoice imported successfully!');
+    } catch (err) {
+      console.error(err);
+      alert(`Import failed: ${err.message}`);
+    }
+    e.target.value = '';
+  };
+
+  const handleDownloadTemplate = async () => {
+    try {
+      await exportExcelTemplate();
+    } catch (err) {
+      console.error(err);
+      alert('Failed to download Excel template.');
+    }
   };
 
   const addItem = () => updateData('items', p => [...p, { id: Date.now(), description: '', quantity: 1, rate: 0 }]);
@@ -118,7 +120,17 @@ export default function InvoiceForm() {
       {/* ── Quick Actions ──────────────────────────────────── */}
       <SectionCard className="border-brand/20 bg-[#121212]/30 backdrop-blur-md">
         <SectionTitle color="emerald" className="mb-1">Quick Actions</SectionTitle>
-        <p className="text-xs text-neutral-400 mb-4 -mt-2">Pre-fill details, import data, or save to your local dashboard.</p>
+        <p className="text-xs text-neutral-400 mb-4 -mt-2">
+          Pre-fill details, import data, or save to your local dashboard. Or download our{" "}
+          <button 
+            type="button" 
+            onClick={handleDownloadTemplate} 
+            className="underline text-brand hover:text-green-400 font-semibold"
+            title="Download blank Excel spreadsheet template"
+          >
+            Excel Template
+          </button>
+        </p>
         
         <div className="space-y-4">
           {/* Profile Pre-fills */}
@@ -163,18 +175,18 @@ export default function InvoiceForm() {
                 type="button"
                 onClick={() => fileInputRef.current?.click()}
                 className="flex items-center justify-center gap-1.5 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 py-2 text-sm font-semibold text-neutral-300 hover:text-white transition-all hover:scale-[1.02] active:scale-95"
-                title="Import invoice from a JSON file"
+                title="Import invoice from JSON, Excel, or CSV files"
               >
                 <Icon name="upload" className="w-4 h-4 shrink-0" />
-                <span className="whitespace-nowrap">Import JSON</span>
+                <span className="whitespace-nowrap">Import Data</span>
               </button>
             </div>
             
             <input
               type="file"
               ref={fileInputRef}
-              accept=".json"
-              onChange={handleImportJSON}
+              accept=".json,.xlsx,.xls,.csv"
+              onChange={handleImportFile}
               className="hidden"
             />
             

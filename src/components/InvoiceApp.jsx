@@ -5,6 +5,7 @@ import { icons } from '../constants/icons';
 import { InvoiceProvider, useInvoiceContext } from '../context/InvoiceContext';
 import { storage } from '../utils/storage';
 import Select from './ui/Select';
+import { exportPDF, exportExcel, exportCSV, exportJSON } from '../utils/fileTransfer';
 
 // Tiny helper: render SVG string safely in React
 const Icon = ({ name, className = '' }) => (
@@ -29,34 +30,8 @@ function InvoiceAppContent() {
     setDownloading(true);
     try {
       const element = document.getElementById('invoice-preview-container');
-      if (!element) throw new Error('Preview not found');
-      
-      let html2pdf = window.html2pdf;
-      if (!html2pdf) {
-        // Load html2pdf dynamically from CDN to bypass all Vite caching and packaging bugs
-        await new Promise((resolve, reject) => {
-          const script = document.createElement('script');
-          script.src = 'https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js';
-          script.onload = () => resolve();
-          script.onerror = () => reject(new Error('Failed to load PDF engine from CDN.'));
-          document.head.appendChild(script);
-        });
-        html2pdf = window.html2pdf;
-      }
-
-      if (!html2pdf) throw new Error('PDF generator not available');
-
-      const filename = `Invoy_${data.invoiceMeta.invoiceNumber}.pdf`;
-      const opt = {
-        margin: 0,
-        filename,
-        image: { type: 'jpeg', quality: 0.98 },
-        html2canvas: { scale: 2, useCORS: true, allowTaint: true },
-        jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' },
-      };
-      
-      await html2pdf().from(element).set(opt).save();
-      showToast('success', `${filename} → Downloads folder ✓`);
+      await exportPDF(element, data.invoiceMeta.invoiceNumber);
+      showToast('success', `PDF exported successfully ✓`);
       setMobileTab('form'); // reset nav back to form view
     } catch (err) {
       console.error('PDF export failed:', err);
@@ -68,20 +43,36 @@ function InvoiceAppContent() {
 
   const handleDownloadJSON = () => {
     try {
-      const filename = `Invoy_${data.invoiceMeta.invoiceNumber}.json`;
-      const jsonStr = JSON.stringify(data, null, 2);
-      const blob = new Blob([jsonStr], { type: "application/json" });
-      const url = URL.createObjectURL(blob);
-      const link = document.createElement("a");
-      link.href = url;
-      link.download = filename;
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-      URL.revokeObjectURL(url);
+      const filename = exportJSON(data);
       showToast('success', `${filename} → Downloads folder ✓`);
     } catch (err) {
       showToast('error', 'JSON export failed.');
+    }
+  };
+
+  const handleDownloadExcel = async () => {
+    setDownloading(true);
+    try {
+      const filename = await exportExcel(data);
+      showToast('success', `${filename} → Excel exported ✓`);
+    } catch (err) {
+      console.error(err);
+      showToast('error', 'Excel export failed.');
+    } finally {
+      setDownloading(false);
+    }
+  };
+
+  const handleDownloadCSV = async () => {
+    setDownloading(true);
+    try {
+      const filename = await exportCSV(data);
+      showToast('success', `${filename} → CSV exported ✓`);
+    } catch (err) {
+      console.error(err);
+      showToast('error', 'CSV export failed.');
+    } finally {
+      setDownloading(false);
     }
   };
 
@@ -168,10 +159,14 @@ function InvoiceAppContent() {
               value=""
               onChange={val => {
                 if (val === 'pdf') handleDownloadPDF();
+                if (val === 'excel') handleDownloadExcel();
+                if (val === 'csv') handleDownloadCSV();
                 if (val === 'json') handleDownloadJSON();
               }}
               options={[
                 { label: 'PDF Document (.pdf)', value: 'pdf', icon: 'file-pdf' },
+                { label: 'Excel Sheet (.xlsx)', value: 'excel', icon: 'file-spreadsheet' },
+                { label: 'CSV Spreadsheet (.csv)', value: 'csv', icon: 'file-text' },
                 { label: 'JSON Schema (.json)', value: 'json', icon: 'file-code' }
               ]}
               placeholder={downloading ? 'PDF...' : 'Export'}
@@ -239,10 +234,14 @@ function InvoiceAppContent() {
                   value=""
                   onChange={val => {
                     if (val === 'pdf') handleDownloadPDF();
+                    if (val === 'excel') handleDownloadExcel();
+                    if (val === 'csv') handleDownloadCSV();
                     if (val === 'json') handleDownloadJSON();
                   }}
                   options={[
                     { label: 'PDF Document (.pdf)', value: 'pdf', icon: 'file-pdf' },
+                    { label: 'Excel Sheet (.xlsx)', value: 'excel', icon: 'file-spreadsheet' },
+                    { label: 'CSV Spreadsheet (.csv)', value: 'csv', icon: 'file-text' },
                     { label: 'JSON Schema (.json)', value: 'json', icon: 'file-code' }
                   ]}
                   placeholder={downloading ? 'Generating PDF...' : 'Export'}

@@ -215,21 +215,18 @@ export default function InvoiceForm() {
       {/* ── 1. Template ─────────────────────────────────── */}
       <SectionCard>
         <SectionTitle color="pink">Template</SectionTitle>
-        <div className="grid grid-cols-2 gap-3">
-          {TEMPLATES.map((t) => (
-            <button
-              key={t.id}
-              onClick={() => updateData('template', t.id)}
-              className={`py-2.5 px-3 rounded-xl text-sm font-semibold border transition-all ${
-                data.template === t.id
-                  ? 'bg-brand border-brand text-black shadow-[0_0_15px_rgba(34,197,94,0.3)]'
-                  : 'bg-white/5 border-white/10 text-neutral-400 hover:text-white hover:bg-white/8'
-              }`}
-            >
-              {t.emoji} {t.name}
-            </button>
-          ))}
-        </div>
+        <p className="text-xs text-neutral-400 mb-3 -mt-2">Select the visual layout of the invoice.</p>
+        <Select
+          value={data.template}
+          onChange={val => updateData('template', val)}
+          options={TEMPLATES.map(t => ({
+            label: `${t.emoji} ${t.name}`,
+            value: t.id
+          }))}
+          searchable={true}
+          placeholder="Select template style..."
+          className="w-full"
+        />
       </SectionCard>
 
       {/* ── 2. Your Business ────────────────────────────── */}

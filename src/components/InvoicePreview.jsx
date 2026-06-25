@@ -4,6 +4,10 @@ import React, { Suspense } from 'react';
 const Templates = {
   classic: React.lazy(() => import('../templates/classic')),
   modern: React.lazy(() => import('../templates/modern')),
+  minimalist: React.lazy(() => import('../templates/minimalist')),
+  creative: React.lazy(() => import('../templates/creative')),
+  corporate: React.lazy(() => import('../templates/corporate')),
+  elegant: React.lazy(() => import('../templates/elegant')),
 };
 
 export default function InvoicePreview({ template, data }) {

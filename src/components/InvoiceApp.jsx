@@ -6,6 +6,8 @@ import { InvoiceProvider, useInvoiceContext } from '../context/InvoiceContext';
 import { storage } from '../utils/storage';
 import Select from './ui/Select';
 import { exportPDF, exportExcel, exportCSV, exportJSON } from '../utils/fileTransfer';
+import { TEMPLATES } from '../templates/index';
+
 
 // Tiny helper: render SVG string safely in React
 const Icon = ({ name, className = '' }) => (
@@ -13,7 +15,7 @@ const Icon = ({ name, className = '' }) => (
 );
 
 function InvoiceAppContent() {
-  const { data, loadInvoice } = useInvoiceContext();
+  const { data, loadInvoice, updateData } = useInvoiceContext();
 
   // ── UI States ──────────────────────────────────────────
   const [downloading, setDownloading] = useState(false);
@@ -103,6 +105,7 @@ function InvoiceAppContent() {
     if (typeof window !== 'undefined') {
       const params = new URLSearchParams(window.location.search);
       const id = params.get('loadId');
+      const paramTemplate = params.get('template');
       if (id) {
         // Load the specific saved invoice
         const saved = storage.getById(id);
@@ -112,13 +115,42 @@ function InvoiceAppContent() {
       } else {
         // If creating a new invoice, load the default business profile (if any)
         const defaultProfile = storage.getProfile();
+        let initialData = { ...data };
         if (defaultProfile) {
-          // Merge default profile into current empty state
-          loadInvoice({ ...data, ...defaultProfile });
+          initialData = { ...initialData, ...defaultProfile };
         }
+        if (paramTemplate) {
+          initialData.template = paramTemplate;
+        }
+        loadInvoice(initialData);
       }
     }
   }, []);
+
+  // Sync state template to URL query parameters dynamically
+  useEffect(() => {
+    if (typeof window !== 'undefined' && data.template) {
+      const url = new URL(window.location.href);
+      if (url.searchParams.get('template') !== data.template) {
+        url.searchParams.set('template', data.template);
+        window.history.replaceState({}, '', url.pathname + url.search);
+      }
+    }
+  }, [data.template]);
+
+  // Sync URL changes (e.g. user changes parameters, popstate) to state
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    const handlePopState = () => {
+      const params = new URLSearchParams(window.location.search);
+      const urlTemplate = params.get('template');
+      if (urlTemplate && urlTemplate !== data.template) {
+        updateData('template', urlTemplate);
+      }
+    };
+    window.addEventListener('popstate', handlePopState);
+    return () => window.removeEventListener('popstate', handlePopState);
+  }, [data.template, updateData]);
 
   return (
     <div className="min-h-screen text-white font-['Inter'] overflow-x-hidden">
@@ -199,9 +231,21 @@ function InvoiceAppContent() {
                       <div className="w-2.5 h-2.5 rounded-full bg-green-500/60" />
                     </div>
                     <span className="text-xs text-neutral-500 ml-1 font-medium">Live Preview</span>
-                    <span className={`ml-2 text-xs px-2 py-0.5 rounded-full font-bold border ${data.template === 'classic' ? 'bg-yellow-500/10 border-yellow-500/30 text-yellow-300' : 'bg-green-500/10 border-green-500/30 text-green-300'}`}>
-                      {data.template === 'classic' ? '⭐ Classic' : '✨ Modern'}
-                    </span>
+                    {(() => {
+                      const activeT = TEMPLATES.find(t => t.id === data.template) || TEMPLATES[0];
+                      return (
+                        <span
+                          className="ml-2 text-xs px-2 py-0.5 rounded-full font-bold border transition-all"
+                          style={{
+                            backgroundColor: `${activeT.accentColor}15`,
+                            borderColor: `${activeT.accentColor}40`,
+                            color: activeT.accentColor === '#111827' ? '#9ca3af' : activeT.accentColor
+                          }}
+                        >
+                          {activeT.emoji} {activeT.name}
+                        </span>
+                      );
+                    })()}
                   </div>
                   <span className="text-xs text-neutral-600 font-mono">{data.invoiceMeta.invoiceNumber}</span>
                 </div>

@@ -46,6 +46,8 @@ export const icons: Record<string, string> = {
   'layers': svg(`<polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/>`, 18, 2),
   'zap': svgFill(`<polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>`, 14),
   'home': svg(`<path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/>`, 16, 2),
+  'sidebar-collapse': svg(`<rect width="18" height="18" x="3" y="3" rx="2"/><path d="M9 3v18"/><path d="m16 15-3-3 3-3"/>`, 16, 2),
+  'sidebar-expand': svg(`<rect width="18" height="18" x="3" y="3" rx="2"/><path d="M9 3v18"/><path d="m14 9 3 3-3 3"/>`, 16, 2),
 
   // ── Brand / Filled ───────────────────────────────────────────────────
   'heart': svgFill(`<path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>`, 16),

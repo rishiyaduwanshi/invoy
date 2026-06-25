@@ -1,0 +1,20 @@
+---
+import Layout from "../layouts/Layout.astro";
+import TemplatesCatalog from "../components/TemplatesCatalog.jsx";
+---
+
+<Layout 
+  title="Professional Invoice Templates – invoy" 
+  description="Choose from 6 beautifully crafted, responsive, and print-ready invoice templates. Preview dynamically with mock data and select the best layout for your business."
+  keywords="invoice templates, word invoice template, excel invoice template, GST invoice layout, msme invoice designs, free invoice styles"
+  headerContainerClass="max-w-7xl mx-auto" 
+  footerContainerClass="max-w-7xl mx-auto px-4 sm:px-6"
+  showHeader={true}
+  showFooter={true}
+>
+
+  <main class="relative z-10">
+    <TemplatesCatalog client:only="react" />
+  </main>
+
+</Layout>

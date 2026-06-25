@@ -1,0 +1,220 @@
+[
+    {
+        "id": "agency",
+        "label": "🎨 Creative Agency (USD)",
+        "data": {
+            "template": "creative",
+            "senderDetails": {
+                "businessName": "Invoy Studio INC",
+                "name": "Abhinav Prakash",
+                "email": "contact@invoy.in",
+                "phone": "+1 (555) 019-2834",
+                "address": "100 Pine Street, Suite 1200, San Francisco, CA 94111",
+                "gstin": "",
+                "udyamNo": "",
+                "logo": "https://images.unsplash.com/photo-1557683316-973673baf926?w=120&auto=format&fit=crop&q=60",
+                "signature": null
+            },
+            "clientDetails": {
+                "name": "Invoy Corporation",
+                "email": "billing@invoy.in",
+                "address": "450 Fashion Avenue, New York, NY 10001",
+                "state": "New York"
+            },
+            "invoiceMeta": {
+                "invoiceNumber": "INV-2026-042",
+                "date": "2026-06-25",
+                "dueDate": "2026-07-25",
+                "currency": "$",
+                "quantityLabel": "Hours",
+                "rateLabel": "Rate"
+            },
+            "items": [
+                {
+                    "id": 1,
+                    "description": "Brand Strategy & Visual Identity Design",
+                    "quantity": 40,
+                    "rate": 120
+                },
+                {
+                    "id": 2,
+                    "description": "Next.js Frontend Development & CMS Integration",
+                    "quantity": 80,
+                    "rate": 150
+                },
+                {
+                    "id": 3,
+                    "description": "User Experience Research & Figma Wireframing",
+                    "quantity": 25,
+                    "rate": 110
+                }
+            ],
+            "taxes": [
+                {
+                    "id": "vat",
+                    "name": "VAT (15%)",
+                    "type": "percentage",
+                    "value": 15
+                }
+            ],
+            "adjustments": {
+                "discountType": "percentage",
+                "discountValue": 10
+            },
+            "contentOptions": {
+                "showSignature": true,
+                "showPaymentDetails": true,
+                "showDeclaration": true,
+                "showDueDate": true,
+                "showUdyamNo": false
+            },
+            "paymentDetails": {
+                "mode": "Stripe / Bank Wire",
+                "status": "Paid",
+                "transactionId": "TXN-9876543210"
+            },
+            "declaration": "Payment is due within 30 days of invoice date.\nAll design works are copyrighted under Apex Studio until payment is settled."
+        }
+    },
+    {
+        "id": "msme",
+        "label": "⭐ Indian MSME (INR)",
+        "data": {
+            "template": "classic",
+            "senderDetails": {
+                "businessName": "Vedic Organic Crafts",
+                "name": "Rishi Yaduwanshi",
+                "email": "rishi@vediccrafts.in",
+                "phone": "+91 98765 43210",
+                "address": "Sector 62, Noida, Uttar Pradesh, 201301",
+                "gstin": "09AAAAA1111A1Z5",
+                "udyamNo": "UDYAM-UP-28-0098765",
+                "logo": "https://images.unsplash.com/photo-1542838132-92c53300491e?w=120&auto=format&fit=crop&q=60",
+                "signature": null
+            },
+            "clientDetails": {
+                "name": "Traders Bharat Ltd",
+                "email": "finance@tradersbharat.com",
+                "address": "M.G. Road, Bengaluru, Karnataka, 560001",
+                "state": "Karnataka"
+            },
+            "invoiceMeta": {
+                "invoiceNumber": "VOC/2026/894",
+                "date": "2026-06-25",
+                "dueDate": "2026-07-10",
+                "currency": "₹",
+                "quantityLabel": "Qty",
+                "rateLabel": "Rate"
+            },
+            "items": [
+                {
+                    "id": 1,
+                    "description": "Handcrafted Wooden Bowls (Medium)",
+                    "quantity": 150,
+                    "rate": 450
+                },
+                {
+                    "id": 2,
+                    "description": "Natural Indigo Dyed Cotton Fabric (Meters)",
+                    "quantity": 200,
+                    "rate": 320
+                },
+                {
+                    "id": 3,
+                    "description": "Artisanal Terra Cotta Planters (Small)",
+                    "quantity": 100,
+                    "rate": 180
+                }
+            ],
+            "taxes": [
+                {
+                    "id": "cgst",
+                    "name": "CGST (9%)",
+                    "type": "percentage",
+                    "value": 9
+                },
+                {
+                    "id": "sgst",
+                    "name": "SGST (9%)",
+                    "type": "percentage",
+                    "value": 9
+                }
+            ],
+            "adjustments": {
+                "discountType": "flat",
+                "discountValue": 2000
+            },
+            "contentOptions": {
+                "showSignature": true,
+                "showPaymentDetails": true,
+                "showDeclaration": true,
+                "showDueDate": true,
+                "showUdyamNo": true
+            },
+            "paymentDetails": {
+                "mode": "NEFT / UPI",
+                "status": "Paid",
+                "transactionId": "UPI-602917384910"
+            },
+            "declaration": "Certified that the particulars given above are true and correct.\nMSME Registration Status applies under Udyam No: UDYAM-UP-28-0098765.\nInterest @18% p.a. will be charged if payment is delayed beyond due date."
+        }
+    },
+    {
+        "id": "consultant",
+        "label": "🍃 Tech Consultant (EUR)",
+        "data": {
+            "template": "minimalist",
+            "senderDetails": {
+                "businessName": "VedaTechno",
+                "name": "Abhinav Prakash",
+                "email": "info@vedatechno.in",
+                "phone": "+91 8602049179",
+                "address": "Kopernikusstraße 14, 10245 Berlin, Germany",
+                "gstin": "DE811123456",
+                "udyamNo: \"\"": "",
+                "logo": null,
+                "signature": null
+            },
+            "clientDetails": {
+                "name": "Zeta Labs GmbH",
+                "email": "accounts@zetalabs.de",
+                "address": "Marienplatz 2, 80331 München, Germany",
+                "state": "Bavaria"
+            },
+            "invoiceMeta": {
+                "invoiceNumber": "SJ-2026-009",
+                "date": "2026-06-25",
+                "dueDate": "",
+                "currency": "€",
+                "quantityLabel": "Days",
+                "rateLabel": "Daily Rate"
+            },
+            "items": [
+                {
+                    "id": 1,
+                    "description": "Software Consultation",
+                    "quantity": 8,
+                    "rate": 500
+                }
+            ],
+            "taxes": [],
+            "adjustments": {
+                "discountType": "percentage",
+                "discountValue": 0
+            },
+            "contentOptions": {
+                "showSignature": false,
+                "showPaymentDetails": true,
+                "showDeclaration": true,
+                "showDueDate": false,
+                "showUdyamNo": false
+            },
+            "paymentDetails": {
+                "mode": "SEPA Direct Bank Transfer",
+                "status": "Unpaid",
+                "transactionId": ""
+            },
+            "declaration": "Reverse charge mechanism applies if applicable under EU Vat rules.\nPlease transfer the invoice total within 14 days of receipt."
+        }
+    }
+]

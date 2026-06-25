@@ -1,8 +1,0 @@
-{
-  "id": "modern",
-  "name": "Modern",
-  "emoji": "✨",
-  "description": "Clean, minimal design for freelancers & agencies",
-  "accentColor": "#4F46E5",
-  "features": ["Logo optional", "GSTIN badge", "Full-width totals", "Signature section"]
-}

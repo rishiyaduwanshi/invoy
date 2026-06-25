@@ -15,9 +15,11 @@ export default function Select({
   variant = 'default',
   direction = 'down',
   leftIcon = null,
+  searchable = false,
   className = '' 
 }) {
   const [isOpen, setIsOpen] = useState(false);
+  const [searchTerm, setSearchTerm] = useState('');
   const ref = useRef(null);
 
   useEffect(() => {
@@ -28,7 +30,17 @@ export default function Select({
     return () => document.removeEventListener('mousedown', handleClick);
   }, []);
 
+  useEffect(() => {
+    if (!isOpen) {
+      setSearchTerm('');
+    }
+  }, [isOpen]);
+
   const selectedOption = options.find(o => o.value === value);
+
+  const filteredOptions = searchable 
+    ? options.filter(o => o.label.toLowerCase().includes(searchTerm.toLowerCase()))
+    : options;
 
   const sizeClasses = {
     sm: 'px-2.5 py-2.5 text-xs rounded-xl h-[42px]',
@@ -65,10 +77,23 @@ export default function Select({
             transition={{ duration: 0.15 }}
             className={`absolute z-50 min-w-full w-max right-0 bg-[#1a1a1a] border border-white/10 rounded-xl shadow-2xl overflow-hidden py-1 max-h-60 overflow-y-auto ${direction === 'up' ? 'bottom-full mb-1.5' : 'top-full mt-1.5'}`}
           >
-            {options.length === 0 ? (
+            {searchable && (
+              <div className="p-2 border-b border-white/5 bg-[#171717] sticky top-0 z-10">
+                <input
+                  type="text"
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  placeholder="Search templates..."
+                  className="w-full bg-white/5 border border-white/10 rounded-lg px-2.5 py-1.5 text-xs text-white placeholder-neutral-500 focus:outline-none focus:border-brand/40"
+                  onClick={(e) => e.stopPropagation()}
+                />
+              </div>
+            )}
+
+            {filteredOptions.length === 0 ? (
               <div className="px-3.5 py-2 text-sm text-neutral-500 italic font-medium">No options</div>
             ) : (
-              options.map(opt => (
+              filteredOptions.map(opt => (
                 <button
                   key={opt.value}
                   type="button"
